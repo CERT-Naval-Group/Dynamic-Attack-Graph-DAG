@@ -1,0 +1,57 @@
+{
+  "vlan": {
+    "adm": 1,
+    "user": 80,
+    "secret": 19
+  },
+  "teleworking": {
+    "percent": 10,
+    "daysPerWeek": 2
+  },
+  "count": {
+    "PC": {
+      "PF_WIN10_PA": 1000,
+      "PF_WIN10_ST": 1000,
+      "PF_WIN10_MA": 1000,
+      "PF_WIN10_LY": 1000,
+      "PF_WIN10_BR": 1000,
+      "PF_WIN7_PA": 1000,
+      "PF_WIN7_ST": 1000,
+      "PF_WIN7_MA": 1000,
+      "PF_WIN7_LY": 1000,
+      "PF_WIN7_BR": 1000,
+      "PF_XP_PA": 1000,
+      "PF_XP_ST": 1000,
+      "PF_XP_MA": 1000,
+      "PF_XP_LY": 1000,
+      "PF_XP_BR": 1000,
+      "PP_WIN10_PA": 1000,
+      "PP_WIN10_ST": 1000,
+      "PP_WIN10_MA": 1000,
+      "PP_WIN10_LY": 1000,
+      "PP_WIN10_BR": 1000,
+      "PP_WIN7_PA": 1000,
+      "PP_WIN7_ST": 1000,
+      "PP_WIN7_MA": 1000,
+      "PP_WIN7_LY": 1000,
+      "PP_WIN7_BR": 1000,
+      "PP_XP_PA": 1000,
+      "PP_XP_ST": 1000,
+      "PP_XP_MA": 1000,
+      "PP_XP_LY": 1000,
+      "PP_XP_BR": 1000
+    },
+    "IPC": {
+      "IPC_PA_NC": 5000,
+      "IPC_ST_NC": 5000,
+      "IPC_MA_NC": 5000,
+      "IPC_LY_NC": 5000,
+      "IPC_BR_NC": 5000,
+      "IPC_PA_C": 1000,
+      "IPC_ST_C": 1000,
+      "IPC_MA_C": 1000,
+      "IPC_LY_C": 1000,
+      "IPC_BR_C": 1000
+    }
+  }
+}

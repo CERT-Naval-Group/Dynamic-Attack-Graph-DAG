@@ -1,0 +1,16 @@
+
+attackerLocated(homeNetwork).[(2021-01-04 00:00:00,2021-01-24 23:59:59,1)]
+attackGoal(execCode(_,_)).
+attackGoal(confidentiality(_)).
+attackGoal(ddos(_,_)).
+attackGoal(availability(_,_)).
+firewallRule(workstation, userLAN, proxy, proxyLAN, tcp, 443).[(2021-01-04 00:00:00,2021-01-24 23:59:59,1)]
+firewallRule(proxy, proxyLAN, webServer, serviceLAN, tcp, 80).[(2021-01-04 00:00:00,2021-01-24 23:59:59,1)]
+vulExists(webServer, 'CVE-2017-12617', httpd, remoteExploit, privEscalation).[(2021-01-04 00:00:00,2021-01-22 23:59:59,1), (2021-01-23 00:00:00,2021-01-24 23:59:59,0)]
+networkServiceInfo(webServer, serviceLAN, httpd, tcp, 80, apache).[(2021-01-04 00:00:00,2021-01-24 23:59:59,1)]
+vlanInterface(webServer, serviceLAN).[(2021-01-04 00:00:00,2021-01-24 23:59:59,1)]
+vulExists(workstation, 'CVE-2020-0796', smb, remoteExploit, privEscalation).[(2021-01-04 00:00:00,2021-01-13 23:59:59,1)]
+networkServiceInfo(workstation, _, smb, tcp, 445, root).[(2021-01-04 00:00:00,2021-01-24 23:59:59,1)]
+vlanInterface(workstation, homeNetwork).[(2021-01-11 00:00:00,2021-01-17 23:59:59,1)]
+vlanInterface(workstation, userLAN).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1), (2021-01-18 00:00:00,2021-01-24 23:59:59,1)]
+isProxy(proxy, 443, webServer, 80).[(2021-01-04 00:00:00,2021-01-24 23:59:59,1)]

@@ -1,0 +1,28 @@
+1, execCode(webServer,apache) : 503
+2, RULE 0 (remote exploit of a server program) : -1
+3, netAccess(webServer,tcp,80) : 336
+4, RULE 13 (access throught proxy) : 336
+5, firewallRule(proxy,proxyLAN,webServer,serviceLAN,tcp,80) : 0
+6, firewallRule(workstation,userLAN,proxy,proxyLAN,tcp,443) : 0
+7, isProxy(proxy,443,webServer,80) : 0
+8, vlanInterface(workstation,userLAN) : 0
+9, execCode(workstation,root) : 168
+10, RULE 0 (remote exploit of a server program) : 168
+11, netAccess(workstation,tcp,445) : 168
+12, RULE 12 (first access on the same LAN) : 168
+13, vlanInterface(workstation,homeNetwork) : 168
+14, attackerLocated(homeNetwork) : 0
+15, RULE 9 (multi-hop access same LAN) : 168
+16, lanAccess(homeNetwork) : 168
+17, RULE 8 (LAN access) : 168
+18, RULE 9 (multi-hop access same LAN) : 336
+19, lanAccess(userLAN) : 336
+20, RULE 8 (LAN access) : 336
+21, networkServiceInfo(workstation,_,smb,tcp,445,root) : 0
+22, vulExists(workstation,'CVE-2020-0796',smb,remoteExploit,privEscalation) : 0
+23, RULE 9 (multi-hop access same LAN) : 503
+24, vlanInterface(webServer,serviceLAN) : 0
+25, lanAccess(serviceLAN) : 503
+26, RULE 8 (LAN access) : 503
+27, networkServiceInfo(webServer,serviceLAN,httpd,tcp,80,apache) : 0
+28, vulExists(webServer,'CVE-2017-12617',httpd,remoteExploit,privEscalation) : 0

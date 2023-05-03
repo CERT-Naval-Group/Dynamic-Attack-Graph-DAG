@@ -1,0 +1,4 @@
+To generate documentation for viewsys into , in this directory do:
+
+xsb
+[xsbdoc],add_lib_dir(..),xsbdoc(pt_format,pdf).

@@ -1,0 +1,59 @@
+/***********************************************************************/
+/********************** Autocom architecture ***************************/
+/***********************************************************************/
+
+vlanInterface('SRV-PA-IPBX', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-ST-IPBX', 'vlan-st-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-MA-IPBX', 'vlan-ma-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-LY-IPBX', 'vlan-ly-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-BR-IPBX', 'vlan-br-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('SRV-PA-IPBX', 'vlan-pa-400', 'autocom-sip-server', sip, 5060, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-PA-IPBX', 'vlan-pa-400', 'autocom-h323-server', h323, 1720, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-PA-IPBX', 'vlan-pa-400', 'open-ssh', ssh, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-PA-IPBX', 'vlan-pa-400', 'autocom-http-ssh', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('SRV-ST-IPBX', 'vlan-st-400', 'autocom-sip-server', sip, 5060, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-ST-IPBX', 'vlan-st-400', 'autocom-h323-server', h323, 1720, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-ST-IPBX', 'vlan-st-400', 'open-ssh', ssh, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-ST-IPBX', 'vlan-st-400', 'autocom-http-ssh', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('SRV-MA-IPBX', 'vlan-ma-400', 'autocom-sip-server', sip, 5060, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-MA-IPBX', 'vlan-ma-400', 'autocom-h323-server', h323, 1720, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-MA-IPBX', 'vlan-ma-400', 'open-ssh', ssh, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-MA-IPBX', 'vlan-ma-400', 'autocom-http-ssh', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('SRV-LY-IPBX', 'vlan-ly-400', 'autocom-sip-server', sip, 5060, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-LY-IPBX', 'vlan-ly-400', 'autocom-h323-server', h323, 1720, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-LY-IPBX', 'vlan-ly-400', 'open-ssh', ssh, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-LY-IPBX', 'vlan-ly-400', 'autocom-http-ssh', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('SRV-BR-IPBX', 'vlan-br-400', 'autocom-sip-server', sip, 5060, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-BR-IPBX', 'vlan-br-400', 'autocom-h323-server', h323, 1720, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-BR-IPBX', 'vlan-br-400', 'open-ssh', ssh, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-BR-IPBX', 'vlan-br-400', 'autocom-http-ssh', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, 'vlan-pa-200', 'SRV-PA-IPBX', 'vlan-pa-400', sip, 5060).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-pa-300', 'SRV-PA-IPBX', 'vlan-pa-400', sip, 5060).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-pa-200', 'SRV-PA-IPBX', 'vlan-pa-400', h323, 1720).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-pa-300', 'SRV-PA-IPBX', 'vlan-pa-400', h323, 1720).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, 'vlan-st-200', 'SRV-ST-IPBX', 'vlan-st-400', sip, 5060).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-st-300', 'SRV-ST-IPBX', 'vlan-st-400', sip, 5060).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-st-200', 'SRV-ST-IPBX', 'vlan-st-400', h323, 1720).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-st-300', 'SRV-ST-IPBX', 'vlan-st-400', h323, 1720).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, 'vlan-ma-200', 'SRV-MA-IPBX', 'vlan-ma-400', sip, 5060).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-ma-300', 'SRV-MA-IPBX', 'vlan-ma-400', sip, 5060).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-ma-200', 'SRV-MA-IPBX', 'vlan-ma-400', h323, 1720).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-ma-300', 'SRV-MA-IPBX', 'vlan-ma-400', h323, 1720).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, 'vlan-ly-200', 'SRV-LY-IPBX', 'vlan-ly-400', sip, 5060).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-ly-300', 'SRV-LY-IPBX', 'vlan-ly-400', sip, 5060).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-ly-200', 'SRV-LY-IPBX', 'vlan-ly-400', h323, 1720).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-ly-300', 'SRV-LY-IPBX', 'vlan-ly-400', h323, 1720).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, 'vlan-br-200', 'SRV-BR-IPBX', 'vlan-br-400', sip, 5060).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-br-300', 'SRV-BR-IPBX', 'vlan-br-400', sip, 5060).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-br-200', 'SRV-BR-IPBX', 'vlan-br-400', h323, 1720).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, 'vlan-br-300', 'SRV-BR-IPBX', 'vlan-br-400', h323, 1720).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]

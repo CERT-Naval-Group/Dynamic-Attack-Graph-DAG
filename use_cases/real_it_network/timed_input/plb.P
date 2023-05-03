@@ -1,0 +1,113 @@
+/***********************************************************************/
+/********************** PLB server architecture ************************/
+/***********************************************************************/
+
+vlanInterface('PLB-01', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface(VAR_SRV_RH_01, 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-BDD-01', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PLB-01', 'vlan-pa-400', 'plb-http-server', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo(VAR_SRV_RH_01, 'vlan-pa-400', 'rh-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-BDD-01', 'vlan-pa-400', mysqld, mysql, 3306, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, VAR_VLAN_300, 'PLB-01', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, VAR_VLAN_700, 'PLB-01', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PLB-01', 'vlan-pa-400', VAR_SRV_RH_01, 'vlan-pa-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_SRV_RH_01, 'vlan-pa-400', 'SRV-BDD-01', 'vlan-pa-400', mysql, 3306).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+isProxy('PLB-01', 443, VAR_SRV_RH_01, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+
+
+
+vlanInterface('PLB-02', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface(VAR_SRV_APP_01, 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-BDD-01', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-BDD-02', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PLB-02', 'vlan-pa-400', 'plb-http-server', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo(VAR_SRV_APP_01, 'vlan-pa-400', 'app-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-BDD-01', 'vlan-pa-400', mysqld, mysql, 3306, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-BDD-02', 'vlan-pa-400', postgresqld, postgresql, 5432, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, VAR_VLAN_300, 'PLB-02', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, VAR_VLAN_700, 'PLB-02', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PLB-02', 'vlan-pa-400', VAR_SRV_APP_01, 'vlan-pa-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_SRV_APP_01, 'vlan-pa-400', 'SRV-BDD-01', 'vlan-pa-400', mysql, 3306).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_SRV_APP_01, 'vlan-pa-400', 'SRV-BDD-02', 'vlan-pa-400', postgresql, 5432).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+isProxy('PLB-02', 443, VAR_SRV_APP_01, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+
+
+vlanInterface('PLB-03', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface(VAR_SRV_APP_02, 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-BDD-02', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PLB-03', 'vlan-pa-400', 'plb-http-server', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo(VAR_SRV_APP_02, 'vlan-pa-400', 'app-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-BDD-02', 'vlan-pa-400', postgresqld, postgresql, 5432, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, VAR_VLAN_300, 'PLB-03', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, VAR_VLAN_700, 'PLB-03', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PLB-03', 'vlan-pa-400', VAR_SRV_APP_02, 'vlan-pa-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_SRV_APP_02, 'vlan-pa-400', 'SRV-BDD-02', 'vlan-pa-400', postgresql, 5432).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+isProxy('PLB-03', 443, VAR_SRV_APP_02, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+
+
+vlanInterface('PLB-04', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface(VAR_SRV_APP_03, 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-BDD-03', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PLB-04', 'vlan-pa-400', 'plb-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo(VAR_SRV_APP_03, 'vlan-pa-400', 'app-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-BDD-03', 'vlan-pa-400', sqloracled, oraclesql, 1521, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, VAR_VLAN_300, 'PLB-04', 'vlan-pa-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, VAR_VLAN_700, 'PLB-04', 'vlan-pa-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PLB-04', 'vlan-pa-400', VAR_SRV_APP_03, 'vlan-pa-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_SRV_APP_03, 'vlan-pa-400', 'SRV-BDD-03', 'vlan-pa-400', oraclesql, 1521).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+isProxy('PLB-04', 80, VAR_SRV_APP_03, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+
+
+vlanInterface('PLB-05', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface(VAR_SRV_APP_04, 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-BDD-01', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PLB-05', 'vlan-pa-400', 'plb-http-server', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo(VAR_SRV_APP_04, 'vlan-pa-400', 'app-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-BDD-01', 'vlan-pa-400', mysqld, mysql, 3306, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, VAR_VLAN_100, 'PLB-05', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, VAR_VLAN_300, 'PLB-05', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, VAR_VLAN_400, 'PLB-05', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, VAR_VLAN_500, 'PLB-05', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, VAR_VLAN_700, 'PLB-05', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PLB-05', 'vlan-pa-400', VAR_SRV_APP_04, 'vlan-pa-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_SRV_APP_04, 'vlan-pa-400', 'SRV-BDD-01', 'vlan-pa-400', mysql, 3306).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+isProxy('PLB-05', 443, VAR_SRV_APP_04, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+
+
+vlanInterface('PLB-06', 'vlan-pa-500').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface(VAR_SRV_WEB_01, 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('SRV-BDD-01', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PLB-06', 'vlan-pa-500', 'plb-http-server', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo(VAR_SRV_WEB_01, 'vlan-pa-400', 'app-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('SRV-BDD-01', 'vlan-pa-400', mysqld, mysql, 3306, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, internet, 'PLB-06', 'vlan-pa-500', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PLB-06', 'vlan-pa-500', VAR_SRV_WEB_01, 'vlan-pa-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_SRV_WEB_01, 'vlan-pa-400', 'SRV-BDD-01', 'vlan-pa-400', mysql, 3306).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+isProxy('PLB-06', 443, VAR_SRV_WEB_01, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkStream(_, 'PLB-06', 443, https, internet, creds).[(2021-01-04 00:00:00,2021-01-04 23:59:59,0.4), (2021-01-05 00:00:00,2021-01-05 23:59:59,0.4), (2021-01-06 00:00:00,2021-01-06 23:59:59,0.2), (2021-01-07 00:00:00,2021-01-07 23:59:59,0.4), (2021-01-08 00:00:00,2021-01-08 23:59:59,0.8), (2021-01-09 00:00:00,2021-01-09 23:59:59,0.05), (2021-01-10 00:00:00,2021-01-10 23:59:59,0.01)]
+//networkStream(_, 'PLB-06', 443, https, internet, creds).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+noCheckAuth('PLB-06', 443, https).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]

@@ -1,0 +1,33 @@
+/***********************************************************************/
+/********************** Firewall INT architecture **********************/
+/***********************************************************************/
+
+vlanInterface('FW-PA-INT', VAR_VLAN_FW_INT_PA).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('FW-ST-INT', VAR_VLAN_FW_INT_ST).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('FW-MA-INT', VAR_VLAN_FW_INT_MA).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('FW-LY-INT', VAR_VLAN_FW_INT_LY).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('FW-BR-INT', VAR_VLAN_FW_INT_BR).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('FW-PA-INT', 'vlan-pa-100', ssh, tls, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-PA-INT', 'vlan-pa-100', stormShieldHTTPD, https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('FW-ST-INT', 'vlan-st-100', ssh, tls, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-ST-INT', 'vlan-st-100', stormShieldHTTPD, https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('FW-MA-INT', 'vlan-ma-100', ssh, tls, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-MA-INT', 'vlan-ma-100', stormShieldHTTPD, https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('FW-LY-INT', 'vlan-ly-100', ssh, tls, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-LY-INT', 'vlan-ly-100', stormShieldHTTPD, https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('FW-BR-INT', 'vlan-br-100', ssh, tls, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-BR-INT', 'vlan-br-100', stormShieldHTTPD, https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo(VAR_FW_INT, 'vlan-800', 'VPNStormShield', tls, 40000, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule('FW-PA-INT', 'FW-LY-INT', tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('FW-PA-INT', 'FW-ST-INT', tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('FW-PA-INT', 'FW-BR-INT', tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('FW-ST-INT', 'FW-LY-INT', tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('FW-LY-INT', 'FW-MA-INT', tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('FW-BR-INT', 'FW-MA-INT', tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]

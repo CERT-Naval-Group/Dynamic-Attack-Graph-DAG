@@ -1,0 +1,45 @@
+/* queries to try:
+persistent_table_test1:pp(X,Y).
+persistent_table_test1:pp(cc,Y).
+
+Can delete all tables by:
+rm -r xsb_persistent_tables
+*/
+
+
+:- packaging:bootstrap_package('persistent_tables','persistent_tables').
+:- import table_persistent/5, pt_call/1 from persistent_tables.
+:- export ensure_persistent_table_test1_loaded/0.
+ensure_persistent_table_test1_loaded.
+
+:- export pp/2, pp_ptdef/2.
+:- table_persistent(pp(_,_),[[+,-],[-,-]],canonical,xsb,true).
+pp(A,B) :- pt_call(pp(A,B)).
+pp_ptdef(X,Y) :- qq(X,Y),rr(Y,_Z).
+
+:- export qq/2, qq_ptdef/2.
+:- table_persistent(qq(_,_),[-,-],delimited([separator=',']),xsb,true).
+qq(X,Y) :- pt_call(qq(X,Y)).
+qq_ptdef(X,Y) :- ss(X,Y), Y @< hh.
+
+
+:- export rr/2, rr_ptdef/2.
+:- table_persistent(rr(_,_),[-,-],canonical,xsb,true).
+rr(X,Y) :- pt_call(rr(X,Y)).
+rr_ptdef(X,Y) :- ss(X,Y).
+
+
+ss(aa,bb) :- writeln(userout,ss(aa,bb)).
+ss(bb,cc) :- writeln(userout,ss(bb,cc)).
+ss(cc,dd) :- writeln(userout,ss(cc,dd)).
+ss(dd,ee) :- writeln(userout,ss(dd,ee)).
+ss(aa,ff) :- writeln(userout,ss(aa,ff)).
+ss(bb,gg) :- writeln(userout,ss(bb,gg)).
+ss(cc,hh) :- writeln(userout,ss(cc,hh)).
+ss(dd,ii) :- writeln(userout,ss(dd,ii)).
+
+
+:- export pp_i/2, qq_i/2, rr_i/2.
+pp_i(X,Y) :- qq_i(X,Y),rr_i(Y,_Z).
+qq_i(X,Y) :- ss(X,Y), Y @< hh.
+rr_i(X,Y) :- ss(X,Y).

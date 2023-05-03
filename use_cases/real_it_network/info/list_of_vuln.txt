@@ -1,0 +1,16 @@
+https://advisories.stormshield.eu/
+https://documentation.stormshield.eu/SNS/v3/fr/Content/Release_Notes_SNS/3.7.1-Bug_Fixes.htm
+https://tools.cisco.com/security/center/publicationListing.x?resourceIDs=2064&apply=1&totalbox=1&cp0=2064#~FilterByProduct
+https://support.f5.com/csp/bug-tracker
+https://www.cvedetails.com/vulnerability-list/vendor_id-1240/Bluecoat.html
+https://httpd.apache.org/security/vulnerabilities-httpd.json
+https://access.redhat.com/security/security-updates/#/?q=&p=1&sort=portal_publication_date%20desc&rows=10&portal_severity=Critical&portal_advisory_type=Security%20Advisory&documentKind=PortalProduct&portal_product=Red%20Hat%20Enterprise%20Linux&portal_product_version=7
+https://tomcat.apache.org/security-9.html#Apache_Tomcat_9.x_vulnerabilities
+https://www.cvedetails.com/vulnerability-list/vendor_id-45/product_id-11016/Apache-Axis.html
+https://www.cvedetails.com/product/467/Oracle-Database-Server.html?vendor_id=93
+https://www.postgresql.org/support/security/
+https://www.cvedetails.com/vulnerability-list/vendor_id-93/product_id-21801/cvssscoremin-7/cvssscoremax-7.99/Oracle-Mysql.html
+https://www.cvedetails.com/vulnerability-list/vendor_id-26/product_id-194/version_id-278740/Microsoft-Exchange-Server-2019.html
+https://www.asterisk.org/downloads/security-advisories/?wpv_view_count=5941&wpv_paged=10
+https://www.cvedetails.com/vulnerability-list/vendor_id-26/product_id-32238/Microsoft-Windows-10.html
+https://tools.cisco.com/security/center/publicationListing.x?resourceIDs=211541&apply=1&totalbox=1&cp0=211541#~FilterByProduct

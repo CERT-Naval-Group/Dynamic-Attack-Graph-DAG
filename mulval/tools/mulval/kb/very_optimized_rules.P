@@ -1,0 +1,196 @@
+primitive(networkServiceInfo(Host, Vlan, Program, Protocol, Port, User)).
+primitive(vulExists(Host, VulID, Program, Range, Consequence)).
+primitive(firewallRule(HostS, Vlan1, HostD, Vlan2, Protocol, Port)).
+primitive(vlanInterface(Host, Vlan)).
+primitive(attackerLocated(Host)).
+primitive(softwareInfo(Host, Software, Perm)).
+primitive(receivePhishingMail(Host)).
+primitive(openMaliciousFile(Host, User, Perm, Software)).
+primitive(mitm(HostS, HostD, Vlan)).
+primitive(noCheckAuth(Host, Port, Prot)).
+primitive(networkStream(HostS, HostD, Port, Protocol, Vlan, Data)).
+primitive(isDC(DC, Domain)).
+primitive(isDomainMember(Host, DC, Domain)).
+primitive(isProxy(Proxy, PortS, Srv, PortD)).
+
+
+meta(cvss(VulID, AC)).
+
+
+derived(execCode(Host, User)).
+derived(availability(Host, Software)).
+derived(confidentiality(Data)).
+derived(ddos(Host, Software)).
+
+
+meta(attackGoal(_)).
+
+
+:- table execCode/2.
+:- table availability/2.
+:- table confidentiality/1.
+:- table ddos/2.
+
+/*
+interaction_rule( (execCode(HostD, Perm2) :-
+	vulExists(HostD, _, Software, remoteExploit, privEscalation),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm2),
+	execCode(HostS,Perm1),
+	firewallRule(HostS,internet,HostD,Vlan2,Protocol,Port),
+	vlanInterface(HostS,homeNetwork),
+	vlanInterface(HostD,Vlan2)),
+  rule_desc('remote exploit of a server program', 1.0)).
+*/
+
+/*
+interaction_rule( (execCode(HostD, Perm) :-
+	vulExists(HostD, _, Software, remoteExploit, privEscalation),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm),
+	execCode(HostS,_),
+	vlanInterface(HostS,Vlan),
+	vlanInterface(HostD,Vlan)),
+  rule_desc('remote exploit of a server program multi hop', 1.0)).
+*/
+
+
+interaction_rule( (execCode(HostD, Perm2) :-
+	vulExists(HostD, _, Software, remoteExploit, privEscalation),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm2),
+	execCode(HostS,Perm1),
+	firewallRule(HostS,Vlan1,HostD,Vlan2,Protocol,Port),
+	vlanInterface(HostS,Vlan1),
+	vlanInterface(HostD,Vlan2)),
+  rule_desc('remote exploit of a server program', 1.0)).
+
+
+
+interaction_rule( (execCode(HostD, Perm) :-
+	vulExists(HostD, _, Software, remoteExploit, privEscalation),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm),
+	attackerLocated(Vlan1),
+	firewallRule(_,Vlan1,HostD,_,Protocol,Port),
+	vlanInterface(HostD,_)),
+  rule_desc('remote exploit of a server program first access', 1.0)).
+
+
+/*
+interaction_rule( (execCode(HostD, Perm) :-
+	vulExists(HostD, _, Software, remoteExploit, privEscalation),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm),
+	attackerLocated(Vlan),
+	vlanInterface(HostD,Vlan)),
+  rule_desc('remote exploit of a server program', 1.0)).
+*/
+
+/*
+interaction_rule( (execCode(HostD, Perm2) :-
+	vulExists(HostD, _, Software, remoteExploit, privEscalation),
+	networkServiceInfo(HostD, _, Software, Protocol2, Port, Perm2),
+	isProxy(Proxy,PortP,HostD,PortD),
+	execCode(HostS,Perm1),
+	firewallRule(HostS,Vlan1,Proxy,VlanP1,Protocol1,PortP),
+	firewallRule(Proxy,VlanP2,HostD,Vlan2,Protocol2,PortD)),
+  rule_desc('remote exploit of a server program', 1.0)).
+*/
+
+
+interaction_rule( (execCode(HostD, Perm2) :-
+	vulExists(HostD, _, Software, localExploit, privEscalation),
+	softwareInfo(HostD, Software, Perm2),
+	execCode(HostD, Perm1)),
+  rule_desc('local exploit of a server program',
+ 1.0)).
+
+
+/*
+interaction_rule( (execCode(HostD, Perm) :-
+	softwareInfo(HostD, Software, _),
+	receivePhishingMail(HostD),
+	openMaliciousFile(HostD, _, Perm, Software)),
+  rule_desc('T1566.001 - Phishing - Spearphishing Attachment',
+ 1.0)).
+
+ 
+interaction_rule( (execCode(Host, root) :-
+	execCode(DC, root),
+	isDC(DC, Domain),
+	isDomainMember(Host, DC, Domain)),
+  rule_desc('Domain Group policy attack',
+ 1.0)).
+*/
+
+
+/*
+interaction_rule( (availability(HostD, Software) :-
+	vulExists(HostD, _, Software, remoteExploit, dos),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm2),
+	execCode(HostS,Perm1),
+	firewallRule(HostS,internet,HostD,Vlan2,Protocol,Port),
+	vlanInterface(HostS,homeNetwork),
+	vlanInterface(HostD,Vlan2)),
+  rule_desc('remote exploit of a server program', 1.0)).
+
+interaction_rule( (availability(HostD, Software) :-
+	vulExists(HostD, _, Software, remoteExploit, dos),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm2),
+	execCode(HostS,Perm1),
+	vlanInterface(HostS,Vlan),
+	vlanInterface(HostD,Vlan)),
+  rule_desc('remote exploit of a server program', 1.0)).
+*/
+
+interaction_rule( (availability(HostD, Software) :-
+	vulExists(HostD, _, Software, remoteExploit, dos),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm2),
+	execCode(HostS,Perm1),
+	firewallRule(HostS,Vlan1,HostD,Vlan2,Protocol,Port),
+	vlanInterface(HostS,Vlan1),
+	vlanInterface(HostD,Vlan2)),
+  rule_desc('remote exploit of a server program', 1.0)).
+
+
+interaction_rule( (availability(HostD, Software) :-
+	vulExists(HostD, _, Software, remoteExploit, dos),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm),
+	attackerLocated(Vlan1),
+	firewallRule(_,Vlan1,HostD,_,Protocol,Port),
+	vlanInterface(HostD,_)),
+  rule_desc('remote exploit of a server program', 1.0)).
+
+/*
+interaction_rule( (availability(HostD, Software) :-
+	vulExists(HostD, _, Software, remoteExploit, dos),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm),
+	attackerLocated(Vlan),
+	vlanInterface(HostD,Vlan)),
+  rule_desc('remote exploit of a server program', 1.0)).
+
+*/
+/*
+interaction_rule( (availability(HostD, Software) :-
+	vulExists(HostD, _, Software, remoteExploit, dos),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm),
+	isProxy(Proxy,PortP,HostD,PortD),
+	firewallRule(_,_,Proxy,_,_,PortP),
+	firewallRule(Proxy,_,HostD,_,_,PortD)),
+  rule_desc('remote exploit of a server program', 1.0)).
+*/
+
+
+
+interaction_rule( (confidentiality(Data) :-
+  	networkStream(HostS, HostD, Port, Protocol, Vlan, Data),
+	noCheckAuth(HostD, Port, Protocol),
+	mitm(HostS, HostD, Vlan)),
+  rule_desc('mitm attack',
+ 1.0)).
+
+
+
+
+interaction_rule( (ddos(HostD, Software) :-
+	vlanInterface(HostD, 'internet'),
+	networkServiceInfo(HostD, 'internet', Software, _, _, _)),
+  rule_desc('remote exploit of a server program - DDOS attack', 1.0)).
+  
+

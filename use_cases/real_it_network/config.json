@@ -1,0 +1,25 @@
+{
+  "start" : "2021-01-04 00:00:00",
+  "end": "2021-01-10 23:59:59",
+  "timeUnit": "hour",
+  "projectName": "it_network",
+  "timedInputDir": "timed_input/",
+  "working_dir": "<USE CASE PATH>",
+  "database": {
+    "host": "localhost",
+    "user": "phpmyadm",
+    "passwd": "QRBIhj_ojXoUuzTS65vH",
+    "dbName": "rpc"
+  },
+  "stateNodes": [
+    "execCode",
+    "availability",
+    "confidentiality"
+  ],
+  "actions": [
+    "vulExists"
+  ],
+  "nbSimulations": 1000,
+  "rules_path": "/opt/dynamic-attack-graph-dag/mulval/tools/mulval/kb/optimized_rules.P",
+  "optimization": false
+}

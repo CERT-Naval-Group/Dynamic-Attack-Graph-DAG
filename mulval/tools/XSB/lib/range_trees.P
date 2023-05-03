@@ -1,0 +1,604 @@
+:- comment(title,"Range Indexing").
+:- comment(subtitle,"Indexing Predicates for Efficient Range Retrieval").
+:- comment(author,"David S. Warren").
+
+:- comment(summary, " This module contains XSB predicates to support
+indexing functionalitythat provides efficient answers to range
+queries.  The basic interface includes predicates to create, add to,
+retrieve from, and delete from range trees.  Range trees store a set
+of keys and associated values.  Arbitrary ranges of keys (along with
+their associated values) can be retrieved efficiently.
+
+Range trees can be used directly by a user to implement key-value
+stores that provide efficient range access.  Also several predicates
+are provided that support the easy definition of data predicates
+(ground, fact-defined) that provide efficient range constrained
+retrieval on given arguments.  All basic indexes in XSB are hash-based
+and as such do not provide for efficient range queries.  The
+predicates of this module allow a user to obtain efficient range
+queries in XSB.
+
+Range trees use a balanced sort tree, similar to a B-Tree in that all
+leaf nodes are equidistant from the root, and nodes are at least half
+full. (Deletion of key-value pairs is supported, but trees are not
+rebalanced on delete, so significant use of delete can seriously
+degrade performance.)  Range trees are stored in dynamic predicates in
+the Prolog database and are identified by user-provided handles.
+
+The user defines a predicate @pred{range_tree_compare/2} that defines
+the comparison operation (@tt{=<}) that is used for the range
+ordering.  If no such predicate is defined by the user in usermod,
+Prolog's @tt{@@=<} is used.  If the user defines
+@pred{range_tree_compare/2}, she must also define predicates
+@pred{range_tree_min_value/1} and @pred{range_tree_max_value/1},
+giving minimum and maximum values that can ever appear in a range.
+").
+
+:- comment(module," This module defines predicates that allow a user
+to declare an interface to a base data predicate (ground-fact-defined)
+that supports efficient range indexing.  For example a user may have a
+data predicate @pred{data(Key,Val1,Val2,Val3)} and want to be able to do
+efficient queries, giving a range of values for the second field,
+@var{Val1}, or for the fourth field, @var{Val3}.  @var{Key} is a key
+for the @pred{data/4} relation, i.e., no two different tuples have
+the same value for the Key fields.  The user would make the following
+definitions: (See the specific predicate documentation below for these
+range predicates to understand their parameters in detail.)
+
+@begin{verbatim}
+:- import range_call/4, range_assert/3, range_retractall/4 from range_trees.
+
+% to retrieve data by range from a range-indexed predicate
+range_data(K,RV1,V2,RV3) :- range_call(data(K,_,V2,_),[1],[2,4],[RV1,RV3]).
+
+% to add data to range-indexed predicate
+assert_data(K,V1,V2,V3) :- range_assert(data(K,V1,V2,V3),[1],[2,4]).
+
+% to delete data from range-indexed predicate
+retractall_data(K,RV1,V2,RV3) :- range_retractall(data(K,_,V2,_),[1],[2,4],[RV1,RV3]).
+@end{verbatim}	   
+
+Then the user will add all data to @pred{data/4} using
+@pred{assert_data/4}, which will assert a tuple to @var{data}/4 and
+also add the tuples to the necessary range trees to support efficient
+range queries on the second or fourth argument.
+
+A range query to @pred{data/4} now is posed by calling the
+user-defined predicate @pred{range_data/4}.  For example to retrieve
+all tuples whose second field is between 4000 and 5000 (inclusive),
+the user would pose the query:
+
+@begin{verbatim}
+| ?- range_data(K,V1:[4000,5000],V2,V3).
+@end{verbatim}
+
+@noindent This query will bind @var{K,V1,V2,V3} to quadruples in the
+@pred{data/4} relation where @var{V1} is between 4000 and 5000
+(inclusive.)  Ranges are indicated by terms of the form
+@tt{Var:[Low,High]}, where @var{Var} is the variable that will be
+bound on return, and @var{Low} and @var{High} are ground values
+indicating the lower and upper bounds of the desired range,
+respectively.  The order of answers returned to a range query is
+indeterminate (i.e., not necessarily in increasing order on the range
+variable.)
+
+One may also use a query such as:
+@begin{verbatim}
+| ?- range_data(K,4015,V2,V3).
+@end{verbatim}
+@noindent which is treated as a range query with lower and upper
+bounds of 4015.
+
+For the declarations shown above, which indicate two range-indexed
+fields for @pred{data/4}, one may also pose a query:
+
+@begin{verbatim} 
+| ?- range_data(K,V1,V2,V3:[6015,7000]).  
+@end{verbatim} 
+
+@noindent which would efficiently retrieve data/4 tuples whose fourth
+field is between 6015 and 7000 (inclusive.)
+
+When multiple range-indexed arguments are given ranges (or constants)
+in a range query, only the first will be used for indexing.
+
+").
+
+:- export range_call/4.
+:- export range_assert/3.
+:- export range_retractall/4.
+
+:- export init_range_tree/1.
+:- export get_from_range_tree/5.
+:- export add_to_range_tree/3.
+:- export delete_from_range_tree/2.
+:- export delete_from_range_tree/3.
+:- export delete_range_tree/1.
+:- export delete_all_range_trees/0.
+:- export print_rt/1.
+
+:- import (dynamic)/1, assert/1, retractall/1, asserta/1,
+	retract/1
+	from assert.
+:- import (index)/2, functor/3, writeln/1, (\=)/2, (',')/2,
+	write/1, write_canonical/1, tab/1, nl/0, arg/3, call_c/1
+	from standard.
+:- import findall/3, sort/2 from setof.
+:- import (:-)/2 from usermod.
+:- import misc_error/1 from error_handler.
+
+:- import length/2, member/2 from basics.
+:- import conset/2, coninc/2 from gensym.
+:- import predicate_defined/1 from assert.
+
+%rt(TreeId,NodeID,Leaf,LO,HI,NodePtr): Leaf = 0 if int, 1 if leaf
+%rtval(TreeId,NodeID,Key,Val).
+:- dynamic rt/6, rtval/4.
+:- index(rt/6,trie).
+:- index(rtval/4,trie).
+
+max_node_size(7).  % seems best size, for trie
+
+?- conset('_rt_ptr',5).
+mygensym(Num) :- coninc('_rt_ptr',Num).
+
+:- import range_tree_compare/2, range_tree_min_value/1, range_tree_max_value/1
+	from usermod.
+
+define_range_tree_compare_if_necessary :-
+	(predicate_defined(range_tree_compare(_,_))
+	 ->	true
+	 ;	assert((range_tree_compare(X,Y) :- X @=< Y)),
+		assert(range_tree_min_value(-1.0e60)),
+		assert(range_tree_max_value(zzzz(zzzz,zzzz,zzzz,zzzz,zzzz,zzzz,zzzz)))
+	).
+
+?- define_range_tree_compare_if_necessary.
+
+
+:- comment(init_range_tree/1,"init_range_tree(+TreeId): to initialize
+a named tree which will provide access to key-value pairs through
+range queries on the keys.  TreeId is an arbitrary user-supplied
+ground term that the user will use to identify the particular tree.").
+
+init_range_tree(TreeId) :-
+	retractall(rt(TreeId,_,_,_,_,_)),
+	retractall(rtval(TreeId,_,_,_)),
+	range_tree_min_value(MinValue), %get from user
+	range_tree_max_value(MaxValue), %get from user
+	assert(rt(TreeId,0,1,MinValue,MaxValue,[1])).
+
+:- comment(get_from_range_tree/5,
+"get_from_range_tree(+TreeId,+Lo,+Hi,?Key,-Val): get a range of Keys
+(and their associated values) between Lo and Hi (inclusive), using the
+ordering defined by range_tree_compare/2.  TreeId is a user-provided
+tree identifier.  Key is the value of a key in the tree in the Lo-Hi
+range, and Val is its associated value.").
+
+get_from_range_tree(TreeId,Lo0,Hi0,Key,Val) :-
+	range_tree_compare(Lo0,Hi0),
+	(ground(Key)
+	 ->	range_tree_compare(Lo0,Key),
+		range_tree_compare(Key,Hi0),
+		Lo = Key, Hi = Key
+	 ;	Lo = Lo0, Hi = Hi0
+	),
+	get_from_range_tree_vals(TreeId,0,Lo,Hi,Key,Vals),
+	%%writeln(userout,got_from_range_tree(Vals,Key,Lo,Hi)),
+	member(Val,Vals).
+
+get_from_range_tree_vals(TreeId,Id,Lo,Hi,Key,Vals) :-
+	rt(TreeId,Id,Leaf,LO,HI,Ptr),
+	%writeln(ret_rt(TreeId,Leaf,Id,LO,HI,Ptr)),
+	range_tree_compare(LO,Hi), range_tree_compare(Lo,HI),
+	(range_tree_compare(LO,Lo), range_tree_compare(Hi,HI), Hi \== HI
+	 ->	!		% only from this one node
+	 ;	true
+	),
+	(Leaf =:= 0
+	 ->	get_from_range_tree_vals(TreeId,Ptr,Lo,Hi,Key,Vals)
+	 ;	rtval(TreeId,Ptr,Key,Vals),
+		%%writeln(ret_rtval(TreeId,Ptr,Key,Vals)),
+		range_tree_compare(Lo,Key),
+		range_tree_compare(Key,Hi)
+	).
+
+:- comment(add_to_range_tree/3,"add_to_range_tree(+TreeId,+Key,+Val)
+adds a key-value pair to a range tree.").
+
+add_to_range_tree(TreeId,Key,Val) :-
+	add_to_range_tree(TreeId,0,[],Key,Val).
+
+add_to_range_tree(TreeId,Id,Path,Key,Val) :-
+	rt(TreeId,Id,Leaf,LO,HI,Ptr),
+	range_tree_compare(LO,Key),
+	range_tree_compare(Key,HI),
+	Key \== HI,
+	!,
+	(Leaf =:= 0
+	 ->	add_to_range_tree(TreeId,Ptr,[Id|Path],Key,Val)
+	 ;	(rtval(TreeId,Ptr,Key,Vals)
+		 ->	(member(Val,Vals)
+			 ->	true
+			 ;	retractall(rtval(TreeId,Ptr,Key,_)),
+				asserta(rtval(TreeId,Ptr,Key,[Val|Vals]))
+			)
+		 ;	asserta(rtval(TreeId,Ptr,Key,[Val])),  % could delay and avoid having to perhaps change it
+			findall(FKey-FVal,rtval(TreeId,Ptr,FKey,FVal),KVals),
+			length(KVals,NumVals),
+			max_node_size(Max),
+			(NumVals =< Max
+			 ->	true
+			 ;	split_leaves(TreeId,Ptr,KVals,NumVals,LO,Id,Path)
+			)
+		)
+	).
+
+split_leaves(TreeId,Ptr,KeyVals,NumVals,LoKey,ParID,Path) :-
+	sort(KeyVals,SKeyVals),
+	Mid is NumVals // 2,
+	split_n(Mid,SKeyVals,FirstKeyVals,LastKeyVals),
+	(do_all member(K-V,FirstKeyVals), retract(rtval(TreeId,Ptr,K,V))),
+	mygensym(NewPtr),
+	(do_all member(K-V,FirstKeyVals), asserta(rtval(TreeId,NewPtr,K,V))),
+	LastKeyVals = [MidKey-_|_],
+	update_parent(TreeId,LoKey,MidKey,ParID,NewPtr,Path).
+
+update_parent(TreeId,Lo,Mid,ID,NewPtr,Path) :-
+	rt(TreeId,ID,Leaf,OldLo,OldHi,Ptr),
+	range_tree_compare(OldLo,Lo), range_tree_compare(Mid,OldHi),
+	retract(rt(TreeId,ID,Leaf,OldLo,OldHi,Ptr)),
+	!,
+	asserta(rt(TreeId,ID,Leaf,Mid,OldHi,Ptr)),
+	asserta(rt(TreeId,ID,Leaf,Lo,Mid,NewPtr)),
+	findall(p(LO,HI,CPtr),rt(TreeId,ID,_,LO,HI,CPtr),Nodes),
+	length(Nodes,NumVals),
+	max_node_size(Max),
+	(NumVals =< Max
+	 ->	true
+	 ;	split_tree(TreeId,Leaf,ID,Nodes,NumVals,Path)
+	).
+
+split_tree(TreeId,Leaf,ID,Nodes,NumVals,Path) :-
+	sort(Nodes,SNodes),
+	Mid is NumVals // 2,
+	split_n(Mid,SNodes,FirstNodes,LastNodes),
+	(Path == []		% at root
+	 ->	(do_all member(p(L,H,Ptr),SNodes), retract(rt(TreeId,ID,Leaf,L,H,Ptr))),
+		mygensym(NewID1),
+		mygensym(NewID2),
+		(do_all member(p(L,H,Ptr),FirstNodes), asserta(rt(TreeId,NewID1,Leaf,L,H,Ptr))),
+		(do_all member(p(L,H,Ptr),LastNodes), asserta(rt(TreeId,NewID2,Leaf,L,H,Ptr))),
+		FirstNodes = [p(NewLo,_,_)|_],
+		LastNodes = [p(NewMid,_,_)|_],
+		last(LastNodes,p(_,NewHi,_)),
+		asserta(rt(TreeId,0,0,NewLo,NewMid,NewID1)),
+		asserta(rt(TreeId,0,0,NewMid,NewHi,NewID2))
+	 ;	(do_all member(p(L,H,Ptr),FirstNodes), retract(rt(TreeId,ID,Leaf,L,H,Ptr))),
+		mygensym(NewID),
+		(do_all member(p(L,H,Ptr),FirstNodes), asserta(rt(TreeId,NewID,Leaf,L,H,Ptr))),
+		SNodes = [p(LoKey,_,_)|_],
+		LastNodes = [p(MidKey,_,_)|_],
+		Path = [ParID|RestPath],
+		update_parent(TreeId,LoKey,MidKey,ParID,NewID,RestPath)
+	).
+
+split_n(0,R,[],R) :- !.
+split_n(K,[X|L],[X|R],F) :- K1 is K-1, split_n(K1,L,R,F).	
+
+last([N],N) :- !.
+last([_|L],N) :- last(L,N).
+
+:- comment(delete_from_range_tree/2,
+"delete_from_range_tree(+TreeId,+Key) deletes all key-value pairs with
+the given @var{Key} from the range tree.  It does not re-balance the
+range tree, so after many deletes it may give bad performance.").
+
+delete_from_range_tree(TreeId,Key) :-
+	delete_from_range_tree(TreeId,Key,_).
+
+:- comment(delete_from_range_tree/3,
+"delete_from_range_tree(+TreeId,+Key,?Val) deletes all key-value pairs
+with the given @var{Key} and @var{Val} from the range tree.  It does
+not re-balance the range tree, so after many deletes it may give bad
+performance.").
+
+delete_from_range_tree(TreeId,Key,Val) :-
+	delete_from_range_tree(TreeId,0,Key,Val).
+
+delete_from_range_tree(TreeId,Id,Key,Val) :-
+	rt(TreeId,Id,Leaf,LO,HI,Ptr),
+	range_tree_compare(LO,Key),
+	range_tree_compare(Key,HI),
+	Key \== HI,
+	(Leaf =:= 0
+	 ->	delete_from_range_tree(TreeId,Ptr,Key,Val)
+	 ;	(var(Val)
+		 ->	retractall(rtval(TreeId,Ptr,Key,_))
+		 ;	(rtval(TreeId,Ptr,Key,OldVals)
+			 do_all
+			 delete_uni(Val,OldVals,NewVals),
+			 retractall(rtval(TreeId,Ptr,Key,_)),
+			 (NewVals == []
+			  ->	 true
+			  ;	 assert(rtval(TreeId,Ptr,Key,NewVals))
+			 )
+			)
+		)
+	).
+
+delete_uni(_,[],[]) :- !.
+delete_uni(E,[E1|L],[E1|R]) :- E \= E1, !, delete_uni(E,L,R).
+delete_uni(E,[_|L],R) :- delete_uni(E,L,R).
+
+:- comment(delete_range_tree/1, "delete_range_tree(+TreeId) deletes
+everything from the named tree (i.e., deletes the tree.").
+
+delete_range_tree(TreeId) :-
+	retractall(rt(TreeId,_,_,_,_,_)),
+	retractall(rtval(TreeId,_,_,_)).
+
+:- comment(delete_all_range_trees/0, "delete_all_range_trees deletes
+all range trees, reinitializing everything.").
+
+delete_all_range_trees :-
+	retractall(rt(_,_,_,_,_,_)),
+	retractall(rtval(_,_,_,_)).
+
+
+
+:- comment(print_rt/1, "print_re(+TreeId) prints out the range tree
+with ID TreeId, in indented format.  Mainly for debugging.").
+
+print_rt(Tree) :- print_rt(Tree,0,0).
+
+print_rt(Tree,Id,Indent) :-
+	(rt(Tree,Id,Leaf,Lo,Hi,Ptr)
+	 do_all
+	 NewIndent is Indent+2,
+	 tab(Indent),
+	 write_canonical(Lo),write('-'),write_canonical(Hi),nl,
+	 (Leaf =:= 0
+	  ->	 print_rt(Tree,Ptr,NewIndent)
+	 ;	findall(Key:Val,rtval(Tree,Ptr,Key,Val),KVs),
+		sort(KVs,SKVs),
+		member(Key:Val,SKVs),
+		tab(NewIndent),
+		write_canonical(Key),write(':'),writeln(Val)
+	 )
+	).
+
+extract_var_ranges([],[],[],[]).
+extract_var_ranges([Arg|ArgList],[Var|Vars],[Lo|Los],[Hi|His]) :-
+	(var(Arg)
+	 ->	Var = Arg,
+		range_tree_min_value(Lo),
+		range_tree_max_value(Hi)
+	 ; Arg = Var:[Lo,Hi]
+	 ->	(nonvar(Lo),nonvar(Hi),range_tree_compare(Lo,Hi)
+		 ->	true
+		 ;	misc_error(('Illegal range argument value: ',Arg))
+		)
+	 ;	Var = Arg,
+		Lo = Arg,
+		Hi = Arg
+	),
+	extract_var_ranges(ArgList,Vars,Los,His).
+
+check_ranges([],[],[]).
+check_ranges([Val|Vals],[Lo|Los],[Hi|His]) :-
+	range_tree_compare(Lo,Val),
+	range_tree_compare(Val,Hi),
+	check_ranges(Vals,Los,His).
+
+:- table init_range_tree_if_nec/1.
+init_range_tree_if_nec(RT) :- init_range_tree(RT).
+
+
+:- comment(range_call/4,"
+@tt{range_call(Goal,KeyPosList,RangePosList,RangeFormList)} calls
+@var{Goal} using range indexing specifications in @var{RangeFormList},
+which binds variables in Goal in positions @var{RangePosList}.  For
+example, to call a predicate @pred{data/4}, whose key is field 1 and
+which has range indexes on fields 2 and 4, one could call:
+
+@begin{verbatim}
+| ?- range_call(data(K,X,Y,Z),[1],[2,4],[_,_:[4000,4500]]).
+@end{verbatim}
+
+@noindent This will efficiently return all triples of the stored
+predicate @pred{data/4} whose fourth field is in the range 4000-4500.
+It is assumed that range indexes have been built for the second and
+fourth fields of @pred{data/4} (normally by using
+@pred{range_assert/3}.)  This predicate is intended to be used by the
+user to define a predicate that can be used to get range-indexed
+access to another data predicate, as exemplified above.
+
+The @var{KeyPosList} is the list of positions in @var{Goal} that
+provide a key to the base predicate of @var{Goal}.  That predicate
+should be indexed on this key.  (If it is not a key or if it is not
+indexed on this key, there may be serious degradation of performance.)
+The @var{RangeFormList} is a list of range specifications, i.e., terms
+of form @tt{Var:[Low,High]}, or constants or variables.  The first in
+this list that has a value or range-specification (i.e., not a
+variable) will be used for range-indexing.  The @var{RangePosList} is
+the (corresponding) list of argument positions in @var{Goal} that are
+range-indexed.  These argument position lists must correspond to those
+used in @pred{range_assert/3}. ").
+
+:- import concat_atom/2 from string.
+
+range_call(Goal,KeyPos,VarsPos,IndexArgs) :-
+	pos_to_val(VarsPos,Goal,Vars),
+	extract_var_ranges(IndexArgs,Vars,Los,His),
+	pos_to_val(KeyPos,Goal,Key),
+	(ground(Key)
+	 ->	true
+	 ;	functor(Goal,Tree,Ar),
+		get_key_for_range_value(IndexArgs,Tree,Ar,VarsPos,Vars,Los,His,Key)
+	),
+	call_c(Goal),
+	check_ranges(Vars,Los,His).
+
+pos_to_val([],_Goal,[]).
+pos_to_val([I|Is],Goal,[V|Vs]) :-
+	arg(I,Goal,V),
+	pos_to_val(Is,Goal,Vs).
+
+get_key_for_range_value([],_,_,_,_,_,_,_).
+get_key_for_range_value([IndexArg|IndexArgs],Tree,Ar,[I|VarsPos],[Var|Vars],[Lo|Los],[Hi|His],Key) :-
+	(nonvar(IndexArg)
+	 ->	tab_concat_atom([Tree,#,Ar,#,I],Tid),
+		init_range_tree_if_nec(Tid),
+		get_from_range_tree(Tid,Lo,Hi,Var,Key) % bind Key to all in range
+	 ;	get_key_for_range_value(IndexArgs,Tree,Ar,VarsPos,Vars,Los,His,Key)
+	).
+
+:- comment(range_assert/3,"
+@tt{range_assert(Goal,KeyPosList,IndexPosList)} asserts @var{Goal}
+to the Prolog database and also adds necessary records to range
+indexes.  @var{KeyPosList} is a list of integers indicating the
+argument positions in @var{Goal} of the key for the predicate of
+@var{Goal}.  (That predicate should be indexed on this key.)
+@var{IndexPosList} is a list of integers that indicate the argument
+positions in @var{Goal} that are to be range indexed.  They must be in
+the order in which the indexes will be tried, and must correspond to
+the order of argument variables in the @var{RangeFormList} (and
+@var{RangePosList}) arguments to @pred{range_call/4} and
+@pred{range_retractall/4}.
+
+This predicate is intended to be used in the definition of a specific
+assert-like predicate to add tuples to a range-indexed predicate, as
+shown in the introductory example.  ").
+
+range_assert(Goal,KeyPoses,IndexPoses) :-
+	assert(Goal),
+	functor(Goal,Tree,Ar),
+	assert_range_trees(IndexPoses,KeyPoses,Tree,Ar,Goal).
+
+assert_range_trees([],_,_,_,_).
+assert_range_trees([IndexPos|IndexPoses],KeyPoses,Tree,Ar,Goal) :-
+	tab_concat_atom([Tree,#,Ar,#,IndexPos],Tid),
+	arg(IndexPos,Goal,RVal),
+	arg_list(KeyPoses,Goal,KeyArgs),
+	init_range_tree_if_nec(Tid),
+	add_to_range_tree(Tid,RVal,KeyArgs),
+	assert_range_trees(IndexPoses,KeyPoses,Tree,Ar,Goal).
+
+arg_list([],_,[]).
+arg_list([K|Ks],Goal,[V|Vs]) :-
+	arg(K,Goal,V),
+	arg_list(Ks,Goal,Vs).
+
+
+:- comment(range_retractall/4, "
+@tt{range_retractall(Goal,KeyPosList,RangePosList,RangeFormList)}
+removes all tuples in the database that would be retrieved by a call
+to @pred{range_call/4}, with the same arguments.  This also updates
+the range-indexes for this predicate.  Notice that this supports
+efficient retraction through use of range-restricted arguments in
+@var{Goal}.  Note also, however, that since range trees are not
+rebalanced after deletion, heavy use of this predicate may cause
+performance degradation.  ").
+
+range_retractall(Goal,KeyPos,VarsPos,IndexArgs) :-
+	functor(Goal,Tree,Ar),
+	pos_to_val(KeyPos,Goal,Key),
+	(is_most_general_term(IndexArgs)
+	 ->	retractall(Goal),
+		pos_to_val(VarsPos,Goal,Vars),
+		(do_all
+		 member(I,VarsPos),
+		 tab_concat_atom([Tree,#,Ar,#,I],Tid),
+		 delete_range_tree(Tid)
+		)
+	 ;	(pos_to_val(VarsPos,Goal,Vars),
+		 range_call(Goal,KeyPos,VarsPos,IndexArgs)
+		 do_all
+		 retractall(Goal),
+		 member(I,VarsPos),
+		 tab_concat_atom([Tree,#,Ar,#,I],Tid),
+		 arg(I,Goal,IndVar),
+		 delete_from_range_tree(Tid,IndVar,Key)
+		)
+	).
+
+:- table tab_concat_atom/2.
+tab_concat_atom(List,Atom) :- concat_atom(List,Atom).
+
+
+end_of_file.
+/**************************testing**********************/
+:- export test/3.
+
+:- import ith/3, for/3 from basics.
+
+%test(1,100000,6).
+test(Tree,Size,K) :-
+	Max is Size*2,
+	init_range_tree(Tree),
+	cputime(T00),
+	gen_rt(Tree,Size,K),
+	cputime(T0),
+	TimeB is T0-T00,
+	writeln(tree_built(TimeB)),
+	ret_rt2(Tree,Size,K),  % each range of 3
+	cputime(T1),
+	Time is T1-T0,
+	writeln(every_item_retrieved(Time)).
+
+gen_rt(Tree,Size,K) :-
+	Max is Size*2,
+	init_range_tree(Tree),
+	Size1 is Size // K,
+	(do_all
+	 for(J,1,K),
+	 for(I,0,Size1),
+	 I1 is I*K+J-1,
+	 add_to_range_tree(Tree,I1,I1)
+	).
+
+ret_rt(Tree,Size,K) :-
+	Size1 is Size // K,
+	(do_all
+	 for(J,1,K),
+	 for(I,0,Size1),
+	 I1 is I*K+J-1,
+	 (get_from_range_tree(Tree,I1,I1,Key,Val)
+	  ->	 (Key==I1,Val==I1
+		  ->	 true
+		  ;	 writeln(error1(I1))
+		 )
+	  ;	 writeln(error2(I1))
+	 )
+	).
+	
+ret_rt2(Tree,Size,K) :-
+	Size1 is Size // K,
+	(do_all
+	 for(J,1,K),
+	 for(I,0,Size1),
+	 I1 is I*K+J-1,
+	 I11 is I1+1,
+	 I12 is I1+2,
+	 findall(Key-Val,get_from_range_tree(Tree,I1,I12,Key,Val),KeyVals),
+	 sort(KeyVals,SKeyVals),
+	 (SKeyVals == [I1-I1,I11-I11,I12-I12]
+	  ->	 true
+	  ; I1 =:= Size, SKeyVals == [I1-I1,I11-I11]
+	  ->	 true
+	  ; I1 =:= Size+1, SKeyVals == [I1-I1]
+	  ->	 true
+	  ;	 writeln(error1(I1,Size,SKeyVals))
+	 )
+	).
+	
+:- export test2/0.
+test2 :-
+	init_range_tree(1),
+	(do_all
+	 for(J,1,10),
+	 for(I,1,100),
+	 add_to_range_tree(1,I,J)
+	).
+

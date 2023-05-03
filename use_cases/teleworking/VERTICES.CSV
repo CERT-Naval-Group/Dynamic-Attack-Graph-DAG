@@ -1,0 +1,28 @@
+1,"execCode(webServer,apache)","OR",0
+2,"RULE 0 (remote exploit of a server program)","AND",0
+3,"netAccess(webServer,tcp,80)","OR",0
+4,"RULE 13 (access throught proxy)","AND",0
+5,"firewallRule(proxy,proxyLAN,webServer,serviceLAN,tcp,80)","LEAF",1
+6,"firewallRule(workstation,userLAN,proxy,proxyLAN,tcp,443)","LEAF",1
+7,"isProxy(proxy,443,webServer,80)","LEAF",1
+8,"vlanInterface(workstation,userLAN)","LEAF",1
+9,"execCode(workstation,root)","OR",0
+10,"RULE 0 (remote exploit of a server program)","AND",0
+11,"netAccess(workstation,tcp,445)","OR",0
+12,"RULE 12 (first access on the same LAN)","AND",0
+13,"vlanInterface(workstation,homeNetwork)","LEAF",1
+14,"attackerLocated(homeNetwork)","LEAF",1
+15,"RULE 9 (multi-hop access same LAN)","AND",0
+16,"lanAccess(homeNetwork)","OR",0
+17,"RULE 8 (LAN access)","AND",0
+18,"RULE 9 (multi-hop access same LAN)","AND",0
+19,"lanAccess(userLAN)","OR",0
+20,"RULE 8 (LAN access)","AND",0
+21,"networkServiceInfo(workstation,_,smb,tcp,445,root)","LEAF",1
+22,"vulExists(workstation,'CVE-2020-0796',smb,remoteExploit,privEscalation)","LEAF",1
+23,"RULE 9 (multi-hop access same LAN)","AND",0
+24,"vlanInterface(webServer,serviceLAN)","LEAF",1
+25,"lanAccess(serviceLAN)","OR",0
+26,"RULE 8 (LAN access)","AND",0
+27,"networkServiceInfo(webServer,serviceLAN,httpd,tcp,80,apache)","LEAF",1
+28,"vulExists(webServer,'CVE-2017-12617',httpd,remoteExploit,privEscalation)","LEAF",1

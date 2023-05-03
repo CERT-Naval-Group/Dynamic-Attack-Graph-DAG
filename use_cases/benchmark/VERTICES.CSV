@@ -1,0 +1,2030 @@
+1,"execCode(h0,root)","OR",0
+2,"vlanInterface(h0,homeNetwork)","LEAF",1
+3,"attackerLocated(homeNetwork)","LEAF",1
+4,"lanAccess(homeNetwork)","OR",0
+5,"RULE 8 (LAN access)","AND",0
+6,"RULE 8 (LAN access)","AND",0
+7,"vlanInterface(h1,homeNetwork)","LEAF",1
+8,"execCode(h1,root)","OR",0
+9,"vlanInterface(h1,userLAN)","LEAF",1
+10,"lanAccess(userLAN)","OR",0
+11,"RULE 8 (LAN access)","AND",0
+12,"vlanInterface(h0,userLAN)","LEAF",1
+13,"RULE 8 (LAN access)","AND",0
+14,"RULE 8 (LAN access)","AND",0
+15,"vlanInterface(h2,userLAN)","LEAF",1
+16,"execCode(h2,root)","OR",0
+17,"vlanInterface(h2,homeNetwork)","LEAF",1
+18,"networkServiceInfo(h2,_,smb,tcp,445,root)","LEAF",1
+19,"vulExists(h2,'CVE-2020-0796',smb,remoteExploit,privEscalation)","LEAF",1
+20,"networkServiceInfo(h1,_,smb,tcp,445,root)","LEAF",1
+21,"vulExists(h1,'CVE-2020-0796',smb,remoteExploit,privEscalation)","LEAF",1
+22,"RULE 8 (LAN access)","AND",0
+23,"networkServiceInfo(h0,_,smb,tcp,445,root)","LEAF",1
+24,"vulExists(h0,'CVE-2020-0796',smb,remoteExploit,privEscalation)","LEAF",1
+25,"execCode(webServer,apache)","OR",0
+26,"RULE 0 (remote exploit of a server program)","AND",0
+27,"netAccess(webServer,tcp,80)","OR",0
+28,"RULE 10 (multi-hop access)","AND",0
+29,"vlanInterface(webServer,serviceLAN)","LEAF",1
+30,"firewallRule(h0,userLAN,webServer,serviceLAN,tcp,80)","LEAF",1
+31,"RULE 10 (multi-hop access)","AND",0
+32,"firewallRule(h1,userLAN,webServer,serviceLAN,tcp,80)","LEAF",1
+33,"RULE 10 (multi-hop access)","AND",0
+34,"firewallRule(h2,userLAN,webServer,serviceLAN,tcp,80)","LEAF",1
+35,"networkServiceInfo(webServer,serviceLAN,httpd,tcp,80,apache)","LEAF",1
+36,"vulExists(webServer,v0,httpd,remoteExploit,privEscalation)","LEAF",1
+37,"RULE 0 (remote exploit of a server program)","AND",0
+38,"vulExists(webServer,v1,httpd,remoteExploit,privEscalation)","LEAF",1
+39,"RULE 0 (remote exploit of a server program)","AND",0
+40,"vulExists(webServer,v10,httpd,remoteExploit,privEscalation)","LEAF",1
+41,"RULE 0 (remote exploit of a server program)","AND",0
+42,"vulExists(webServer,v100,httpd,remoteExploit,privEscalation)","LEAF",1
+43,"RULE 0 (remote exploit of a server program)","AND",0
+44,"vulExists(webServer,v101,httpd,remoteExploit,privEscalation)","LEAF",1
+45,"RULE 0 (remote exploit of a server program)","AND",0
+46,"vulExists(webServer,v102,httpd,remoteExploit,privEscalation)","LEAF",1
+47,"RULE 0 (remote exploit of a server program)","AND",0
+48,"vulExists(webServer,v103,httpd,remoteExploit,privEscalation)","LEAF",1
+49,"RULE 0 (remote exploit of a server program)","AND",0
+50,"vulExists(webServer,v104,httpd,remoteExploit,privEscalation)","LEAF",1
+51,"RULE 0 (remote exploit of a server program)","AND",0
+52,"vulExists(webServer,v105,httpd,remoteExploit,privEscalation)","LEAF",1
+53,"RULE 0 (remote exploit of a server program)","AND",0
+54,"vulExists(webServer,v106,httpd,remoteExploit,privEscalation)","LEAF",1
+55,"RULE 0 (remote exploit of a server program)","AND",0
+56,"vulExists(webServer,v107,httpd,remoteExploit,privEscalation)","LEAF",1
+57,"RULE 0 (remote exploit of a server program)","AND",0
+58,"vulExists(webServer,v108,httpd,remoteExploit,privEscalation)","LEAF",1
+59,"RULE 0 (remote exploit of a server program)","AND",0
+60,"vulExists(webServer,v109,httpd,remoteExploit,privEscalation)","LEAF",1
+61,"RULE 0 (remote exploit of a server program)","AND",0
+62,"vulExists(webServer,v11,httpd,remoteExploit,privEscalation)","LEAF",1
+63,"RULE 0 (remote exploit of a server program)","AND",0
+64,"vulExists(webServer,v110,httpd,remoteExploit,privEscalation)","LEAF",1
+65,"RULE 0 (remote exploit of a server program)","AND",0
+66,"vulExists(webServer,v111,httpd,remoteExploit,privEscalation)","LEAF",1
+67,"RULE 0 (remote exploit of a server program)","AND",0
+68,"vulExists(webServer,v112,httpd,remoteExploit,privEscalation)","LEAF",1
+69,"RULE 0 (remote exploit of a server program)","AND",0
+70,"vulExists(webServer,v113,httpd,remoteExploit,privEscalation)","LEAF",1
+71,"RULE 0 (remote exploit of a server program)","AND",0
+72,"vulExists(webServer,v114,httpd,remoteExploit,privEscalation)","LEAF",1
+73,"RULE 0 (remote exploit of a server program)","AND",0
+74,"vulExists(webServer,v115,httpd,remoteExploit,privEscalation)","LEAF",1
+75,"RULE 0 (remote exploit of a server program)","AND",0
+76,"vulExists(webServer,v116,httpd,remoteExploit,privEscalation)","LEAF",1
+77,"RULE 0 (remote exploit of a server program)","AND",0
+78,"vulExists(webServer,v117,httpd,remoteExploit,privEscalation)","LEAF",1
+79,"RULE 0 (remote exploit of a server program)","AND",0
+80,"vulExists(webServer,v118,httpd,remoteExploit,privEscalation)","LEAF",1
+81,"RULE 0 (remote exploit of a server program)","AND",0
+82,"vulExists(webServer,v119,httpd,remoteExploit,privEscalation)","LEAF",1
+83,"RULE 0 (remote exploit of a server program)","AND",0
+84,"vulExists(webServer,v12,httpd,remoteExploit,privEscalation)","LEAF",1
+85,"RULE 0 (remote exploit of a server program)","AND",0
+86,"vulExists(webServer,v120,httpd,remoteExploit,privEscalation)","LEAF",1
+87,"RULE 0 (remote exploit of a server program)","AND",0
+88,"vulExists(webServer,v121,httpd,remoteExploit,privEscalation)","LEAF",1
+89,"RULE 0 (remote exploit of a server program)","AND",0
+90,"vulExists(webServer,v122,httpd,remoteExploit,privEscalation)","LEAF",1
+91,"RULE 0 (remote exploit of a server program)","AND",0
+92,"vulExists(webServer,v123,httpd,remoteExploit,privEscalation)","LEAF",1
+93,"RULE 0 (remote exploit of a server program)","AND",0
+94,"vulExists(webServer,v124,httpd,remoteExploit,privEscalation)","LEAF",1
+95,"RULE 0 (remote exploit of a server program)","AND",0
+96,"vulExists(webServer,v125,httpd,remoteExploit,privEscalation)","LEAF",1
+97,"RULE 0 (remote exploit of a server program)","AND",0
+98,"vulExists(webServer,v126,httpd,remoteExploit,privEscalation)","LEAF",1
+99,"RULE 0 (remote exploit of a server program)","AND",0
+100,"vulExists(webServer,v127,httpd,remoteExploit,privEscalation)","LEAF",1
+101,"RULE 0 (remote exploit of a server program)","AND",0
+102,"vulExists(webServer,v128,httpd,remoteExploit,privEscalation)","LEAF",1
+103,"RULE 0 (remote exploit of a server program)","AND",0
+104,"vulExists(webServer,v129,httpd,remoteExploit,privEscalation)","LEAF",1
+105,"RULE 0 (remote exploit of a server program)","AND",0
+106,"vulExists(webServer,v13,httpd,remoteExploit,privEscalation)","LEAF",1
+107,"RULE 0 (remote exploit of a server program)","AND",0
+108,"vulExists(webServer,v130,httpd,remoteExploit,privEscalation)","LEAF",1
+109,"RULE 0 (remote exploit of a server program)","AND",0
+110,"vulExists(webServer,v131,httpd,remoteExploit,privEscalation)","LEAF",1
+111,"RULE 0 (remote exploit of a server program)","AND",0
+112,"vulExists(webServer,v132,httpd,remoteExploit,privEscalation)","LEAF",1
+113,"RULE 0 (remote exploit of a server program)","AND",0
+114,"vulExists(webServer,v133,httpd,remoteExploit,privEscalation)","LEAF",1
+115,"RULE 0 (remote exploit of a server program)","AND",0
+116,"vulExists(webServer,v134,httpd,remoteExploit,privEscalation)","LEAF",1
+117,"RULE 0 (remote exploit of a server program)","AND",0
+118,"vulExists(webServer,v135,httpd,remoteExploit,privEscalation)","LEAF",1
+119,"RULE 0 (remote exploit of a server program)","AND",0
+120,"vulExists(webServer,v136,httpd,remoteExploit,privEscalation)","LEAF",1
+121,"RULE 0 (remote exploit of a server program)","AND",0
+122,"vulExists(webServer,v137,httpd,remoteExploit,privEscalation)","LEAF",1
+123,"RULE 0 (remote exploit of a server program)","AND",0
+124,"vulExists(webServer,v138,httpd,remoteExploit,privEscalation)","LEAF",1
+125,"RULE 0 (remote exploit of a server program)","AND",0
+126,"vulExists(webServer,v139,httpd,remoteExploit,privEscalation)","LEAF",1
+127,"RULE 0 (remote exploit of a server program)","AND",0
+128,"vulExists(webServer,v14,httpd,remoteExploit,privEscalation)","LEAF",1
+129,"RULE 0 (remote exploit of a server program)","AND",0
+130,"vulExists(webServer,v140,httpd,remoteExploit,privEscalation)","LEAF",1
+131,"RULE 0 (remote exploit of a server program)","AND",0
+132,"vulExists(webServer,v141,httpd,remoteExploit,privEscalation)","LEAF",1
+133,"RULE 0 (remote exploit of a server program)","AND",0
+134,"vulExists(webServer,v142,httpd,remoteExploit,privEscalation)","LEAF",1
+135,"RULE 0 (remote exploit of a server program)","AND",0
+136,"vulExists(webServer,v143,httpd,remoteExploit,privEscalation)","LEAF",1
+137,"RULE 0 (remote exploit of a server program)","AND",0
+138,"vulExists(webServer,v144,httpd,remoteExploit,privEscalation)","LEAF",1
+139,"RULE 0 (remote exploit of a server program)","AND",0
+140,"vulExists(webServer,v145,httpd,remoteExploit,privEscalation)","LEAF",1
+141,"RULE 0 (remote exploit of a server program)","AND",0
+142,"vulExists(webServer,v146,httpd,remoteExploit,privEscalation)","LEAF",1
+143,"RULE 0 (remote exploit of a server program)","AND",0
+144,"vulExists(webServer,v147,httpd,remoteExploit,privEscalation)","LEAF",1
+145,"RULE 0 (remote exploit of a server program)","AND",0
+146,"vulExists(webServer,v148,httpd,remoteExploit,privEscalation)","LEAF",1
+147,"RULE 0 (remote exploit of a server program)","AND",0
+148,"vulExists(webServer,v149,httpd,remoteExploit,privEscalation)","LEAF",1
+149,"RULE 0 (remote exploit of a server program)","AND",0
+150,"vulExists(webServer,v15,httpd,remoteExploit,privEscalation)","LEAF",1
+151,"RULE 0 (remote exploit of a server program)","AND",0
+152,"vulExists(webServer,v150,httpd,remoteExploit,privEscalation)","LEAF",1
+153,"RULE 0 (remote exploit of a server program)","AND",0
+154,"vulExists(webServer,v151,httpd,remoteExploit,privEscalation)","LEAF",1
+155,"RULE 0 (remote exploit of a server program)","AND",0
+156,"vulExists(webServer,v152,httpd,remoteExploit,privEscalation)","LEAF",1
+157,"RULE 0 (remote exploit of a server program)","AND",0
+158,"vulExists(webServer,v153,httpd,remoteExploit,privEscalation)","LEAF",1
+159,"RULE 0 (remote exploit of a server program)","AND",0
+160,"vulExists(webServer,v154,httpd,remoteExploit,privEscalation)","LEAF",1
+161,"RULE 0 (remote exploit of a server program)","AND",0
+162,"vulExists(webServer,v155,httpd,remoteExploit,privEscalation)","LEAF",1
+163,"RULE 0 (remote exploit of a server program)","AND",0
+164,"vulExists(webServer,v156,httpd,remoteExploit,privEscalation)","LEAF",1
+165,"RULE 0 (remote exploit of a server program)","AND",0
+166,"vulExists(webServer,v157,httpd,remoteExploit,privEscalation)","LEAF",1
+167,"RULE 0 (remote exploit of a server program)","AND",0
+168,"vulExists(webServer,v158,httpd,remoteExploit,privEscalation)","LEAF",1
+169,"RULE 0 (remote exploit of a server program)","AND",0
+170,"vulExists(webServer,v159,httpd,remoteExploit,privEscalation)","LEAF",1
+171,"RULE 0 (remote exploit of a server program)","AND",0
+172,"vulExists(webServer,v16,httpd,remoteExploit,privEscalation)","LEAF",1
+173,"RULE 0 (remote exploit of a server program)","AND",0
+174,"vulExists(webServer,v160,httpd,remoteExploit,privEscalation)","LEAF",1
+175,"RULE 0 (remote exploit of a server program)","AND",0
+176,"vulExists(webServer,v161,httpd,remoteExploit,privEscalation)","LEAF",1
+177,"RULE 0 (remote exploit of a server program)","AND",0
+178,"vulExists(webServer,v162,httpd,remoteExploit,privEscalation)","LEAF",1
+179,"RULE 0 (remote exploit of a server program)","AND",0
+180,"vulExists(webServer,v163,httpd,remoteExploit,privEscalation)","LEAF",1
+181,"RULE 0 (remote exploit of a server program)","AND",0
+182,"vulExists(webServer,v164,httpd,remoteExploit,privEscalation)","LEAF",1
+183,"RULE 0 (remote exploit of a server program)","AND",0
+184,"vulExists(webServer,v165,httpd,remoteExploit,privEscalation)","LEAF",1
+185,"RULE 0 (remote exploit of a server program)","AND",0
+186,"vulExists(webServer,v166,httpd,remoteExploit,privEscalation)","LEAF",1
+187,"RULE 0 (remote exploit of a server program)","AND",0
+188,"vulExists(webServer,v167,httpd,remoteExploit,privEscalation)","LEAF",1
+189,"RULE 0 (remote exploit of a server program)","AND",0
+190,"vulExists(webServer,v168,httpd,remoteExploit,privEscalation)","LEAF",1
+191,"RULE 0 (remote exploit of a server program)","AND",0
+192,"vulExists(webServer,v169,httpd,remoteExploit,privEscalation)","LEAF",1
+193,"RULE 0 (remote exploit of a server program)","AND",0
+194,"vulExists(webServer,v17,httpd,remoteExploit,privEscalation)","LEAF",1
+195,"RULE 0 (remote exploit of a server program)","AND",0
+196,"vulExists(webServer,v170,httpd,remoteExploit,privEscalation)","LEAF",1
+197,"RULE 0 (remote exploit of a server program)","AND",0
+198,"vulExists(webServer,v171,httpd,remoteExploit,privEscalation)","LEAF",1
+199,"RULE 0 (remote exploit of a server program)","AND",0
+200,"vulExists(webServer,v172,httpd,remoteExploit,privEscalation)","LEAF",1
+201,"RULE 0 (remote exploit of a server program)","AND",0
+202,"vulExists(webServer,v173,httpd,remoteExploit,privEscalation)","LEAF",1
+203,"RULE 0 (remote exploit of a server program)","AND",0
+204,"vulExists(webServer,v174,httpd,remoteExploit,privEscalation)","LEAF",1
+205,"RULE 0 (remote exploit of a server program)","AND",0
+206,"vulExists(webServer,v175,httpd,remoteExploit,privEscalation)","LEAF",1
+207,"RULE 0 (remote exploit of a server program)","AND",0
+208,"vulExists(webServer,v176,httpd,remoteExploit,privEscalation)","LEAF",1
+209,"RULE 0 (remote exploit of a server program)","AND",0
+210,"vulExists(webServer,v177,httpd,remoteExploit,privEscalation)","LEAF",1
+211,"RULE 0 (remote exploit of a server program)","AND",0
+212,"vulExists(webServer,v178,httpd,remoteExploit,privEscalation)","LEAF",1
+213,"RULE 0 (remote exploit of a server program)","AND",0
+214,"vulExists(webServer,v179,httpd,remoteExploit,privEscalation)","LEAF",1
+215,"RULE 0 (remote exploit of a server program)","AND",0
+216,"vulExists(webServer,v18,httpd,remoteExploit,privEscalation)","LEAF",1
+217,"RULE 0 (remote exploit of a server program)","AND",0
+218,"vulExists(webServer,v180,httpd,remoteExploit,privEscalation)","LEAF",1
+219,"RULE 0 (remote exploit of a server program)","AND",0
+220,"vulExists(webServer,v181,httpd,remoteExploit,privEscalation)","LEAF",1
+221,"RULE 0 (remote exploit of a server program)","AND",0
+222,"vulExists(webServer,v182,httpd,remoteExploit,privEscalation)","LEAF",1
+223,"RULE 0 (remote exploit of a server program)","AND",0
+224,"vulExists(webServer,v183,httpd,remoteExploit,privEscalation)","LEAF",1
+225,"RULE 0 (remote exploit of a server program)","AND",0
+226,"vulExists(webServer,v184,httpd,remoteExploit,privEscalation)","LEAF",1
+227,"RULE 0 (remote exploit of a server program)","AND",0
+228,"vulExists(webServer,v185,httpd,remoteExploit,privEscalation)","LEAF",1
+229,"RULE 0 (remote exploit of a server program)","AND",0
+230,"vulExists(webServer,v186,httpd,remoteExploit,privEscalation)","LEAF",1
+231,"RULE 0 (remote exploit of a server program)","AND",0
+232,"vulExists(webServer,v187,httpd,remoteExploit,privEscalation)","LEAF",1
+233,"RULE 0 (remote exploit of a server program)","AND",0
+234,"vulExists(webServer,v188,httpd,remoteExploit,privEscalation)","LEAF",1
+235,"RULE 0 (remote exploit of a server program)","AND",0
+236,"vulExists(webServer,v189,httpd,remoteExploit,privEscalation)","LEAF",1
+237,"RULE 0 (remote exploit of a server program)","AND",0
+238,"vulExists(webServer,v19,httpd,remoteExploit,privEscalation)","LEAF",1
+239,"RULE 0 (remote exploit of a server program)","AND",0
+240,"vulExists(webServer,v190,httpd,remoteExploit,privEscalation)","LEAF",1
+241,"RULE 0 (remote exploit of a server program)","AND",0
+242,"vulExists(webServer,v191,httpd,remoteExploit,privEscalation)","LEAF",1
+243,"RULE 0 (remote exploit of a server program)","AND",0
+244,"vulExists(webServer,v192,httpd,remoteExploit,privEscalation)","LEAF",1
+245,"RULE 0 (remote exploit of a server program)","AND",0
+246,"vulExists(webServer,v193,httpd,remoteExploit,privEscalation)","LEAF",1
+247,"RULE 0 (remote exploit of a server program)","AND",0
+248,"vulExists(webServer,v194,httpd,remoteExploit,privEscalation)","LEAF",1
+249,"RULE 0 (remote exploit of a server program)","AND",0
+250,"vulExists(webServer,v195,httpd,remoteExploit,privEscalation)","LEAF",1
+251,"RULE 0 (remote exploit of a server program)","AND",0
+252,"vulExists(webServer,v196,httpd,remoteExploit,privEscalation)","LEAF",1
+253,"RULE 0 (remote exploit of a server program)","AND",0
+254,"vulExists(webServer,v197,httpd,remoteExploit,privEscalation)","LEAF",1
+255,"RULE 0 (remote exploit of a server program)","AND",0
+256,"vulExists(webServer,v198,httpd,remoteExploit,privEscalation)","LEAF",1
+257,"RULE 0 (remote exploit of a server program)","AND",0
+258,"vulExists(webServer,v199,httpd,remoteExploit,privEscalation)","LEAF",1
+259,"RULE 0 (remote exploit of a server program)","AND",0
+260,"vulExists(webServer,v2,httpd,remoteExploit,privEscalation)","LEAF",1
+261,"RULE 0 (remote exploit of a server program)","AND",0
+262,"vulExists(webServer,v20,httpd,remoteExploit,privEscalation)","LEAF",1
+263,"RULE 0 (remote exploit of a server program)","AND",0
+264,"vulExists(webServer,v200,httpd,remoteExploit,privEscalation)","LEAF",1
+265,"RULE 0 (remote exploit of a server program)","AND",0
+266,"vulExists(webServer,v201,httpd,remoteExploit,privEscalation)","LEAF",1
+267,"RULE 0 (remote exploit of a server program)","AND",0
+268,"vulExists(webServer,v202,httpd,remoteExploit,privEscalation)","LEAF",1
+269,"RULE 0 (remote exploit of a server program)","AND",0
+270,"vulExists(webServer,v203,httpd,remoteExploit,privEscalation)","LEAF",1
+271,"RULE 0 (remote exploit of a server program)","AND",0
+272,"vulExists(webServer,v204,httpd,remoteExploit,privEscalation)","LEAF",1
+273,"RULE 0 (remote exploit of a server program)","AND",0
+274,"vulExists(webServer,v205,httpd,remoteExploit,privEscalation)","LEAF",1
+275,"RULE 0 (remote exploit of a server program)","AND",0
+276,"vulExists(webServer,v206,httpd,remoteExploit,privEscalation)","LEAF",1
+277,"RULE 0 (remote exploit of a server program)","AND",0
+278,"vulExists(webServer,v207,httpd,remoteExploit,privEscalation)","LEAF",1
+279,"RULE 0 (remote exploit of a server program)","AND",0
+280,"vulExists(webServer,v208,httpd,remoteExploit,privEscalation)","LEAF",1
+281,"RULE 0 (remote exploit of a server program)","AND",0
+282,"vulExists(webServer,v209,httpd,remoteExploit,privEscalation)","LEAF",1
+283,"RULE 0 (remote exploit of a server program)","AND",0
+284,"vulExists(webServer,v21,httpd,remoteExploit,privEscalation)","LEAF",1
+285,"RULE 0 (remote exploit of a server program)","AND",0
+286,"vulExists(webServer,v210,httpd,remoteExploit,privEscalation)","LEAF",1
+287,"RULE 0 (remote exploit of a server program)","AND",0
+288,"vulExists(webServer,v211,httpd,remoteExploit,privEscalation)","LEAF",1
+289,"RULE 0 (remote exploit of a server program)","AND",0
+290,"vulExists(webServer,v212,httpd,remoteExploit,privEscalation)","LEAF",1
+291,"RULE 0 (remote exploit of a server program)","AND",0
+292,"vulExists(webServer,v213,httpd,remoteExploit,privEscalation)","LEAF",1
+293,"RULE 0 (remote exploit of a server program)","AND",0
+294,"vulExists(webServer,v214,httpd,remoteExploit,privEscalation)","LEAF",1
+295,"RULE 0 (remote exploit of a server program)","AND",0
+296,"vulExists(webServer,v215,httpd,remoteExploit,privEscalation)","LEAF",1
+297,"RULE 0 (remote exploit of a server program)","AND",0
+298,"vulExists(webServer,v216,httpd,remoteExploit,privEscalation)","LEAF",1
+299,"RULE 0 (remote exploit of a server program)","AND",0
+300,"vulExists(webServer,v217,httpd,remoteExploit,privEscalation)","LEAF",1
+301,"RULE 0 (remote exploit of a server program)","AND",0
+302,"vulExists(webServer,v218,httpd,remoteExploit,privEscalation)","LEAF",1
+303,"RULE 0 (remote exploit of a server program)","AND",0
+304,"vulExists(webServer,v219,httpd,remoteExploit,privEscalation)","LEAF",1
+305,"RULE 0 (remote exploit of a server program)","AND",0
+306,"vulExists(webServer,v22,httpd,remoteExploit,privEscalation)","LEAF",1
+307,"RULE 0 (remote exploit of a server program)","AND",0
+308,"vulExists(webServer,v220,httpd,remoteExploit,privEscalation)","LEAF",1
+309,"RULE 0 (remote exploit of a server program)","AND",0
+310,"vulExists(webServer,v221,httpd,remoteExploit,privEscalation)","LEAF",1
+311,"RULE 0 (remote exploit of a server program)","AND",0
+312,"vulExists(webServer,v222,httpd,remoteExploit,privEscalation)","LEAF",1
+313,"RULE 0 (remote exploit of a server program)","AND",0
+314,"vulExists(webServer,v223,httpd,remoteExploit,privEscalation)","LEAF",1
+315,"RULE 0 (remote exploit of a server program)","AND",0
+316,"vulExists(webServer,v224,httpd,remoteExploit,privEscalation)","LEAF",1
+317,"RULE 0 (remote exploit of a server program)","AND",0
+318,"vulExists(webServer,v225,httpd,remoteExploit,privEscalation)","LEAF",1
+319,"RULE 0 (remote exploit of a server program)","AND",0
+320,"vulExists(webServer,v226,httpd,remoteExploit,privEscalation)","LEAF",1
+321,"RULE 0 (remote exploit of a server program)","AND",0
+322,"vulExists(webServer,v227,httpd,remoteExploit,privEscalation)","LEAF",1
+323,"RULE 0 (remote exploit of a server program)","AND",0
+324,"vulExists(webServer,v228,httpd,remoteExploit,privEscalation)","LEAF",1
+325,"RULE 0 (remote exploit of a server program)","AND",0
+326,"vulExists(webServer,v229,httpd,remoteExploit,privEscalation)","LEAF",1
+327,"RULE 0 (remote exploit of a server program)","AND",0
+328,"vulExists(webServer,v23,httpd,remoteExploit,privEscalation)","LEAF",1
+329,"RULE 0 (remote exploit of a server program)","AND",0
+330,"vulExists(webServer,v230,httpd,remoteExploit,privEscalation)","LEAF",1
+331,"RULE 0 (remote exploit of a server program)","AND",0
+332,"vulExists(webServer,v231,httpd,remoteExploit,privEscalation)","LEAF",1
+333,"RULE 0 (remote exploit of a server program)","AND",0
+334,"vulExists(webServer,v232,httpd,remoteExploit,privEscalation)","LEAF",1
+335,"RULE 0 (remote exploit of a server program)","AND",0
+336,"vulExists(webServer,v233,httpd,remoteExploit,privEscalation)","LEAF",1
+337,"RULE 0 (remote exploit of a server program)","AND",0
+338,"vulExists(webServer,v234,httpd,remoteExploit,privEscalation)","LEAF",1
+339,"RULE 0 (remote exploit of a server program)","AND",0
+340,"vulExists(webServer,v235,httpd,remoteExploit,privEscalation)","LEAF",1
+341,"RULE 0 (remote exploit of a server program)","AND",0
+342,"vulExists(webServer,v236,httpd,remoteExploit,privEscalation)","LEAF",1
+343,"RULE 0 (remote exploit of a server program)","AND",0
+344,"vulExists(webServer,v237,httpd,remoteExploit,privEscalation)","LEAF",1
+345,"RULE 0 (remote exploit of a server program)","AND",0
+346,"vulExists(webServer,v238,httpd,remoteExploit,privEscalation)","LEAF",1
+347,"RULE 0 (remote exploit of a server program)","AND",0
+348,"vulExists(webServer,v239,httpd,remoteExploit,privEscalation)","LEAF",1
+349,"RULE 0 (remote exploit of a server program)","AND",0
+350,"vulExists(webServer,v24,httpd,remoteExploit,privEscalation)","LEAF",1
+351,"RULE 0 (remote exploit of a server program)","AND",0
+352,"vulExists(webServer,v240,httpd,remoteExploit,privEscalation)","LEAF",1
+353,"RULE 0 (remote exploit of a server program)","AND",0
+354,"vulExists(webServer,v241,httpd,remoteExploit,privEscalation)","LEAF",1
+355,"RULE 0 (remote exploit of a server program)","AND",0
+356,"vulExists(webServer,v242,httpd,remoteExploit,privEscalation)","LEAF",1
+357,"RULE 0 (remote exploit of a server program)","AND",0
+358,"vulExists(webServer,v243,httpd,remoteExploit,privEscalation)","LEAF",1
+359,"RULE 0 (remote exploit of a server program)","AND",0
+360,"vulExists(webServer,v244,httpd,remoteExploit,privEscalation)","LEAF",1
+361,"RULE 0 (remote exploit of a server program)","AND",0
+362,"vulExists(webServer,v245,httpd,remoteExploit,privEscalation)","LEAF",1
+363,"RULE 0 (remote exploit of a server program)","AND",0
+364,"vulExists(webServer,v246,httpd,remoteExploit,privEscalation)","LEAF",1
+365,"RULE 0 (remote exploit of a server program)","AND",0
+366,"vulExists(webServer,v247,httpd,remoteExploit,privEscalation)","LEAF",1
+367,"RULE 0 (remote exploit of a server program)","AND",0
+368,"vulExists(webServer,v248,httpd,remoteExploit,privEscalation)","LEAF",1
+369,"RULE 0 (remote exploit of a server program)","AND",0
+370,"vulExists(webServer,v249,httpd,remoteExploit,privEscalation)","LEAF",1
+371,"RULE 0 (remote exploit of a server program)","AND",0
+372,"vulExists(webServer,v25,httpd,remoteExploit,privEscalation)","LEAF",1
+373,"RULE 0 (remote exploit of a server program)","AND",0
+374,"vulExists(webServer,v250,httpd,remoteExploit,privEscalation)","LEAF",1
+375,"RULE 0 (remote exploit of a server program)","AND",0
+376,"vulExists(webServer,v251,httpd,remoteExploit,privEscalation)","LEAF",1
+377,"RULE 0 (remote exploit of a server program)","AND",0
+378,"vulExists(webServer,v252,httpd,remoteExploit,privEscalation)","LEAF",1
+379,"RULE 0 (remote exploit of a server program)","AND",0
+380,"vulExists(webServer,v253,httpd,remoteExploit,privEscalation)","LEAF",1
+381,"RULE 0 (remote exploit of a server program)","AND",0
+382,"vulExists(webServer,v254,httpd,remoteExploit,privEscalation)","LEAF",1
+383,"RULE 0 (remote exploit of a server program)","AND",0
+384,"vulExists(webServer,v255,httpd,remoteExploit,privEscalation)","LEAF",1
+385,"RULE 0 (remote exploit of a server program)","AND",0
+386,"vulExists(webServer,v256,httpd,remoteExploit,privEscalation)","LEAF",1
+387,"RULE 0 (remote exploit of a server program)","AND",0
+388,"vulExists(webServer,v257,httpd,remoteExploit,privEscalation)","LEAF",1
+389,"RULE 0 (remote exploit of a server program)","AND",0
+390,"vulExists(webServer,v258,httpd,remoteExploit,privEscalation)","LEAF",1
+391,"RULE 0 (remote exploit of a server program)","AND",0
+392,"vulExists(webServer,v259,httpd,remoteExploit,privEscalation)","LEAF",1
+393,"RULE 0 (remote exploit of a server program)","AND",0
+394,"vulExists(webServer,v26,httpd,remoteExploit,privEscalation)","LEAF",1
+395,"RULE 0 (remote exploit of a server program)","AND",0
+396,"vulExists(webServer,v260,httpd,remoteExploit,privEscalation)","LEAF",1
+397,"RULE 0 (remote exploit of a server program)","AND",0
+398,"vulExists(webServer,v261,httpd,remoteExploit,privEscalation)","LEAF",1
+399,"RULE 0 (remote exploit of a server program)","AND",0
+400,"vulExists(webServer,v262,httpd,remoteExploit,privEscalation)","LEAF",1
+401,"RULE 0 (remote exploit of a server program)","AND",0
+402,"vulExists(webServer,v263,httpd,remoteExploit,privEscalation)","LEAF",1
+403,"RULE 0 (remote exploit of a server program)","AND",0
+404,"vulExists(webServer,v264,httpd,remoteExploit,privEscalation)","LEAF",1
+405,"RULE 0 (remote exploit of a server program)","AND",0
+406,"vulExists(webServer,v265,httpd,remoteExploit,privEscalation)","LEAF",1
+407,"RULE 0 (remote exploit of a server program)","AND",0
+408,"vulExists(webServer,v266,httpd,remoteExploit,privEscalation)","LEAF",1
+409,"RULE 0 (remote exploit of a server program)","AND",0
+410,"vulExists(webServer,v267,httpd,remoteExploit,privEscalation)","LEAF",1
+411,"RULE 0 (remote exploit of a server program)","AND",0
+412,"vulExists(webServer,v268,httpd,remoteExploit,privEscalation)","LEAF",1
+413,"RULE 0 (remote exploit of a server program)","AND",0
+414,"vulExists(webServer,v269,httpd,remoteExploit,privEscalation)","LEAF",1
+415,"RULE 0 (remote exploit of a server program)","AND",0
+416,"vulExists(webServer,v27,httpd,remoteExploit,privEscalation)","LEAF",1
+417,"RULE 0 (remote exploit of a server program)","AND",0
+418,"vulExists(webServer,v270,httpd,remoteExploit,privEscalation)","LEAF",1
+419,"RULE 0 (remote exploit of a server program)","AND",0
+420,"vulExists(webServer,v271,httpd,remoteExploit,privEscalation)","LEAF",1
+421,"RULE 0 (remote exploit of a server program)","AND",0
+422,"vulExists(webServer,v272,httpd,remoteExploit,privEscalation)","LEAF",1
+423,"RULE 0 (remote exploit of a server program)","AND",0
+424,"vulExists(webServer,v273,httpd,remoteExploit,privEscalation)","LEAF",1
+425,"RULE 0 (remote exploit of a server program)","AND",0
+426,"vulExists(webServer,v274,httpd,remoteExploit,privEscalation)","LEAF",1
+427,"RULE 0 (remote exploit of a server program)","AND",0
+428,"vulExists(webServer,v275,httpd,remoteExploit,privEscalation)","LEAF",1
+429,"RULE 0 (remote exploit of a server program)","AND",0
+430,"vulExists(webServer,v276,httpd,remoteExploit,privEscalation)","LEAF",1
+431,"RULE 0 (remote exploit of a server program)","AND",0
+432,"vulExists(webServer,v277,httpd,remoteExploit,privEscalation)","LEAF",1
+433,"RULE 0 (remote exploit of a server program)","AND",0
+434,"vulExists(webServer,v278,httpd,remoteExploit,privEscalation)","LEAF",1
+435,"RULE 0 (remote exploit of a server program)","AND",0
+436,"vulExists(webServer,v279,httpd,remoteExploit,privEscalation)","LEAF",1
+437,"RULE 0 (remote exploit of a server program)","AND",0
+438,"vulExists(webServer,v28,httpd,remoteExploit,privEscalation)","LEAF",1
+439,"RULE 0 (remote exploit of a server program)","AND",0
+440,"vulExists(webServer,v280,httpd,remoteExploit,privEscalation)","LEAF",1
+441,"RULE 0 (remote exploit of a server program)","AND",0
+442,"vulExists(webServer,v281,httpd,remoteExploit,privEscalation)","LEAF",1
+443,"RULE 0 (remote exploit of a server program)","AND",0
+444,"vulExists(webServer,v282,httpd,remoteExploit,privEscalation)","LEAF",1
+445,"RULE 0 (remote exploit of a server program)","AND",0
+446,"vulExists(webServer,v283,httpd,remoteExploit,privEscalation)","LEAF",1
+447,"RULE 0 (remote exploit of a server program)","AND",0
+448,"vulExists(webServer,v284,httpd,remoteExploit,privEscalation)","LEAF",1
+449,"RULE 0 (remote exploit of a server program)","AND",0
+450,"vulExists(webServer,v285,httpd,remoteExploit,privEscalation)","LEAF",1
+451,"RULE 0 (remote exploit of a server program)","AND",0
+452,"vulExists(webServer,v286,httpd,remoteExploit,privEscalation)","LEAF",1
+453,"RULE 0 (remote exploit of a server program)","AND",0
+454,"vulExists(webServer,v287,httpd,remoteExploit,privEscalation)","LEAF",1
+455,"RULE 0 (remote exploit of a server program)","AND",0
+456,"vulExists(webServer,v288,httpd,remoteExploit,privEscalation)","LEAF",1
+457,"RULE 0 (remote exploit of a server program)","AND",0
+458,"vulExists(webServer,v289,httpd,remoteExploit,privEscalation)","LEAF",1
+459,"RULE 0 (remote exploit of a server program)","AND",0
+460,"vulExists(webServer,v29,httpd,remoteExploit,privEscalation)","LEAF",1
+461,"RULE 0 (remote exploit of a server program)","AND",0
+462,"vulExists(webServer,v290,httpd,remoteExploit,privEscalation)","LEAF",1
+463,"RULE 0 (remote exploit of a server program)","AND",0
+464,"vulExists(webServer,v291,httpd,remoteExploit,privEscalation)","LEAF",1
+465,"RULE 0 (remote exploit of a server program)","AND",0
+466,"vulExists(webServer,v292,httpd,remoteExploit,privEscalation)","LEAF",1
+467,"RULE 0 (remote exploit of a server program)","AND",0
+468,"vulExists(webServer,v293,httpd,remoteExploit,privEscalation)","LEAF",1
+469,"RULE 0 (remote exploit of a server program)","AND",0
+470,"vulExists(webServer,v294,httpd,remoteExploit,privEscalation)","LEAF",1
+471,"RULE 0 (remote exploit of a server program)","AND",0
+472,"vulExists(webServer,v295,httpd,remoteExploit,privEscalation)","LEAF",1
+473,"RULE 0 (remote exploit of a server program)","AND",0
+474,"vulExists(webServer,v296,httpd,remoteExploit,privEscalation)","LEAF",1
+475,"RULE 0 (remote exploit of a server program)","AND",0
+476,"vulExists(webServer,v297,httpd,remoteExploit,privEscalation)","LEAF",1
+477,"RULE 0 (remote exploit of a server program)","AND",0
+478,"vulExists(webServer,v298,httpd,remoteExploit,privEscalation)","LEAF",1
+479,"RULE 0 (remote exploit of a server program)","AND",0
+480,"vulExists(webServer,v299,httpd,remoteExploit,privEscalation)","LEAF",1
+481,"RULE 0 (remote exploit of a server program)","AND",0
+482,"vulExists(webServer,v3,httpd,remoteExploit,privEscalation)","LEAF",1
+483,"RULE 0 (remote exploit of a server program)","AND",0
+484,"vulExists(webServer,v30,httpd,remoteExploit,privEscalation)","LEAF",1
+485,"RULE 0 (remote exploit of a server program)","AND",0
+486,"vulExists(webServer,v300,httpd,remoteExploit,privEscalation)","LEAF",1
+487,"RULE 0 (remote exploit of a server program)","AND",0
+488,"vulExists(webServer,v301,httpd,remoteExploit,privEscalation)","LEAF",1
+489,"RULE 0 (remote exploit of a server program)","AND",0
+490,"vulExists(webServer,v302,httpd,remoteExploit,privEscalation)","LEAF",1
+491,"RULE 0 (remote exploit of a server program)","AND",0
+492,"vulExists(webServer,v303,httpd,remoteExploit,privEscalation)","LEAF",1
+493,"RULE 0 (remote exploit of a server program)","AND",0
+494,"vulExists(webServer,v304,httpd,remoteExploit,privEscalation)","LEAF",1
+495,"RULE 0 (remote exploit of a server program)","AND",0
+496,"vulExists(webServer,v305,httpd,remoteExploit,privEscalation)","LEAF",1
+497,"RULE 0 (remote exploit of a server program)","AND",0
+498,"vulExists(webServer,v306,httpd,remoteExploit,privEscalation)","LEAF",1
+499,"RULE 0 (remote exploit of a server program)","AND",0
+500,"vulExists(webServer,v307,httpd,remoteExploit,privEscalation)","LEAF",1
+501,"RULE 0 (remote exploit of a server program)","AND",0
+502,"vulExists(webServer,v308,httpd,remoteExploit,privEscalation)","LEAF",1
+503,"RULE 0 (remote exploit of a server program)","AND",0
+504,"vulExists(webServer,v309,httpd,remoteExploit,privEscalation)","LEAF",1
+505,"RULE 0 (remote exploit of a server program)","AND",0
+506,"vulExists(webServer,v31,httpd,remoteExploit,privEscalation)","LEAF",1
+507,"RULE 0 (remote exploit of a server program)","AND",0
+508,"vulExists(webServer,v310,httpd,remoteExploit,privEscalation)","LEAF",1
+509,"RULE 0 (remote exploit of a server program)","AND",0
+510,"vulExists(webServer,v311,httpd,remoteExploit,privEscalation)","LEAF",1
+511,"RULE 0 (remote exploit of a server program)","AND",0
+512,"vulExists(webServer,v312,httpd,remoteExploit,privEscalation)","LEAF",1
+513,"RULE 0 (remote exploit of a server program)","AND",0
+514,"vulExists(webServer,v313,httpd,remoteExploit,privEscalation)","LEAF",1
+515,"RULE 0 (remote exploit of a server program)","AND",0
+516,"vulExists(webServer,v314,httpd,remoteExploit,privEscalation)","LEAF",1
+517,"RULE 0 (remote exploit of a server program)","AND",0
+518,"vulExists(webServer,v315,httpd,remoteExploit,privEscalation)","LEAF",1
+519,"RULE 0 (remote exploit of a server program)","AND",0
+520,"vulExists(webServer,v316,httpd,remoteExploit,privEscalation)","LEAF",1
+521,"RULE 0 (remote exploit of a server program)","AND",0
+522,"vulExists(webServer,v317,httpd,remoteExploit,privEscalation)","LEAF",1
+523,"RULE 0 (remote exploit of a server program)","AND",0
+524,"vulExists(webServer,v318,httpd,remoteExploit,privEscalation)","LEAF",1
+525,"RULE 0 (remote exploit of a server program)","AND",0
+526,"vulExists(webServer,v319,httpd,remoteExploit,privEscalation)","LEAF",1
+527,"RULE 0 (remote exploit of a server program)","AND",0
+528,"vulExists(webServer,v32,httpd,remoteExploit,privEscalation)","LEAF",1
+529,"RULE 0 (remote exploit of a server program)","AND",0
+530,"vulExists(webServer,v320,httpd,remoteExploit,privEscalation)","LEAF",1
+531,"RULE 0 (remote exploit of a server program)","AND",0
+532,"vulExists(webServer,v321,httpd,remoteExploit,privEscalation)","LEAF",1
+533,"RULE 0 (remote exploit of a server program)","AND",0
+534,"vulExists(webServer,v322,httpd,remoteExploit,privEscalation)","LEAF",1
+535,"RULE 0 (remote exploit of a server program)","AND",0
+536,"vulExists(webServer,v323,httpd,remoteExploit,privEscalation)","LEAF",1
+537,"RULE 0 (remote exploit of a server program)","AND",0
+538,"vulExists(webServer,v324,httpd,remoteExploit,privEscalation)","LEAF",1
+539,"RULE 0 (remote exploit of a server program)","AND",0
+540,"vulExists(webServer,v325,httpd,remoteExploit,privEscalation)","LEAF",1
+541,"RULE 0 (remote exploit of a server program)","AND",0
+542,"vulExists(webServer,v326,httpd,remoteExploit,privEscalation)","LEAF",1
+543,"RULE 0 (remote exploit of a server program)","AND",0
+544,"vulExists(webServer,v327,httpd,remoteExploit,privEscalation)","LEAF",1
+545,"RULE 0 (remote exploit of a server program)","AND",0
+546,"vulExists(webServer,v328,httpd,remoteExploit,privEscalation)","LEAF",1
+547,"RULE 0 (remote exploit of a server program)","AND",0
+548,"vulExists(webServer,v329,httpd,remoteExploit,privEscalation)","LEAF",1
+549,"RULE 0 (remote exploit of a server program)","AND",0
+550,"vulExists(webServer,v33,httpd,remoteExploit,privEscalation)","LEAF",1
+551,"RULE 0 (remote exploit of a server program)","AND",0
+552,"vulExists(webServer,v330,httpd,remoteExploit,privEscalation)","LEAF",1
+553,"RULE 0 (remote exploit of a server program)","AND",0
+554,"vulExists(webServer,v331,httpd,remoteExploit,privEscalation)","LEAF",1
+555,"RULE 0 (remote exploit of a server program)","AND",0
+556,"vulExists(webServer,v332,httpd,remoteExploit,privEscalation)","LEAF",1
+557,"RULE 0 (remote exploit of a server program)","AND",0
+558,"vulExists(webServer,v333,httpd,remoteExploit,privEscalation)","LEAF",1
+559,"RULE 0 (remote exploit of a server program)","AND",0
+560,"vulExists(webServer,v334,httpd,remoteExploit,privEscalation)","LEAF",1
+561,"RULE 0 (remote exploit of a server program)","AND",0
+562,"vulExists(webServer,v335,httpd,remoteExploit,privEscalation)","LEAF",1
+563,"RULE 0 (remote exploit of a server program)","AND",0
+564,"vulExists(webServer,v336,httpd,remoteExploit,privEscalation)","LEAF",1
+565,"RULE 0 (remote exploit of a server program)","AND",0
+566,"vulExists(webServer,v337,httpd,remoteExploit,privEscalation)","LEAF",1
+567,"RULE 0 (remote exploit of a server program)","AND",0
+568,"vulExists(webServer,v338,httpd,remoteExploit,privEscalation)","LEAF",1
+569,"RULE 0 (remote exploit of a server program)","AND",0
+570,"vulExists(webServer,v339,httpd,remoteExploit,privEscalation)","LEAF",1
+571,"RULE 0 (remote exploit of a server program)","AND",0
+572,"vulExists(webServer,v34,httpd,remoteExploit,privEscalation)","LEAF",1
+573,"RULE 0 (remote exploit of a server program)","AND",0
+574,"vulExists(webServer,v340,httpd,remoteExploit,privEscalation)","LEAF",1
+575,"RULE 0 (remote exploit of a server program)","AND",0
+576,"vulExists(webServer,v341,httpd,remoteExploit,privEscalation)","LEAF",1
+577,"RULE 0 (remote exploit of a server program)","AND",0
+578,"vulExists(webServer,v342,httpd,remoteExploit,privEscalation)","LEAF",1
+579,"RULE 0 (remote exploit of a server program)","AND",0
+580,"vulExists(webServer,v343,httpd,remoteExploit,privEscalation)","LEAF",1
+581,"RULE 0 (remote exploit of a server program)","AND",0
+582,"vulExists(webServer,v344,httpd,remoteExploit,privEscalation)","LEAF",1
+583,"RULE 0 (remote exploit of a server program)","AND",0
+584,"vulExists(webServer,v345,httpd,remoteExploit,privEscalation)","LEAF",1
+585,"RULE 0 (remote exploit of a server program)","AND",0
+586,"vulExists(webServer,v346,httpd,remoteExploit,privEscalation)","LEAF",1
+587,"RULE 0 (remote exploit of a server program)","AND",0
+588,"vulExists(webServer,v347,httpd,remoteExploit,privEscalation)","LEAF",1
+589,"RULE 0 (remote exploit of a server program)","AND",0
+590,"vulExists(webServer,v348,httpd,remoteExploit,privEscalation)","LEAF",1
+591,"RULE 0 (remote exploit of a server program)","AND",0
+592,"vulExists(webServer,v349,httpd,remoteExploit,privEscalation)","LEAF",1
+593,"RULE 0 (remote exploit of a server program)","AND",0
+594,"vulExists(webServer,v35,httpd,remoteExploit,privEscalation)","LEAF",1
+595,"RULE 0 (remote exploit of a server program)","AND",0
+596,"vulExists(webServer,v350,httpd,remoteExploit,privEscalation)","LEAF",1
+597,"RULE 0 (remote exploit of a server program)","AND",0
+598,"vulExists(webServer,v351,httpd,remoteExploit,privEscalation)","LEAF",1
+599,"RULE 0 (remote exploit of a server program)","AND",0
+600,"vulExists(webServer,v352,httpd,remoteExploit,privEscalation)","LEAF",1
+601,"RULE 0 (remote exploit of a server program)","AND",0
+602,"vulExists(webServer,v353,httpd,remoteExploit,privEscalation)","LEAF",1
+603,"RULE 0 (remote exploit of a server program)","AND",0
+604,"vulExists(webServer,v354,httpd,remoteExploit,privEscalation)","LEAF",1
+605,"RULE 0 (remote exploit of a server program)","AND",0
+606,"vulExists(webServer,v355,httpd,remoteExploit,privEscalation)","LEAF",1
+607,"RULE 0 (remote exploit of a server program)","AND",0
+608,"vulExists(webServer,v356,httpd,remoteExploit,privEscalation)","LEAF",1
+609,"RULE 0 (remote exploit of a server program)","AND",0
+610,"vulExists(webServer,v357,httpd,remoteExploit,privEscalation)","LEAF",1
+611,"RULE 0 (remote exploit of a server program)","AND",0
+612,"vulExists(webServer,v358,httpd,remoteExploit,privEscalation)","LEAF",1
+613,"RULE 0 (remote exploit of a server program)","AND",0
+614,"vulExists(webServer,v359,httpd,remoteExploit,privEscalation)","LEAF",1
+615,"RULE 0 (remote exploit of a server program)","AND",0
+616,"vulExists(webServer,v36,httpd,remoteExploit,privEscalation)","LEAF",1
+617,"RULE 0 (remote exploit of a server program)","AND",0
+618,"vulExists(webServer,v360,httpd,remoteExploit,privEscalation)","LEAF",1
+619,"RULE 0 (remote exploit of a server program)","AND",0
+620,"vulExists(webServer,v361,httpd,remoteExploit,privEscalation)","LEAF",1
+621,"RULE 0 (remote exploit of a server program)","AND",0
+622,"vulExists(webServer,v362,httpd,remoteExploit,privEscalation)","LEAF",1
+623,"RULE 0 (remote exploit of a server program)","AND",0
+624,"vulExists(webServer,v363,httpd,remoteExploit,privEscalation)","LEAF",1
+625,"RULE 0 (remote exploit of a server program)","AND",0
+626,"vulExists(webServer,v364,httpd,remoteExploit,privEscalation)","LEAF",1
+627,"RULE 0 (remote exploit of a server program)","AND",0
+628,"vulExists(webServer,v365,httpd,remoteExploit,privEscalation)","LEAF",1
+629,"RULE 0 (remote exploit of a server program)","AND",0
+630,"vulExists(webServer,v366,httpd,remoteExploit,privEscalation)","LEAF",1
+631,"RULE 0 (remote exploit of a server program)","AND",0
+632,"vulExists(webServer,v367,httpd,remoteExploit,privEscalation)","LEAF",1
+633,"RULE 0 (remote exploit of a server program)","AND",0
+634,"vulExists(webServer,v368,httpd,remoteExploit,privEscalation)","LEAF",1
+635,"RULE 0 (remote exploit of a server program)","AND",0
+636,"vulExists(webServer,v369,httpd,remoteExploit,privEscalation)","LEAF",1
+637,"RULE 0 (remote exploit of a server program)","AND",0
+638,"vulExists(webServer,v37,httpd,remoteExploit,privEscalation)","LEAF",1
+639,"RULE 0 (remote exploit of a server program)","AND",0
+640,"vulExists(webServer,v370,httpd,remoteExploit,privEscalation)","LEAF",1
+641,"RULE 0 (remote exploit of a server program)","AND",0
+642,"vulExists(webServer,v371,httpd,remoteExploit,privEscalation)","LEAF",1
+643,"RULE 0 (remote exploit of a server program)","AND",0
+644,"vulExists(webServer,v372,httpd,remoteExploit,privEscalation)","LEAF",1
+645,"RULE 0 (remote exploit of a server program)","AND",0
+646,"vulExists(webServer,v373,httpd,remoteExploit,privEscalation)","LEAF",1
+647,"RULE 0 (remote exploit of a server program)","AND",0
+648,"vulExists(webServer,v374,httpd,remoteExploit,privEscalation)","LEAF",1
+649,"RULE 0 (remote exploit of a server program)","AND",0
+650,"vulExists(webServer,v375,httpd,remoteExploit,privEscalation)","LEAF",1
+651,"RULE 0 (remote exploit of a server program)","AND",0
+652,"vulExists(webServer,v376,httpd,remoteExploit,privEscalation)","LEAF",1
+653,"RULE 0 (remote exploit of a server program)","AND",0
+654,"vulExists(webServer,v377,httpd,remoteExploit,privEscalation)","LEAF",1
+655,"RULE 0 (remote exploit of a server program)","AND",0
+656,"vulExists(webServer,v378,httpd,remoteExploit,privEscalation)","LEAF",1
+657,"RULE 0 (remote exploit of a server program)","AND",0
+658,"vulExists(webServer,v379,httpd,remoteExploit,privEscalation)","LEAF",1
+659,"RULE 0 (remote exploit of a server program)","AND",0
+660,"vulExists(webServer,v38,httpd,remoteExploit,privEscalation)","LEAF",1
+661,"RULE 0 (remote exploit of a server program)","AND",0
+662,"vulExists(webServer,v380,httpd,remoteExploit,privEscalation)","LEAF",1
+663,"RULE 0 (remote exploit of a server program)","AND",0
+664,"vulExists(webServer,v381,httpd,remoteExploit,privEscalation)","LEAF",1
+665,"RULE 0 (remote exploit of a server program)","AND",0
+666,"vulExists(webServer,v382,httpd,remoteExploit,privEscalation)","LEAF",1
+667,"RULE 0 (remote exploit of a server program)","AND",0
+668,"vulExists(webServer,v383,httpd,remoteExploit,privEscalation)","LEAF",1
+669,"RULE 0 (remote exploit of a server program)","AND",0
+670,"vulExists(webServer,v384,httpd,remoteExploit,privEscalation)","LEAF",1
+671,"RULE 0 (remote exploit of a server program)","AND",0
+672,"vulExists(webServer,v385,httpd,remoteExploit,privEscalation)","LEAF",1
+673,"RULE 0 (remote exploit of a server program)","AND",0
+674,"vulExists(webServer,v386,httpd,remoteExploit,privEscalation)","LEAF",1
+675,"RULE 0 (remote exploit of a server program)","AND",0
+676,"vulExists(webServer,v387,httpd,remoteExploit,privEscalation)","LEAF",1
+677,"RULE 0 (remote exploit of a server program)","AND",0
+678,"vulExists(webServer,v388,httpd,remoteExploit,privEscalation)","LEAF",1
+679,"RULE 0 (remote exploit of a server program)","AND",0
+680,"vulExists(webServer,v389,httpd,remoteExploit,privEscalation)","LEAF",1
+681,"RULE 0 (remote exploit of a server program)","AND",0
+682,"vulExists(webServer,v39,httpd,remoteExploit,privEscalation)","LEAF",1
+683,"RULE 0 (remote exploit of a server program)","AND",0
+684,"vulExists(webServer,v390,httpd,remoteExploit,privEscalation)","LEAF",1
+685,"RULE 0 (remote exploit of a server program)","AND",0
+686,"vulExists(webServer,v391,httpd,remoteExploit,privEscalation)","LEAF",1
+687,"RULE 0 (remote exploit of a server program)","AND",0
+688,"vulExists(webServer,v392,httpd,remoteExploit,privEscalation)","LEAF",1
+689,"RULE 0 (remote exploit of a server program)","AND",0
+690,"vulExists(webServer,v393,httpd,remoteExploit,privEscalation)","LEAF",1
+691,"RULE 0 (remote exploit of a server program)","AND",0
+692,"vulExists(webServer,v394,httpd,remoteExploit,privEscalation)","LEAF",1
+693,"RULE 0 (remote exploit of a server program)","AND",0
+694,"vulExists(webServer,v395,httpd,remoteExploit,privEscalation)","LEAF",1
+695,"RULE 0 (remote exploit of a server program)","AND",0
+696,"vulExists(webServer,v396,httpd,remoteExploit,privEscalation)","LEAF",1
+697,"RULE 0 (remote exploit of a server program)","AND",0
+698,"vulExists(webServer,v397,httpd,remoteExploit,privEscalation)","LEAF",1
+699,"RULE 0 (remote exploit of a server program)","AND",0
+700,"vulExists(webServer,v398,httpd,remoteExploit,privEscalation)","LEAF",1
+701,"RULE 0 (remote exploit of a server program)","AND",0
+702,"vulExists(webServer,v399,httpd,remoteExploit,privEscalation)","LEAF",1
+703,"RULE 0 (remote exploit of a server program)","AND",0
+704,"vulExists(webServer,v4,httpd,remoteExploit,privEscalation)","LEAF",1
+705,"RULE 0 (remote exploit of a server program)","AND",0
+706,"vulExists(webServer,v40,httpd,remoteExploit,privEscalation)","LEAF",1
+707,"RULE 0 (remote exploit of a server program)","AND",0
+708,"vulExists(webServer,v400,httpd,remoteExploit,privEscalation)","LEAF",1
+709,"RULE 0 (remote exploit of a server program)","AND",0
+710,"vulExists(webServer,v401,httpd,remoteExploit,privEscalation)","LEAF",1
+711,"RULE 0 (remote exploit of a server program)","AND",0
+712,"vulExists(webServer,v402,httpd,remoteExploit,privEscalation)","LEAF",1
+713,"RULE 0 (remote exploit of a server program)","AND",0
+714,"vulExists(webServer,v403,httpd,remoteExploit,privEscalation)","LEAF",1
+715,"RULE 0 (remote exploit of a server program)","AND",0
+716,"vulExists(webServer,v404,httpd,remoteExploit,privEscalation)","LEAF",1
+717,"RULE 0 (remote exploit of a server program)","AND",0
+718,"vulExists(webServer,v405,httpd,remoteExploit,privEscalation)","LEAF",1
+719,"RULE 0 (remote exploit of a server program)","AND",0
+720,"vulExists(webServer,v406,httpd,remoteExploit,privEscalation)","LEAF",1
+721,"RULE 0 (remote exploit of a server program)","AND",0
+722,"vulExists(webServer,v407,httpd,remoteExploit,privEscalation)","LEAF",1
+723,"RULE 0 (remote exploit of a server program)","AND",0
+724,"vulExists(webServer,v408,httpd,remoteExploit,privEscalation)","LEAF",1
+725,"RULE 0 (remote exploit of a server program)","AND",0
+726,"vulExists(webServer,v409,httpd,remoteExploit,privEscalation)","LEAF",1
+727,"RULE 0 (remote exploit of a server program)","AND",0
+728,"vulExists(webServer,v41,httpd,remoteExploit,privEscalation)","LEAF",1
+729,"RULE 0 (remote exploit of a server program)","AND",0
+730,"vulExists(webServer,v410,httpd,remoteExploit,privEscalation)","LEAF",1
+731,"RULE 0 (remote exploit of a server program)","AND",0
+732,"vulExists(webServer,v411,httpd,remoteExploit,privEscalation)","LEAF",1
+733,"RULE 0 (remote exploit of a server program)","AND",0
+734,"vulExists(webServer,v412,httpd,remoteExploit,privEscalation)","LEAF",1
+735,"RULE 0 (remote exploit of a server program)","AND",0
+736,"vulExists(webServer,v413,httpd,remoteExploit,privEscalation)","LEAF",1
+737,"RULE 0 (remote exploit of a server program)","AND",0
+738,"vulExists(webServer,v414,httpd,remoteExploit,privEscalation)","LEAF",1
+739,"RULE 0 (remote exploit of a server program)","AND",0
+740,"vulExists(webServer,v415,httpd,remoteExploit,privEscalation)","LEAF",1
+741,"RULE 0 (remote exploit of a server program)","AND",0
+742,"vulExists(webServer,v416,httpd,remoteExploit,privEscalation)","LEAF",1
+743,"RULE 0 (remote exploit of a server program)","AND",0
+744,"vulExists(webServer,v417,httpd,remoteExploit,privEscalation)","LEAF",1
+745,"RULE 0 (remote exploit of a server program)","AND",0
+746,"vulExists(webServer,v418,httpd,remoteExploit,privEscalation)","LEAF",1
+747,"RULE 0 (remote exploit of a server program)","AND",0
+748,"vulExists(webServer,v419,httpd,remoteExploit,privEscalation)","LEAF",1
+749,"RULE 0 (remote exploit of a server program)","AND",0
+750,"vulExists(webServer,v42,httpd,remoteExploit,privEscalation)","LEAF",1
+751,"RULE 0 (remote exploit of a server program)","AND",0
+752,"vulExists(webServer,v420,httpd,remoteExploit,privEscalation)","LEAF",1
+753,"RULE 0 (remote exploit of a server program)","AND",0
+754,"vulExists(webServer,v421,httpd,remoteExploit,privEscalation)","LEAF",1
+755,"RULE 0 (remote exploit of a server program)","AND",0
+756,"vulExists(webServer,v422,httpd,remoteExploit,privEscalation)","LEAF",1
+757,"RULE 0 (remote exploit of a server program)","AND",0
+758,"vulExists(webServer,v423,httpd,remoteExploit,privEscalation)","LEAF",1
+759,"RULE 0 (remote exploit of a server program)","AND",0
+760,"vulExists(webServer,v424,httpd,remoteExploit,privEscalation)","LEAF",1
+761,"RULE 0 (remote exploit of a server program)","AND",0
+762,"vulExists(webServer,v425,httpd,remoteExploit,privEscalation)","LEAF",1
+763,"RULE 0 (remote exploit of a server program)","AND",0
+764,"vulExists(webServer,v426,httpd,remoteExploit,privEscalation)","LEAF",1
+765,"RULE 0 (remote exploit of a server program)","AND",0
+766,"vulExists(webServer,v427,httpd,remoteExploit,privEscalation)","LEAF",1
+767,"RULE 0 (remote exploit of a server program)","AND",0
+768,"vulExists(webServer,v428,httpd,remoteExploit,privEscalation)","LEAF",1
+769,"RULE 0 (remote exploit of a server program)","AND",0
+770,"vulExists(webServer,v429,httpd,remoteExploit,privEscalation)","LEAF",1
+771,"RULE 0 (remote exploit of a server program)","AND",0
+772,"vulExists(webServer,v43,httpd,remoteExploit,privEscalation)","LEAF",1
+773,"RULE 0 (remote exploit of a server program)","AND",0
+774,"vulExists(webServer,v430,httpd,remoteExploit,privEscalation)","LEAF",1
+775,"RULE 0 (remote exploit of a server program)","AND",0
+776,"vulExists(webServer,v431,httpd,remoteExploit,privEscalation)","LEAF",1
+777,"RULE 0 (remote exploit of a server program)","AND",0
+778,"vulExists(webServer,v432,httpd,remoteExploit,privEscalation)","LEAF",1
+779,"RULE 0 (remote exploit of a server program)","AND",0
+780,"vulExists(webServer,v433,httpd,remoteExploit,privEscalation)","LEAF",1
+781,"RULE 0 (remote exploit of a server program)","AND",0
+782,"vulExists(webServer,v434,httpd,remoteExploit,privEscalation)","LEAF",1
+783,"RULE 0 (remote exploit of a server program)","AND",0
+784,"vulExists(webServer,v435,httpd,remoteExploit,privEscalation)","LEAF",1
+785,"RULE 0 (remote exploit of a server program)","AND",0
+786,"vulExists(webServer,v436,httpd,remoteExploit,privEscalation)","LEAF",1
+787,"RULE 0 (remote exploit of a server program)","AND",0
+788,"vulExists(webServer,v437,httpd,remoteExploit,privEscalation)","LEAF",1
+789,"RULE 0 (remote exploit of a server program)","AND",0
+790,"vulExists(webServer,v438,httpd,remoteExploit,privEscalation)","LEAF",1
+791,"RULE 0 (remote exploit of a server program)","AND",0
+792,"vulExists(webServer,v439,httpd,remoteExploit,privEscalation)","LEAF",1
+793,"RULE 0 (remote exploit of a server program)","AND",0
+794,"vulExists(webServer,v44,httpd,remoteExploit,privEscalation)","LEAF",1
+795,"RULE 0 (remote exploit of a server program)","AND",0
+796,"vulExists(webServer,v440,httpd,remoteExploit,privEscalation)","LEAF",1
+797,"RULE 0 (remote exploit of a server program)","AND",0
+798,"vulExists(webServer,v441,httpd,remoteExploit,privEscalation)","LEAF",1
+799,"RULE 0 (remote exploit of a server program)","AND",0
+800,"vulExists(webServer,v442,httpd,remoteExploit,privEscalation)","LEAF",1
+801,"RULE 0 (remote exploit of a server program)","AND",0
+802,"vulExists(webServer,v443,httpd,remoteExploit,privEscalation)","LEAF",1
+803,"RULE 0 (remote exploit of a server program)","AND",0
+804,"vulExists(webServer,v444,httpd,remoteExploit,privEscalation)","LEAF",1
+805,"RULE 0 (remote exploit of a server program)","AND",0
+806,"vulExists(webServer,v445,httpd,remoteExploit,privEscalation)","LEAF",1
+807,"RULE 0 (remote exploit of a server program)","AND",0
+808,"vulExists(webServer,v446,httpd,remoteExploit,privEscalation)","LEAF",1
+809,"RULE 0 (remote exploit of a server program)","AND",0
+810,"vulExists(webServer,v447,httpd,remoteExploit,privEscalation)","LEAF",1
+811,"RULE 0 (remote exploit of a server program)","AND",0
+812,"vulExists(webServer,v448,httpd,remoteExploit,privEscalation)","LEAF",1
+813,"RULE 0 (remote exploit of a server program)","AND",0
+814,"vulExists(webServer,v449,httpd,remoteExploit,privEscalation)","LEAF",1
+815,"RULE 0 (remote exploit of a server program)","AND",0
+816,"vulExists(webServer,v45,httpd,remoteExploit,privEscalation)","LEAF",1
+817,"RULE 0 (remote exploit of a server program)","AND",0
+818,"vulExists(webServer,v450,httpd,remoteExploit,privEscalation)","LEAF",1
+819,"RULE 0 (remote exploit of a server program)","AND",0
+820,"vulExists(webServer,v451,httpd,remoteExploit,privEscalation)","LEAF",1
+821,"RULE 0 (remote exploit of a server program)","AND",0
+822,"vulExists(webServer,v452,httpd,remoteExploit,privEscalation)","LEAF",1
+823,"RULE 0 (remote exploit of a server program)","AND",0
+824,"vulExists(webServer,v453,httpd,remoteExploit,privEscalation)","LEAF",1
+825,"RULE 0 (remote exploit of a server program)","AND",0
+826,"vulExists(webServer,v454,httpd,remoteExploit,privEscalation)","LEAF",1
+827,"RULE 0 (remote exploit of a server program)","AND",0
+828,"vulExists(webServer,v455,httpd,remoteExploit,privEscalation)","LEAF",1
+829,"RULE 0 (remote exploit of a server program)","AND",0
+830,"vulExists(webServer,v456,httpd,remoteExploit,privEscalation)","LEAF",1
+831,"RULE 0 (remote exploit of a server program)","AND",0
+832,"vulExists(webServer,v457,httpd,remoteExploit,privEscalation)","LEAF",1
+833,"RULE 0 (remote exploit of a server program)","AND",0
+834,"vulExists(webServer,v458,httpd,remoteExploit,privEscalation)","LEAF",1
+835,"RULE 0 (remote exploit of a server program)","AND",0
+836,"vulExists(webServer,v459,httpd,remoteExploit,privEscalation)","LEAF",1
+837,"RULE 0 (remote exploit of a server program)","AND",0
+838,"vulExists(webServer,v46,httpd,remoteExploit,privEscalation)","LEAF",1
+839,"RULE 0 (remote exploit of a server program)","AND",0
+840,"vulExists(webServer,v460,httpd,remoteExploit,privEscalation)","LEAF",1
+841,"RULE 0 (remote exploit of a server program)","AND",0
+842,"vulExists(webServer,v461,httpd,remoteExploit,privEscalation)","LEAF",1
+843,"RULE 0 (remote exploit of a server program)","AND",0
+844,"vulExists(webServer,v462,httpd,remoteExploit,privEscalation)","LEAF",1
+845,"RULE 0 (remote exploit of a server program)","AND",0
+846,"vulExists(webServer,v463,httpd,remoteExploit,privEscalation)","LEAF",1
+847,"RULE 0 (remote exploit of a server program)","AND",0
+848,"vulExists(webServer,v464,httpd,remoteExploit,privEscalation)","LEAF",1
+849,"RULE 0 (remote exploit of a server program)","AND",0
+850,"vulExists(webServer,v465,httpd,remoteExploit,privEscalation)","LEAF",1
+851,"RULE 0 (remote exploit of a server program)","AND",0
+852,"vulExists(webServer,v466,httpd,remoteExploit,privEscalation)","LEAF",1
+853,"RULE 0 (remote exploit of a server program)","AND",0
+854,"vulExists(webServer,v467,httpd,remoteExploit,privEscalation)","LEAF",1
+855,"RULE 0 (remote exploit of a server program)","AND",0
+856,"vulExists(webServer,v468,httpd,remoteExploit,privEscalation)","LEAF",1
+857,"RULE 0 (remote exploit of a server program)","AND",0
+858,"vulExists(webServer,v469,httpd,remoteExploit,privEscalation)","LEAF",1
+859,"RULE 0 (remote exploit of a server program)","AND",0
+860,"vulExists(webServer,v47,httpd,remoteExploit,privEscalation)","LEAF",1
+861,"RULE 0 (remote exploit of a server program)","AND",0
+862,"vulExists(webServer,v470,httpd,remoteExploit,privEscalation)","LEAF",1
+863,"RULE 0 (remote exploit of a server program)","AND",0
+864,"vulExists(webServer,v471,httpd,remoteExploit,privEscalation)","LEAF",1
+865,"RULE 0 (remote exploit of a server program)","AND",0
+866,"vulExists(webServer,v472,httpd,remoteExploit,privEscalation)","LEAF",1
+867,"RULE 0 (remote exploit of a server program)","AND",0
+868,"vulExists(webServer,v473,httpd,remoteExploit,privEscalation)","LEAF",1
+869,"RULE 0 (remote exploit of a server program)","AND",0
+870,"vulExists(webServer,v474,httpd,remoteExploit,privEscalation)","LEAF",1
+871,"RULE 0 (remote exploit of a server program)","AND",0
+872,"vulExists(webServer,v475,httpd,remoteExploit,privEscalation)","LEAF",1
+873,"RULE 0 (remote exploit of a server program)","AND",0
+874,"vulExists(webServer,v476,httpd,remoteExploit,privEscalation)","LEAF",1
+875,"RULE 0 (remote exploit of a server program)","AND",0
+876,"vulExists(webServer,v477,httpd,remoteExploit,privEscalation)","LEAF",1
+877,"RULE 0 (remote exploit of a server program)","AND",0
+878,"vulExists(webServer,v478,httpd,remoteExploit,privEscalation)","LEAF",1
+879,"RULE 0 (remote exploit of a server program)","AND",0
+880,"vulExists(webServer,v479,httpd,remoteExploit,privEscalation)","LEAF",1
+881,"RULE 0 (remote exploit of a server program)","AND",0
+882,"vulExists(webServer,v48,httpd,remoteExploit,privEscalation)","LEAF",1
+883,"RULE 0 (remote exploit of a server program)","AND",0
+884,"vulExists(webServer,v480,httpd,remoteExploit,privEscalation)","LEAF",1
+885,"RULE 0 (remote exploit of a server program)","AND",0
+886,"vulExists(webServer,v481,httpd,remoteExploit,privEscalation)","LEAF",1
+887,"RULE 0 (remote exploit of a server program)","AND",0
+888,"vulExists(webServer,v482,httpd,remoteExploit,privEscalation)","LEAF",1
+889,"RULE 0 (remote exploit of a server program)","AND",0
+890,"vulExists(webServer,v483,httpd,remoteExploit,privEscalation)","LEAF",1
+891,"RULE 0 (remote exploit of a server program)","AND",0
+892,"vulExists(webServer,v484,httpd,remoteExploit,privEscalation)","LEAF",1
+893,"RULE 0 (remote exploit of a server program)","AND",0
+894,"vulExists(webServer,v485,httpd,remoteExploit,privEscalation)","LEAF",1
+895,"RULE 0 (remote exploit of a server program)","AND",0
+896,"vulExists(webServer,v486,httpd,remoteExploit,privEscalation)","LEAF",1
+897,"RULE 0 (remote exploit of a server program)","AND",0
+898,"vulExists(webServer,v487,httpd,remoteExploit,privEscalation)","LEAF",1
+899,"RULE 0 (remote exploit of a server program)","AND",0
+900,"vulExists(webServer,v488,httpd,remoteExploit,privEscalation)","LEAF",1
+901,"RULE 0 (remote exploit of a server program)","AND",0
+902,"vulExists(webServer,v489,httpd,remoteExploit,privEscalation)","LEAF",1
+903,"RULE 0 (remote exploit of a server program)","AND",0
+904,"vulExists(webServer,v49,httpd,remoteExploit,privEscalation)","LEAF",1
+905,"RULE 0 (remote exploit of a server program)","AND",0
+906,"vulExists(webServer,v490,httpd,remoteExploit,privEscalation)","LEAF",1
+907,"RULE 0 (remote exploit of a server program)","AND",0
+908,"vulExists(webServer,v491,httpd,remoteExploit,privEscalation)","LEAF",1
+909,"RULE 0 (remote exploit of a server program)","AND",0
+910,"vulExists(webServer,v492,httpd,remoteExploit,privEscalation)","LEAF",1
+911,"RULE 0 (remote exploit of a server program)","AND",0
+912,"vulExists(webServer,v493,httpd,remoteExploit,privEscalation)","LEAF",1
+913,"RULE 0 (remote exploit of a server program)","AND",0
+914,"vulExists(webServer,v494,httpd,remoteExploit,privEscalation)","LEAF",1
+915,"RULE 0 (remote exploit of a server program)","AND",0
+916,"vulExists(webServer,v495,httpd,remoteExploit,privEscalation)","LEAF",1
+917,"RULE 0 (remote exploit of a server program)","AND",0
+918,"vulExists(webServer,v496,httpd,remoteExploit,privEscalation)","LEAF",1
+919,"RULE 0 (remote exploit of a server program)","AND",0
+920,"vulExists(webServer,v497,httpd,remoteExploit,privEscalation)","LEAF",1
+921,"RULE 0 (remote exploit of a server program)","AND",0
+922,"vulExists(webServer,v498,httpd,remoteExploit,privEscalation)","LEAF",1
+923,"RULE 0 (remote exploit of a server program)","AND",0
+924,"vulExists(webServer,v499,httpd,remoteExploit,privEscalation)","LEAF",1
+925,"RULE 0 (remote exploit of a server program)","AND",0
+926,"vulExists(webServer,v5,httpd,remoteExploit,privEscalation)","LEAF",1
+927,"RULE 0 (remote exploit of a server program)","AND",0
+928,"vulExists(webServer,v50,httpd,remoteExploit,privEscalation)","LEAF",1
+929,"RULE 0 (remote exploit of a server program)","AND",0
+930,"vulExists(webServer,v500,httpd,remoteExploit,privEscalation)","LEAF",1
+931,"RULE 0 (remote exploit of a server program)","AND",0
+932,"vulExists(webServer,v501,httpd,remoteExploit,privEscalation)","LEAF",1
+933,"RULE 0 (remote exploit of a server program)","AND",0
+934,"vulExists(webServer,v502,httpd,remoteExploit,privEscalation)","LEAF",1
+935,"RULE 0 (remote exploit of a server program)","AND",0
+936,"vulExists(webServer,v503,httpd,remoteExploit,privEscalation)","LEAF",1
+937,"RULE 0 (remote exploit of a server program)","AND",0
+938,"vulExists(webServer,v504,httpd,remoteExploit,privEscalation)","LEAF",1
+939,"RULE 0 (remote exploit of a server program)","AND",0
+940,"vulExists(webServer,v505,httpd,remoteExploit,privEscalation)","LEAF",1
+941,"RULE 0 (remote exploit of a server program)","AND",0
+942,"vulExists(webServer,v506,httpd,remoteExploit,privEscalation)","LEAF",1
+943,"RULE 0 (remote exploit of a server program)","AND",0
+944,"vulExists(webServer,v507,httpd,remoteExploit,privEscalation)","LEAF",1
+945,"RULE 0 (remote exploit of a server program)","AND",0
+946,"vulExists(webServer,v508,httpd,remoteExploit,privEscalation)","LEAF",1
+947,"RULE 0 (remote exploit of a server program)","AND",0
+948,"vulExists(webServer,v509,httpd,remoteExploit,privEscalation)","LEAF",1
+949,"RULE 0 (remote exploit of a server program)","AND",0
+950,"vulExists(webServer,v51,httpd,remoteExploit,privEscalation)","LEAF",1
+951,"RULE 0 (remote exploit of a server program)","AND",0
+952,"vulExists(webServer,v510,httpd,remoteExploit,privEscalation)","LEAF",1
+953,"RULE 0 (remote exploit of a server program)","AND",0
+954,"vulExists(webServer,v511,httpd,remoteExploit,privEscalation)","LEAF",1
+955,"RULE 0 (remote exploit of a server program)","AND",0
+956,"vulExists(webServer,v512,httpd,remoteExploit,privEscalation)","LEAF",1
+957,"RULE 0 (remote exploit of a server program)","AND",0
+958,"vulExists(webServer,v513,httpd,remoteExploit,privEscalation)","LEAF",1
+959,"RULE 0 (remote exploit of a server program)","AND",0
+960,"vulExists(webServer,v514,httpd,remoteExploit,privEscalation)","LEAF",1
+961,"RULE 0 (remote exploit of a server program)","AND",0
+962,"vulExists(webServer,v515,httpd,remoteExploit,privEscalation)","LEAF",1
+963,"RULE 0 (remote exploit of a server program)","AND",0
+964,"vulExists(webServer,v516,httpd,remoteExploit,privEscalation)","LEAF",1
+965,"RULE 0 (remote exploit of a server program)","AND",0
+966,"vulExists(webServer,v517,httpd,remoteExploit,privEscalation)","LEAF",1
+967,"RULE 0 (remote exploit of a server program)","AND",0
+968,"vulExists(webServer,v518,httpd,remoteExploit,privEscalation)","LEAF",1
+969,"RULE 0 (remote exploit of a server program)","AND",0
+970,"vulExists(webServer,v519,httpd,remoteExploit,privEscalation)","LEAF",1
+971,"RULE 0 (remote exploit of a server program)","AND",0
+972,"vulExists(webServer,v52,httpd,remoteExploit,privEscalation)","LEAF",1
+973,"RULE 0 (remote exploit of a server program)","AND",0
+974,"vulExists(webServer,v520,httpd,remoteExploit,privEscalation)","LEAF",1
+975,"RULE 0 (remote exploit of a server program)","AND",0
+976,"vulExists(webServer,v521,httpd,remoteExploit,privEscalation)","LEAF",1
+977,"RULE 0 (remote exploit of a server program)","AND",0
+978,"vulExists(webServer,v522,httpd,remoteExploit,privEscalation)","LEAF",1
+979,"RULE 0 (remote exploit of a server program)","AND",0
+980,"vulExists(webServer,v523,httpd,remoteExploit,privEscalation)","LEAF",1
+981,"RULE 0 (remote exploit of a server program)","AND",0
+982,"vulExists(webServer,v524,httpd,remoteExploit,privEscalation)","LEAF",1
+983,"RULE 0 (remote exploit of a server program)","AND",0
+984,"vulExists(webServer,v525,httpd,remoteExploit,privEscalation)","LEAF",1
+985,"RULE 0 (remote exploit of a server program)","AND",0
+986,"vulExists(webServer,v526,httpd,remoteExploit,privEscalation)","LEAF",1
+987,"RULE 0 (remote exploit of a server program)","AND",0
+988,"vulExists(webServer,v527,httpd,remoteExploit,privEscalation)","LEAF",1
+989,"RULE 0 (remote exploit of a server program)","AND",0
+990,"vulExists(webServer,v528,httpd,remoteExploit,privEscalation)","LEAF",1
+991,"RULE 0 (remote exploit of a server program)","AND",0
+992,"vulExists(webServer,v529,httpd,remoteExploit,privEscalation)","LEAF",1
+993,"RULE 0 (remote exploit of a server program)","AND",0
+994,"vulExists(webServer,v53,httpd,remoteExploit,privEscalation)","LEAF",1
+995,"RULE 0 (remote exploit of a server program)","AND",0
+996,"vulExists(webServer,v530,httpd,remoteExploit,privEscalation)","LEAF",1
+997,"RULE 0 (remote exploit of a server program)","AND",0
+998,"vulExists(webServer,v531,httpd,remoteExploit,privEscalation)","LEAF",1
+999,"RULE 0 (remote exploit of a server program)","AND",0
+1000,"vulExists(webServer,v532,httpd,remoteExploit,privEscalation)","LEAF",1
+1001,"RULE 0 (remote exploit of a server program)","AND",0
+1002,"vulExists(webServer,v533,httpd,remoteExploit,privEscalation)","LEAF",1
+1003,"RULE 0 (remote exploit of a server program)","AND",0
+1004,"vulExists(webServer,v534,httpd,remoteExploit,privEscalation)","LEAF",1
+1005,"RULE 0 (remote exploit of a server program)","AND",0
+1006,"vulExists(webServer,v535,httpd,remoteExploit,privEscalation)","LEAF",1
+1007,"RULE 0 (remote exploit of a server program)","AND",0
+1008,"vulExists(webServer,v536,httpd,remoteExploit,privEscalation)","LEAF",1
+1009,"RULE 0 (remote exploit of a server program)","AND",0
+1010,"vulExists(webServer,v537,httpd,remoteExploit,privEscalation)","LEAF",1
+1011,"RULE 0 (remote exploit of a server program)","AND",0
+1012,"vulExists(webServer,v538,httpd,remoteExploit,privEscalation)","LEAF",1
+1013,"RULE 0 (remote exploit of a server program)","AND",0
+1014,"vulExists(webServer,v539,httpd,remoteExploit,privEscalation)","LEAF",1
+1015,"RULE 0 (remote exploit of a server program)","AND",0
+1016,"vulExists(webServer,v54,httpd,remoteExploit,privEscalation)","LEAF",1
+1017,"RULE 0 (remote exploit of a server program)","AND",0
+1018,"vulExists(webServer,v540,httpd,remoteExploit,privEscalation)","LEAF",1
+1019,"RULE 0 (remote exploit of a server program)","AND",0
+1020,"vulExists(webServer,v541,httpd,remoteExploit,privEscalation)","LEAF",1
+1021,"RULE 0 (remote exploit of a server program)","AND",0
+1022,"vulExists(webServer,v542,httpd,remoteExploit,privEscalation)","LEAF",1
+1023,"RULE 0 (remote exploit of a server program)","AND",0
+1024,"vulExists(webServer,v543,httpd,remoteExploit,privEscalation)","LEAF",1
+1025,"RULE 0 (remote exploit of a server program)","AND",0
+1026,"vulExists(webServer,v544,httpd,remoteExploit,privEscalation)","LEAF",1
+1027,"RULE 0 (remote exploit of a server program)","AND",0
+1028,"vulExists(webServer,v545,httpd,remoteExploit,privEscalation)","LEAF",1
+1029,"RULE 0 (remote exploit of a server program)","AND",0
+1030,"vulExists(webServer,v546,httpd,remoteExploit,privEscalation)","LEAF",1
+1031,"RULE 0 (remote exploit of a server program)","AND",0
+1032,"vulExists(webServer,v547,httpd,remoteExploit,privEscalation)","LEAF",1
+1033,"RULE 0 (remote exploit of a server program)","AND",0
+1034,"vulExists(webServer,v548,httpd,remoteExploit,privEscalation)","LEAF",1
+1035,"RULE 0 (remote exploit of a server program)","AND",0
+1036,"vulExists(webServer,v549,httpd,remoteExploit,privEscalation)","LEAF",1
+1037,"RULE 0 (remote exploit of a server program)","AND",0
+1038,"vulExists(webServer,v55,httpd,remoteExploit,privEscalation)","LEAF",1
+1039,"RULE 0 (remote exploit of a server program)","AND",0
+1040,"vulExists(webServer,v550,httpd,remoteExploit,privEscalation)","LEAF",1
+1041,"RULE 0 (remote exploit of a server program)","AND",0
+1042,"vulExists(webServer,v551,httpd,remoteExploit,privEscalation)","LEAF",1
+1043,"RULE 0 (remote exploit of a server program)","AND",0
+1044,"vulExists(webServer,v552,httpd,remoteExploit,privEscalation)","LEAF",1
+1045,"RULE 0 (remote exploit of a server program)","AND",0
+1046,"vulExists(webServer,v553,httpd,remoteExploit,privEscalation)","LEAF",1
+1047,"RULE 0 (remote exploit of a server program)","AND",0
+1048,"vulExists(webServer,v554,httpd,remoteExploit,privEscalation)","LEAF",1
+1049,"RULE 0 (remote exploit of a server program)","AND",0
+1050,"vulExists(webServer,v555,httpd,remoteExploit,privEscalation)","LEAF",1
+1051,"RULE 0 (remote exploit of a server program)","AND",0
+1052,"vulExists(webServer,v556,httpd,remoteExploit,privEscalation)","LEAF",1
+1053,"RULE 0 (remote exploit of a server program)","AND",0
+1054,"vulExists(webServer,v557,httpd,remoteExploit,privEscalation)","LEAF",1
+1055,"RULE 0 (remote exploit of a server program)","AND",0
+1056,"vulExists(webServer,v558,httpd,remoteExploit,privEscalation)","LEAF",1
+1057,"RULE 0 (remote exploit of a server program)","AND",0
+1058,"vulExists(webServer,v559,httpd,remoteExploit,privEscalation)","LEAF",1
+1059,"RULE 0 (remote exploit of a server program)","AND",0
+1060,"vulExists(webServer,v56,httpd,remoteExploit,privEscalation)","LEAF",1
+1061,"RULE 0 (remote exploit of a server program)","AND",0
+1062,"vulExists(webServer,v560,httpd,remoteExploit,privEscalation)","LEAF",1
+1063,"RULE 0 (remote exploit of a server program)","AND",0
+1064,"vulExists(webServer,v561,httpd,remoteExploit,privEscalation)","LEAF",1
+1065,"RULE 0 (remote exploit of a server program)","AND",0
+1066,"vulExists(webServer,v562,httpd,remoteExploit,privEscalation)","LEAF",1
+1067,"RULE 0 (remote exploit of a server program)","AND",0
+1068,"vulExists(webServer,v563,httpd,remoteExploit,privEscalation)","LEAF",1
+1069,"RULE 0 (remote exploit of a server program)","AND",0
+1070,"vulExists(webServer,v564,httpd,remoteExploit,privEscalation)","LEAF",1
+1071,"RULE 0 (remote exploit of a server program)","AND",0
+1072,"vulExists(webServer,v565,httpd,remoteExploit,privEscalation)","LEAF",1
+1073,"RULE 0 (remote exploit of a server program)","AND",0
+1074,"vulExists(webServer,v566,httpd,remoteExploit,privEscalation)","LEAF",1
+1075,"RULE 0 (remote exploit of a server program)","AND",0
+1076,"vulExists(webServer,v567,httpd,remoteExploit,privEscalation)","LEAF",1
+1077,"RULE 0 (remote exploit of a server program)","AND",0
+1078,"vulExists(webServer,v568,httpd,remoteExploit,privEscalation)","LEAF",1
+1079,"RULE 0 (remote exploit of a server program)","AND",0
+1080,"vulExists(webServer,v569,httpd,remoteExploit,privEscalation)","LEAF",1
+1081,"RULE 0 (remote exploit of a server program)","AND",0
+1082,"vulExists(webServer,v57,httpd,remoteExploit,privEscalation)","LEAF",1
+1083,"RULE 0 (remote exploit of a server program)","AND",0
+1084,"vulExists(webServer,v570,httpd,remoteExploit,privEscalation)","LEAF",1
+1085,"RULE 0 (remote exploit of a server program)","AND",0
+1086,"vulExists(webServer,v571,httpd,remoteExploit,privEscalation)","LEAF",1
+1087,"RULE 0 (remote exploit of a server program)","AND",0
+1088,"vulExists(webServer,v572,httpd,remoteExploit,privEscalation)","LEAF",1
+1089,"RULE 0 (remote exploit of a server program)","AND",0
+1090,"vulExists(webServer,v573,httpd,remoteExploit,privEscalation)","LEAF",1
+1091,"RULE 0 (remote exploit of a server program)","AND",0
+1092,"vulExists(webServer,v574,httpd,remoteExploit,privEscalation)","LEAF",1
+1093,"RULE 0 (remote exploit of a server program)","AND",0
+1094,"vulExists(webServer,v575,httpd,remoteExploit,privEscalation)","LEAF",1
+1095,"RULE 0 (remote exploit of a server program)","AND",0
+1096,"vulExists(webServer,v576,httpd,remoteExploit,privEscalation)","LEAF",1
+1097,"RULE 0 (remote exploit of a server program)","AND",0
+1098,"vulExists(webServer,v577,httpd,remoteExploit,privEscalation)","LEAF",1
+1099,"RULE 0 (remote exploit of a server program)","AND",0
+1100,"vulExists(webServer,v578,httpd,remoteExploit,privEscalation)","LEAF",1
+1101,"RULE 0 (remote exploit of a server program)","AND",0
+1102,"vulExists(webServer,v579,httpd,remoteExploit,privEscalation)","LEAF",1
+1103,"RULE 0 (remote exploit of a server program)","AND",0
+1104,"vulExists(webServer,v58,httpd,remoteExploit,privEscalation)","LEAF",1
+1105,"RULE 0 (remote exploit of a server program)","AND",0
+1106,"vulExists(webServer,v580,httpd,remoteExploit,privEscalation)","LEAF",1
+1107,"RULE 0 (remote exploit of a server program)","AND",0
+1108,"vulExists(webServer,v581,httpd,remoteExploit,privEscalation)","LEAF",1
+1109,"RULE 0 (remote exploit of a server program)","AND",0
+1110,"vulExists(webServer,v582,httpd,remoteExploit,privEscalation)","LEAF",1
+1111,"RULE 0 (remote exploit of a server program)","AND",0
+1112,"vulExists(webServer,v583,httpd,remoteExploit,privEscalation)","LEAF",1
+1113,"RULE 0 (remote exploit of a server program)","AND",0
+1114,"vulExists(webServer,v584,httpd,remoteExploit,privEscalation)","LEAF",1
+1115,"RULE 0 (remote exploit of a server program)","AND",0
+1116,"vulExists(webServer,v585,httpd,remoteExploit,privEscalation)","LEAF",1
+1117,"RULE 0 (remote exploit of a server program)","AND",0
+1118,"vulExists(webServer,v586,httpd,remoteExploit,privEscalation)","LEAF",1
+1119,"RULE 0 (remote exploit of a server program)","AND",0
+1120,"vulExists(webServer,v587,httpd,remoteExploit,privEscalation)","LEAF",1
+1121,"RULE 0 (remote exploit of a server program)","AND",0
+1122,"vulExists(webServer,v588,httpd,remoteExploit,privEscalation)","LEAF",1
+1123,"RULE 0 (remote exploit of a server program)","AND",0
+1124,"vulExists(webServer,v589,httpd,remoteExploit,privEscalation)","LEAF",1
+1125,"RULE 0 (remote exploit of a server program)","AND",0
+1126,"vulExists(webServer,v59,httpd,remoteExploit,privEscalation)","LEAF",1
+1127,"RULE 0 (remote exploit of a server program)","AND",0
+1128,"vulExists(webServer,v590,httpd,remoteExploit,privEscalation)","LEAF",1
+1129,"RULE 0 (remote exploit of a server program)","AND",0
+1130,"vulExists(webServer,v591,httpd,remoteExploit,privEscalation)","LEAF",1
+1131,"RULE 0 (remote exploit of a server program)","AND",0
+1132,"vulExists(webServer,v592,httpd,remoteExploit,privEscalation)","LEAF",1
+1133,"RULE 0 (remote exploit of a server program)","AND",0
+1134,"vulExists(webServer,v593,httpd,remoteExploit,privEscalation)","LEAF",1
+1135,"RULE 0 (remote exploit of a server program)","AND",0
+1136,"vulExists(webServer,v594,httpd,remoteExploit,privEscalation)","LEAF",1
+1137,"RULE 0 (remote exploit of a server program)","AND",0
+1138,"vulExists(webServer,v595,httpd,remoteExploit,privEscalation)","LEAF",1
+1139,"RULE 0 (remote exploit of a server program)","AND",0
+1140,"vulExists(webServer,v596,httpd,remoteExploit,privEscalation)","LEAF",1
+1141,"RULE 0 (remote exploit of a server program)","AND",0
+1142,"vulExists(webServer,v597,httpd,remoteExploit,privEscalation)","LEAF",1
+1143,"RULE 0 (remote exploit of a server program)","AND",0
+1144,"vulExists(webServer,v598,httpd,remoteExploit,privEscalation)","LEAF",1
+1145,"RULE 0 (remote exploit of a server program)","AND",0
+1146,"vulExists(webServer,v599,httpd,remoteExploit,privEscalation)","LEAF",1
+1147,"RULE 0 (remote exploit of a server program)","AND",0
+1148,"vulExists(webServer,v6,httpd,remoteExploit,privEscalation)","LEAF",1
+1149,"RULE 0 (remote exploit of a server program)","AND",0
+1150,"vulExists(webServer,v60,httpd,remoteExploit,privEscalation)","LEAF",1
+1151,"RULE 0 (remote exploit of a server program)","AND",0
+1152,"vulExists(webServer,v600,httpd,remoteExploit,privEscalation)","LEAF",1
+1153,"RULE 0 (remote exploit of a server program)","AND",0
+1154,"vulExists(webServer,v601,httpd,remoteExploit,privEscalation)","LEAF",1
+1155,"RULE 0 (remote exploit of a server program)","AND",0
+1156,"vulExists(webServer,v602,httpd,remoteExploit,privEscalation)","LEAF",1
+1157,"RULE 0 (remote exploit of a server program)","AND",0
+1158,"vulExists(webServer,v603,httpd,remoteExploit,privEscalation)","LEAF",1
+1159,"RULE 0 (remote exploit of a server program)","AND",0
+1160,"vulExists(webServer,v604,httpd,remoteExploit,privEscalation)","LEAF",1
+1161,"RULE 0 (remote exploit of a server program)","AND",0
+1162,"vulExists(webServer,v605,httpd,remoteExploit,privEscalation)","LEAF",1
+1163,"RULE 0 (remote exploit of a server program)","AND",0
+1164,"vulExists(webServer,v606,httpd,remoteExploit,privEscalation)","LEAF",1
+1165,"RULE 0 (remote exploit of a server program)","AND",0
+1166,"vulExists(webServer,v607,httpd,remoteExploit,privEscalation)","LEAF",1
+1167,"RULE 0 (remote exploit of a server program)","AND",0
+1168,"vulExists(webServer,v608,httpd,remoteExploit,privEscalation)","LEAF",1
+1169,"RULE 0 (remote exploit of a server program)","AND",0
+1170,"vulExists(webServer,v609,httpd,remoteExploit,privEscalation)","LEAF",1
+1171,"RULE 0 (remote exploit of a server program)","AND",0
+1172,"vulExists(webServer,v61,httpd,remoteExploit,privEscalation)","LEAF",1
+1173,"RULE 0 (remote exploit of a server program)","AND",0
+1174,"vulExists(webServer,v610,httpd,remoteExploit,privEscalation)","LEAF",1
+1175,"RULE 0 (remote exploit of a server program)","AND",0
+1176,"vulExists(webServer,v611,httpd,remoteExploit,privEscalation)","LEAF",1
+1177,"RULE 0 (remote exploit of a server program)","AND",0
+1178,"vulExists(webServer,v612,httpd,remoteExploit,privEscalation)","LEAF",1
+1179,"RULE 0 (remote exploit of a server program)","AND",0
+1180,"vulExists(webServer,v613,httpd,remoteExploit,privEscalation)","LEAF",1
+1181,"RULE 0 (remote exploit of a server program)","AND",0
+1182,"vulExists(webServer,v614,httpd,remoteExploit,privEscalation)","LEAF",1
+1183,"RULE 0 (remote exploit of a server program)","AND",0
+1184,"vulExists(webServer,v615,httpd,remoteExploit,privEscalation)","LEAF",1
+1185,"RULE 0 (remote exploit of a server program)","AND",0
+1186,"vulExists(webServer,v616,httpd,remoteExploit,privEscalation)","LEAF",1
+1187,"RULE 0 (remote exploit of a server program)","AND",0
+1188,"vulExists(webServer,v617,httpd,remoteExploit,privEscalation)","LEAF",1
+1189,"RULE 0 (remote exploit of a server program)","AND",0
+1190,"vulExists(webServer,v618,httpd,remoteExploit,privEscalation)","LEAF",1
+1191,"RULE 0 (remote exploit of a server program)","AND",0
+1192,"vulExists(webServer,v619,httpd,remoteExploit,privEscalation)","LEAF",1
+1193,"RULE 0 (remote exploit of a server program)","AND",0
+1194,"vulExists(webServer,v62,httpd,remoteExploit,privEscalation)","LEAF",1
+1195,"RULE 0 (remote exploit of a server program)","AND",0
+1196,"vulExists(webServer,v620,httpd,remoteExploit,privEscalation)","LEAF",1
+1197,"RULE 0 (remote exploit of a server program)","AND",0
+1198,"vulExists(webServer,v621,httpd,remoteExploit,privEscalation)","LEAF",1
+1199,"RULE 0 (remote exploit of a server program)","AND",0
+1200,"vulExists(webServer,v622,httpd,remoteExploit,privEscalation)","LEAF",1
+1201,"RULE 0 (remote exploit of a server program)","AND",0
+1202,"vulExists(webServer,v623,httpd,remoteExploit,privEscalation)","LEAF",1
+1203,"RULE 0 (remote exploit of a server program)","AND",0
+1204,"vulExists(webServer,v624,httpd,remoteExploit,privEscalation)","LEAF",1
+1205,"RULE 0 (remote exploit of a server program)","AND",0
+1206,"vulExists(webServer,v625,httpd,remoteExploit,privEscalation)","LEAF",1
+1207,"RULE 0 (remote exploit of a server program)","AND",0
+1208,"vulExists(webServer,v626,httpd,remoteExploit,privEscalation)","LEAF",1
+1209,"RULE 0 (remote exploit of a server program)","AND",0
+1210,"vulExists(webServer,v627,httpd,remoteExploit,privEscalation)","LEAF",1
+1211,"RULE 0 (remote exploit of a server program)","AND",0
+1212,"vulExists(webServer,v628,httpd,remoteExploit,privEscalation)","LEAF",1
+1213,"RULE 0 (remote exploit of a server program)","AND",0
+1214,"vulExists(webServer,v629,httpd,remoteExploit,privEscalation)","LEAF",1
+1215,"RULE 0 (remote exploit of a server program)","AND",0
+1216,"vulExists(webServer,v63,httpd,remoteExploit,privEscalation)","LEAF",1
+1217,"RULE 0 (remote exploit of a server program)","AND",0
+1218,"vulExists(webServer,v630,httpd,remoteExploit,privEscalation)","LEAF",1
+1219,"RULE 0 (remote exploit of a server program)","AND",0
+1220,"vulExists(webServer,v631,httpd,remoteExploit,privEscalation)","LEAF",1
+1221,"RULE 0 (remote exploit of a server program)","AND",0
+1222,"vulExists(webServer,v632,httpd,remoteExploit,privEscalation)","LEAF",1
+1223,"RULE 0 (remote exploit of a server program)","AND",0
+1224,"vulExists(webServer,v633,httpd,remoteExploit,privEscalation)","LEAF",1
+1225,"RULE 0 (remote exploit of a server program)","AND",0
+1226,"vulExists(webServer,v634,httpd,remoteExploit,privEscalation)","LEAF",1
+1227,"RULE 0 (remote exploit of a server program)","AND",0
+1228,"vulExists(webServer,v635,httpd,remoteExploit,privEscalation)","LEAF",1
+1229,"RULE 0 (remote exploit of a server program)","AND",0
+1230,"vulExists(webServer,v636,httpd,remoteExploit,privEscalation)","LEAF",1
+1231,"RULE 0 (remote exploit of a server program)","AND",0
+1232,"vulExists(webServer,v637,httpd,remoteExploit,privEscalation)","LEAF",1
+1233,"RULE 0 (remote exploit of a server program)","AND",0
+1234,"vulExists(webServer,v638,httpd,remoteExploit,privEscalation)","LEAF",1
+1235,"RULE 0 (remote exploit of a server program)","AND",0
+1236,"vulExists(webServer,v639,httpd,remoteExploit,privEscalation)","LEAF",1
+1237,"RULE 0 (remote exploit of a server program)","AND",0
+1238,"vulExists(webServer,v64,httpd,remoteExploit,privEscalation)","LEAF",1
+1239,"RULE 0 (remote exploit of a server program)","AND",0
+1240,"vulExists(webServer,v640,httpd,remoteExploit,privEscalation)","LEAF",1
+1241,"RULE 0 (remote exploit of a server program)","AND",0
+1242,"vulExists(webServer,v641,httpd,remoteExploit,privEscalation)","LEAF",1
+1243,"RULE 0 (remote exploit of a server program)","AND",0
+1244,"vulExists(webServer,v642,httpd,remoteExploit,privEscalation)","LEAF",1
+1245,"RULE 0 (remote exploit of a server program)","AND",0
+1246,"vulExists(webServer,v643,httpd,remoteExploit,privEscalation)","LEAF",1
+1247,"RULE 0 (remote exploit of a server program)","AND",0
+1248,"vulExists(webServer,v644,httpd,remoteExploit,privEscalation)","LEAF",1
+1249,"RULE 0 (remote exploit of a server program)","AND",0
+1250,"vulExists(webServer,v645,httpd,remoteExploit,privEscalation)","LEAF",1
+1251,"RULE 0 (remote exploit of a server program)","AND",0
+1252,"vulExists(webServer,v646,httpd,remoteExploit,privEscalation)","LEAF",1
+1253,"RULE 0 (remote exploit of a server program)","AND",0
+1254,"vulExists(webServer,v647,httpd,remoteExploit,privEscalation)","LEAF",1
+1255,"RULE 0 (remote exploit of a server program)","AND",0
+1256,"vulExists(webServer,v648,httpd,remoteExploit,privEscalation)","LEAF",1
+1257,"RULE 0 (remote exploit of a server program)","AND",0
+1258,"vulExists(webServer,v649,httpd,remoteExploit,privEscalation)","LEAF",1
+1259,"RULE 0 (remote exploit of a server program)","AND",0
+1260,"vulExists(webServer,v65,httpd,remoteExploit,privEscalation)","LEAF",1
+1261,"RULE 0 (remote exploit of a server program)","AND",0
+1262,"vulExists(webServer,v650,httpd,remoteExploit,privEscalation)","LEAF",1
+1263,"RULE 0 (remote exploit of a server program)","AND",0
+1264,"vulExists(webServer,v651,httpd,remoteExploit,privEscalation)","LEAF",1
+1265,"RULE 0 (remote exploit of a server program)","AND",0
+1266,"vulExists(webServer,v652,httpd,remoteExploit,privEscalation)","LEAF",1
+1267,"RULE 0 (remote exploit of a server program)","AND",0
+1268,"vulExists(webServer,v653,httpd,remoteExploit,privEscalation)","LEAF",1
+1269,"RULE 0 (remote exploit of a server program)","AND",0
+1270,"vulExists(webServer,v654,httpd,remoteExploit,privEscalation)","LEAF",1
+1271,"RULE 0 (remote exploit of a server program)","AND",0
+1272,"vulExists(webServer,v655,httpd,remoteExploit,privEscalation)","LEAF",1
+1273,"RULE 0 (remote exploit of a server program)","AND",0
+1274,"vulExists(webServer,v656,httpd,remoteExploit,privEscalation)","LEAF",1
+1275,"RULE 0 (remote exploit of a server program)","AND",0
+1276,"vulExists(webServer,v657,httpd,remoteExploit,privEscalation)","LEAF",1
+1277,"RULE 0 (remote exploit of a server program)","AND",0
+1278,"vulExists(webServer,v658,httpd,remoteExploit,privEscalation)","LEAF",1
+1279,"RULE 0 (remote exploit of a server program)","AND",0
+1280,"vulExists(webServer,v659,httpd,remoteExploit,privEscalation)","LEAF",1
+1281,"RULE 0 (remote exploit of a server program)","AND",0
+1282,"vulExists(webServer,v66,httpd,remoteExploit,privEscalation)","LEAF",1
+1283,"RULE 0 (remote exploit of a server program)","AND",0
+1284,"vulExists(webServer,v660,httpd,remoteExploit,privEscalation)","LEAF",1
+1285,"RULE 0 (remote exploit of a server program)","AND",0
+1286,"vulExists(webServer,v661,httpd,remoteExploit,privEscalation)","LEAF",1
+1287,"RULE 0 (remote exploit of a server program)","AND",0
+1288,"vulExists(webServer,v662,httpd,remoteExploit,privEscalation)","LEAF",1
+1289,"RULE 0 (remote exploit of a server program)","AND",0
+1290,"vulExists(webServer,v663,httpd,remoteExploit,privEscalation)","LEAF",1
+1291,"RULE 0 (remote exploit of a server program)","AND",0
+1292,"vulExists(webServer,v664,httpd,remoteExploit,privEscalation)","LEAF",1
+1293,"RULE 0 (remote exploit of a server program)","AND",0
+1294,"vulExists(webServer,v665,httpd,remoteExploit,privEscalation)","LEAF",1
+1295,"RULE 0 (remote exploit of a server program)","AND",0
+1296,"vulExists(webServer,v666,httpd,remoteExploit,privEscalation)","LEAF",1
+1297,"RULE 0 (remote exploit of a server program)","AND",0
+1298,"vulExists(webServer,v667,httpd,remoteExploit,privEscalation)","LEAF",1
+1299,"RULE 0 (remote exploit of a server program)","AND",0
+1300,"vulExists(webServer,v668,httpd,remoteExploit,privEscalation)","LEAF",1
+1301,"RULE 0 (remote exploit of a server program)","AND",0
+1302,"vulExists(webServer,v669,httpd,remoteExploit,privEscalation)","LEAF",1
+1303,"RULE 0 (remote exploit of a server program)","AND",0
+1304,"vulExists(webServer,v67,httpd,remoteExploit,privEscalation)","LEAF",1
+1305,"RULE 0 (remote exploit of a server program)","AND",0
+1306,"vulExists(webServer,v670,httpd,remoteExploit,privEscalation)","LEAF",1
+1307,"RULE 0 (remote exploit of a server program)","AND",0
+1308,"vulExists(webServer,v671,httpd,remoteExploit,privEscalation)","LEAF",1
+1309,"RULE 0 (remote exploit of a server program)","AND",0
+1310,"vulExists(webServer,v672,httpd,remoteExploit,privEscalation)","LEAF",1
+1311,"RULE 0 (remote exploit of a server program)","AND",0
+1312,"vulExists(webServer,v673,httpd,remoteExploit,privEscalation)","LEAF",1
+1313,"RULE 0 (remote exploit of a server program)","AND",0
+1314,"vulExists(webServer,v674,httpd,remoteExploit,privEscalation)","LEAF",1
+1315,"RULE 0 (remote exploit of a server program)","AND",0
+1316,"vulExists(webServer,v675,httpd,remoteExploit,privEscalation)","LEAF",1
+1317,"RULE 0 (remote exploit of a server program)","AND",0
+1318,"vulExists(webServer,v676,httpd,remoteExploit,privEscalation)","LEAF",1
+1319,"RULE 0 (remote exploit of a server program)","AND",0
+1320,"vulExists(webServer,v677,httpd,remoteExploit,privEscalation)","LEAF",1
+1321,"RULE 0 (remote exploit of a server program)","AND",0
+1322,"vulExists(webServer,v678,httpd,remoteExploit,privEscalation)","LEAF",1
+1323,"RULE 0 (remote exploit of a server program)","AND",0
+1324,"vulExists(webServer,v679,httpd,remoteExploit,privEscalation)","LEAF",1
+1325,"RULE 0 (remote exploit of a server program)","AND",0
+1326,"vulExists(webServer,v68,httpd,remoteExploit,privEscalation)","LEAF",1
+1327,"RULE 0 (remote exploit of a server program)","AND",0
+1328,"vulExists(webServer,v680,httpd,remoteExploit,privEscalation)","LEAF",1
+1329,"RULE 0 (remote exploit of a server program)","AND",0
+1330,"vulExists(webServer,v681,httpd,remoteExploit,privEscalation)","LEAF",1
+1331,"RULE 0 (remote exploit of a server program)","AND",0
+1332,"vulExists(webServer,v682,httpd,remoteExploit,privEscalation)","LEAF",1
+1333,"RULE 0 (remote exploit of a server program)","AND",0
+1334,"vulExists(webServer,v683,httpd,remoteExploit,privEscalation)","LEAF",1
+1335,"RULE 0 (remote exploit of a server program)","AND",0
+1336,"vulExists(webServer,v684,httpd,remoteExploit,privEscalation)","LEAF",1
+1337,"RULE 0 (remote exploit of a server program)","AND",0
+1338,"vulExists(webServer,v685,httpd,remoteExploit,privEscalation)","LEAF",1
+1339,"RULE 0 (remote exploit of a server program)","AND",0
+1340,"vulExists(webServer,v686,httpd,remoteExploit,privEscalation)","LEAF",1
+1341,"RULE 0 (remote exploit of a server program)","AND",0
+1342,"vulExists(webServer,v687,httpd,remoteExploit,privEscalation)","LEAF",1
+1343,"RULE 0 (remote exploit of a server program)","AND",0
+1344,"vulExists(webServer,v688,httpd,remoteExploit,privEscalation)","LEAF",1
+1345,"RULE 0 (remote exploit of a server program)","AND",0
+1346,"vulExists(webServer,v689,httpd,remoteExploit,privEscalation)","LEAF",1
+1347,"RULE 0 (remote exploit of a server program)","AND",0
+1348,"vulExists(webServer,v69,httpd,remoteExploit,privEscalation)","LEAF",1
+1349,"RULE 0 (remote exploit of a server program)","AND",0
+1350,"vulExists(webServer,v690,httpd,remoteExploit,privEscalation)","LEAF",1
+1351,"RULE 0 (remote exploit of a server program)","AND",0
+1352,"vulExists(webServer,v691,httpd,remoteExploit,privEscalation)","LEAF",1
+1353,"RULE 0 (remote exploit of a server program)","AND",0
+1354,"vulExists(webServer,v692,httpd,remoteExploit,privEscalation)","LEAF",1
+1355,"RULE 0 (remote exploit of a server program)","AND",0
+1356,"vulExists(webServer,v693,httpd,remoteExploit,privEscalation)","LEAF",1
+1357,"RULE 0 (remote exploit of a server program)","AND",0
+1358,"vulExists(webServer,v694,httpd,remoteExploit,privEscalation)","LEAF",1
+1359,"RULE 0 (remote exploit of a server program)","AND",0
+1360,"vulExists(webServer,v695,httpd,remoteExploit,privEscalation)","LEAF",1
+1361,"RULE 0 (remote exploit of a server program)","AND",0
+1362,"vulExists(webServer,v696,httpd,remoteExploit,privEscalation)","LEAF",1
+1363,"RULE 0 (remote exploit of a server program)","AND",0
+1364,"vulExists(webServer,v697,httpd,remoteExploit,privEscalation)","LEAF",1
+1365,"RULE 0 (remote exploit of a server program)","AND",0
+1366,"vulExists(webServer,v698,httpd,remoteExploit,privEscalation)","LEAF",1
+1367,"RULE 0 (remote exploit of a server program)","AND",0
+1368,"vulExists(webServer,v699,httpd,remoteExploit,privEscalation)","LEAF",1
+1369,"RULE 0 (remote exploit of a server program)","AND",0
+1370,"vulExists(webServer,v7,httpd,remoteExploit,privEscalation)","LEAF",1
+1371,"RULE 0 (remote exploit of a server program)","AND",0
+1372,"vulExists(webServer,v70,httpd,remoteExploit,privEscalation)","LEAF",1
+1373,"RULE 0 (remote exploit of a server program)","AND",0
+1374,"vulExists(webServer,v700,httpd,remoteExploit,privEscalation)","LEAF",1
+1375,"RULE 0 (remote exploit of a server program)","AND",0
+1376,"vulExists(webServer,v701,httpd,remoteExploit,privEscalation)","LEAF",1
+1377,"RULE 0 (remote exploit of a server program)","AND",0
+1378,"vulExists(webServer,v702,httpd,remoteExploit,privEscalation)","LEAF",1
+1379,"RULE 0 (remote exploit of a server program)","AND",0
+1380,"vulExists(webServer,v703,httpd,remoteExploit,privEscalation)","LEAF",1
+1381,"RULE 0 (remote exploit of a server program)","AND",0
+1382,"vulExists(webServer,v704,httpd,remoteExploit,privEscalation)","LEAF",1
+1383,"RULE 0 (remote exploit of a server program)","AND",0
+1384,"vulExists(webServer,v705,httpd,remoteExploit,privEscalation)","LEAF",1
+1385,"RULE 0 (remote exploit of a server program)","AND",0
+1386,"vulExists(webServer,v706,httpd,remoteExploit,privEscalation)","LEAF",1
+1387,"RULE 0 (remote exploit of a server program)","AND",0
+1388,"vulExists(webServer,v707,httpd,remoteExploit,privEscalation)","LEAF",1
+1389,"RULE 0 (remote exploit of a server program)","AND",0
+1390,"vulExists(webServer,v708,httpd,remoteExploit,privEscalation)","LEAF",1
+1391,"RULE 0 (remote exploit of a server program)","AND",0
+1392,"vulExists(webServer,v709,httpd,remoteExploit,privEscalation)","LEAF",1
+1393,"RULE 0 (remote exploit of a server program)","AND",0
+1394,"vulExists(webServer,v71,httpd,remoteExploit,privEscalation)","LEAF",1
+1395,"RULE 0 (remote exploit of a server program)","AND",0
+1396,"vulExists(webServer,v710,httpd,remoteExploit,privEscalation)","LEAF",1
+1397,"RULE 0 (remote exploit of a server program)","AND",0
+1398,"vulExists(webServer,v711,httpd,remoteExploit,privEscalation)","LEAF",1
+1399,"RULE 0 (remote exploit of a server program)","AND",0
+1400,"vulExists(webServer,v712,httpd,remoteExploit,privEscalation)","LEAF",1
+1401,"RULE 0 (remote exploit of a server program)","AND",0
+1402,"vulExists(webServer,v713,httpd,remoteExploit,privEscalation)","LEAF",1
+1403,"RULE 0 (remote exploit of a server program)","AND",0
+1404,"vulExists(webServer,v714,httpd,remoteExploit,privEscalation)","LEAF",1
+1405,"RULE 0 (remote exploit of a server program)","AND",0
+1406,"vulExists(webServer,v715,httpd,remoteExploit,privEscalation)","LEAF",1
+1407,"RULE 0 (remote exploit of a server program)","AND",0
+1408,"vulExists(webServer,v716,httpd,remoteExploit,privEscalation)","LEAF",1
+1409,"RULE 0 (remote exploit of a server program)","AND",0
+1410,"vulExists(webServer,v717,httpd,remoteExploit,privEscalation)","LEAF",1
+1411,"RULE 0 (remote exploit of a server program)","AND",0
+1412,"vulExists(webServer,v718,httpd,remoteExploit,privEscalation)","LEAF",1
+1413,"RULE 0 (remote exploit of a server program)","AND",0
+1414,"vulExists(webServer,v719,httpd,remoteExploit,privEscalation)","LEAF",1
+1415,"RULE 0 (remote exploit of a server program)","AND",0
+1416,"vulExists(webServer,v72,httpd,remoteExploit,privEscalation)","LEAF",1
+1417,"RULE 0 (remote exploit of a server program)","AND",0
+1418,"vulExists(webServer,v720,httpd,remoteExploit,privEscalation)","LEAF",1
+1419,"RULE 0 (remote exploit of a server program)","AND",0
+1420,"vulExists(webServer,v721,httpd,remoteExploit,privEscalation)","LEAF",1
+1421,"RULE 0 (remote exploit of a server program)","AND",0
+1422,"vulExists(webServer,v722,httpd,remoteExploit,privEscalation)","LEAF",1
+1423,"RULE 0 (remote exploit of a server program)","AND",0
+1424,"vulExists(webServer,v723,httpd,remoteExploit,privEscalation)","LEAF",1
+1425,"RULE 0 (remote exploit of a server program)","AND",0
+1426,"vulExists(webServer,v724,httpd,remoteExploit,privEscalation)","LEAF",1
+1427,"RULE 0 (remote exploit of a server program)","AND",0
+1428,"vulExists(webServer,v725,httpd,remoteExploit,privEscalation)","LEAF",1
+1429,"RULE 0 (remote exploit of a server program)","AND",0
+1430,"vulExists(webServer,v726,httpd,remoteExploit,privEscalation)","LEAF",1
+1431,"RULE 0 (remote exploit of a server program)","AND",0
+1432,"vulExists(webServer,v727,httpd,remoteExploit,privEscalation)","LEAF",1
+1433,"RULE 0 (remote exploit of a server program)","AND",0
+1434,"vulExists(webServer,v728,httpd,remoteExploit,privEscalation)","LEAF",1
+1435,"RULE 0 (remote exploit of a server program)","AND",0
+1436,"vulExists(webServer,v729,httpd,remoteExploit,privEscalation)","LEAF",1
+1437,"RULE 0 (remote exploit of a server program)","AND",0
+1438,"vulExists(webServer,v73,httpd,remoteExploit,privEscalation)","LEAF",1
+1439,"RULE 0 (remote exploit of a server program)","AND",0
+1440,"vulExists(webServer,v730,httpd,remoteExploit,privEscalation)","LEAF",1
+1441,"RULE 0 (remote exploit of a server program)","AND",0
+1442,"vulExists(webServer,v731,httpd,remoteExploit,privEscalation)","LEAF",1
+1443,"RULE 0 (remote exploit of a server program)","AND",0
+1444,"vulExists(webServer,v732,httpd,remoteExploit,privEscalation)","LEAF",1
+1445,"RULE 0 (remote exploit of a server program)","AND",0
+1446,"vulExists(webServer,v733,httpd,remoteExploit,privEscalation)","LEAF",1
+1447,"RULE 0 (remote exploit of a server program)","AND",0
+1448,"vulExists(webServer,v734,httpd,remoteExploit,privEscalation)","LEAF",1
+1449,"RULE 0 (remote exploit of a server program)","AND",0
+1450,"vulExists(webServer,v735,httpd,remoteExploit,privEscalation)","LEAF",1
+1451,"RULE 0 (remote exploit of a server program)","AND",0
+1452,"vulExists(webServer,v736,httpd,remoteExploit,privEscalation)","LEAF",1
+1453,"RULE 0 (remote exploit of a server program)","AND",0
+1454,"vulExists(webServer,v737,httpd,remoteExploit,privEscalation)","LEAF",1
+1455,"RULE 0 (remote exploit of a server program)","AND",0
+1456,"vulExists(webServer,v738,httpd,remoteExploit,privEscalation)","LEAF",1
+1457,"RULE 0 (remote exploit of a server program)","AND",0
+1458,"vulExists(webServer,v739,httpd,remoteExploit,privEscalation)","LEAF",1
+1459,"RULE 0 (remote exploit of a server program)","AND",0
+1460,"vulExists(webServer,v74,httpd,remoteExploit,privEscalation)","LEAF",1
+1461,"RULE 0 (remote exploit of a server program)","AND",0
+1462,"vulExists(webServer,v740,httpd,remoteExploit,privEscalation)","LEAF",1
+1463,"RULE 0 (remote exploit of a server program)","AND",0
+1464,"vulExists(webServer,v741,httpd,remoteExploit,privEscalation)","LEAF",1
+1465,"RULE 0 (remote exploit of a server program)","AND",0
+1466,"vulExists(webServer,v742,httpd,remoteExploit,privEscalation)","LEAF",1
+1467,"RULE 0 (remote exploit of a server program)","AND",0
+1468,"vulExists(webServer,v743,httpd,remoteExploit,privEscalation)","LEAF",1
+1469,"RULE 0 (remote exploit of a server program)","AND",0
+1470,"vulExists(webServer,v744,httpd,remoteExploit,privEscalation)","LEAF",1
+1471,"RULE 0 (remote exploit of a server program)","AND",0
+1472,"vulExists(webServer,v745,httpd,remoteExploit,privEscalation)","LEAF",1
+1473,"RULE 0 (remote exploit of a server program)","AND",0
+1474,"vulExists(webServer,v746,httpd,remoteExploit,privEscalation)","LEAF",1
+1475,"RULE 0 (remote exploit of a server program)","AND",0
+1476,"vulExists(webServer,v747,httpd,remoteExploit,privEscalation)","LEAF",1
+1477,"RULE 0 (remote exploit of a server program)","AND",0
+1478,"vulExists(webServer,v748,httpd,remoteExploit,privEscalation)","LEAF",1
+1479,"RULE 0 (remote exploit of a server program)","AND",0
+1480,"vulExists(webServer,v749,httpd,remoteExploit,privEscalation)","LEAF",1
+1481,"RULE 0 (remote exploit of a server program)","AND",0
+1482,"vulExists(webServer,v75,httpd,remoteExploit,privEscalation)","LEAF",1
+1483,"RULE 0 (remote exploit of a server program)","AND",0
+1484,"vulExists(webServer,v750,httpd,remoteExploit,privEscalation)","LEAF",1
+1485,"RULE 0 (remote exploit of a server program)","AND",0
+1486,"vulExists(webServer,v751,httpd,remoteExploit,privEscalation)","LEAF",1
+1487,"RULE 0 (remote exploit of a server program)","AND",0
+1488,"vulExists(webServer,v752,httpd,remoteExploit,privEscalation)","LEAF",1
+1489,"RULE 0 (remote exploit of a server program)","AND",0
+1490,"vulExists(webServer,v753,httpd,remoteExploit,privEscalation)","LEAF",1
+1491,"RULE 0 (remote exploit of a server program)","AND",0
+1492,"vulExists(webServer,v754,httpd,remoteExploit,privEscalation)","LEAF",1
+1493,"RULE 0 (remote exploit of a server program)","AND",0
+1494,"vulExists(webServer,v755,httpd,remoteExploit,privEscalation)","LEAF",1
+1495,"RULE 0 (remote exploit of a server program)","AND",0
+1496,"vulExists(webServer,v756,httpd,remoteExploit,privEscalation)","LEAF",1
+1497,"RULE 0 (remote exploit of a server program)","AND",0
+1498,"vulExists(webServer,v757,httpd,remoteExploit,privEscalation)","LEAF",1
+1499,"RULE 0 (remote exploit of a server program)","AND",0
+1500,"vulExists(webServer,v758,httpd,remoteExploit,privEscalation)","LEAF",1
+1501,"RULE 0 (remote exploit of a server program)","AND",0
+1502,"vulExists(webServer,v759,httpd,remoteExploit,privEscalation)","LEAF",1
+1503,"RULE 0 (remote exploit of a server program)","AND",0
+1504,"vulExists(webServer,v76,httpd,remoteExploit,privEscalation)","LEAF",1
+1505,"RULE 0 (remote exploit of a server program)","AND",0
+1506,"vulExists(webServer,v760,httpd,remoteExploit,privEscalation)","LEAF",1
+1507,"RULE 0 (remote exploit of a server program)","AND",0
+1508,"vulExists(webServer,v761,httpd,remoteExploit,privEscalation)","LEAF",1
+1509,"RULE 0 (remote exploit of a server program)","AND",0
+1510,"vulExists(webServer,v762,httpd,remoteExploit,privEscalation)","LEAF",1
+1511,"RULE 0 (remote exploit of a server program)","AND",0
+1512,"vulExists(webServer,v763,httpd,remoteExploit,privEscalation)","LEAF",1
+1513,"RULE 0 (remote exploit of a server program)","AND",0
+1514,"vulExists(webServer,v764,httpd,remoteExploit,privEscalation)","LEAF",1
+1515,"RULE 0 (remote exploit of a server program)","AND",0
+1516,"vulExists(webServer,v765,httpd,remoteExploit,privEscalation)","LEAF",1
+1517,"RULE 0 (remote exploit of a server program)","AND",0
+1518,"vulExists(webServer,v766,httpd,remoteExploit,privEscalation)","LEAF",1
+1519,"RULE 0 (remote exploit of a server program)","AND",0
+1520,"vulExists(webServer,v767,httpd,remoteExploit,privEscalation)","LEAF",1
+1521,"RULE 0 (remote exploit of a server program)","AND",0
+1522,"vulExists(webServer,v768,httpd,remoteExploit,privEscalation)","LEAF",1
+1523,"RULE 0 (remote exploit of a server program)","AND",0
+1524,"vulExists(webServer,v769,httpd,remoteExploit,privEscalation)","LEAF",1
+1525,"RULE 0 (remote exploit of a server program)","AND",0
+1526,"vulExists(webServer,v77,httpd,remoteExploit,privEscalation)","LEAF",1
+1527,"RULE 0 (remote exploit of a server program)","AND",0
+1528,"vulExists(webServer,v770,httpd,remoteExploit,privEscalation)","LEAF",1
+1529,"RULE 0 (remote exploit of a server program)","AND",0
+1530,"vulExists(webServer,v771,httpd,remoteExploit,privEscalation)","LEAF",1
+1531,"RULE 0 (remote exploit of a server program)","AND",0
+1532,"vulExists(webServer,v772,httpd,remoteExploit,privEscalation)","LEAF",1
+1533,"RULE 0 (remote exploit of a server program)","AND",0
+1534,"vulExists(webServer,v773,httpd,remoteExploit,privEscalation)","LEAF",1
+1535,"RULE 0 (remote exploit of a server program)","AND",0
+1536,"vulExists(webServer,v774,httpd,remoteExploit,privEscalation)","LEAF",1
+1537,"RULE 0 (remote exploit of a server program)","AND",0
+1538,"vulExists(webServer,v775,httpd,remoteExploit,privEscalation)","LEAF",1
+1539,"RULE 0 (remote exploit of a server program)","AND",0
+1540,"vulExists(webServer,v776,httpd,remoteExploit,privEscalation)","LEAF",1
+1541,"RULE 0 (remote exploit of a server program)","AND",0
+1542,"vulExists(webServer,v777,httpd,remoteExploit,privEscalation)","LEAF",1
+1543,"RULE 0 (remote exploit of a server program)","AND",0
+1544,"vulExists(webServer,v778,httpd,remoteExploit,privEscalation)","LEAF",1
+1545,"RULE 0 (remote exploit of a server program)","AND",0
+1546,"vulExists(webServer,v779,httpd,remoteExploit,privEscalation)","LEAF",1
+1547,"RULE 0 (remote exploit of a server program)","AND",0
+1548,"vulExists(webServer,v78,httpd,remoteExploit,privEscalation)","LEAF",1
+1549,"RULE 0 (remote exploit of a server program)","AND",0
+1550,"vulExists(webServer,v780,httpd,remoteExploit,privEscalation)","LEAF",1
+1551,"RULE 0 (remote exploit of a server program)","AND",0
+1552,"vulExists(webServer,v781,httpd,remoteExploit,privEscalation)","LEAF",1
+1553,"RULE 0 (remote exploit of a server program)","AND",0
+1554,"vulExists(webServer,v782,httpd,remoteExploit,privEscalation)","LEAF",1
+1555,"RULE 0 (remote exploit of a server program)","AND",0
+1556,"vulExists(webServer,v783,httpd,remoteExploit,privEscalation)","LEAF",1
+1557,"RULE 0 (remote exploit of a server program)","AND",0
+1558,"vulExists(webServer,v784,httpd,remoteExploit,privEscalation)","LEAF",1
+1559,"RULE 0 (remote exploit of a server program)","AND",0
+1560,"vulExists(webServer,v785,httpd,remoteExploit,privEscalation)","LEAF",1
+1561,"RULE 0 (remote exploit of a server program)","AND",0
+1562,"vulExists(webServer,v786,httpd,remoteExploit,privEscalation)","LEAF",1
+1563,"RULE 0 (remote exploit of a server program)","AND",0
+1564,"vulExists(webServer,v787,httpd,remoteExploit,privEscalation)","LEAF",1
+1565,"RULE 0 (remote exploit of a server program)","AND",0
+1566,"vulExists(webServer,v788,httpd,remoteExploit,privEscalation)","LEAF",1
+1567,"RULE 0 (remote exploit of a server program)","AND",0
+1568,"vulExists(webServer,v789,httpd,remoteExploit,privEscalation)","LEAF",1
+1569,"RULE 0 (remote exploit of a server program)","AND",0
+1570,"vulExists(webServer,v79,httpd,remoteExploit,privEscalation)","LEAF",1
+1571,"RULE 0 (remote exploit of a server program)","AND",0
+1572,"vulExists(webServer,v790,httpd,remoteExploit,privEscalation)","LEAF",1
+1573,"RULE 0 (remote exploit of a server program)","AND",0
+1574,"vulExists(webServer,v791,httpd,remoteExploit,privEscalation)","LEAF",1
+1575,"RULE 0 (remote exploit of a server program)","AND",0
+1576,"vulExists(webServer,v792,httpd,remoteExploit,privEscalation)","LEAF",1
+1577,"RULE 0 (remote exploit of a server program)","AND",0
+1578,"vulExists(webServer,v793,httpd,remoteExploit,privEscalation)","LEAF",1
+1579,"RULE 0 (remote exploit of a server program)","AND",0
+1580,"vulExists(webServer,v794,httpd,remoteExploit,privEscalation)","LEAF",1
+1581,"RULE 0 (remote exploit of a server program)","AND",0
+1582,"vulExists(webServer,v795,httpd,remoteExploit,privEscalation)","LEAF",1
+1583,"RULE 0 (remote exploit of a server program)","AND",0
+1584,"vulExists(webServer,v796,httpd,remoteExploit,privEscalation)","LEAF",1
+1585,"RULE 0 (remote exploit of a server program)","AND",0
+1586,"vulExists(webServer,v797,httpd,remoteExploit,privEscalation)","LEAF",1
+1587,"RULE 0 (remote exploit of a server program)","AND",0
+1588,"vulExists(webServer,v798,httpd,remoteExploit,privEscalation)","LEAF",1
+1589,"RULE 0 (remote exploit of a server program)","AND",0
+1590,"vulExists(webServer,v799,httpd,remoteExploit,privEscalation)","LEAF",1
+1591,"RULE 0 (remote exploit of a server program)","AND",0
+1592,"vulExists(webServer,v8,httpd,remoteExploit,privEscalation)","LEAF",1
+1593,"RULE 0 (remote exploit of a server program)","AND",0
+1594,"vulExists(webServer,v80,httpd,remoteExploit,privEscalation)","LEAF",1
+1595,"RULE 0 (remote exploit of a server program)","AND",0
+1596,"vulExists(webServer,v800,httpd,remoteExploit,privEscalation)","LEAF",1
+1597,"RULE 0 (remote exploit of a server program)","AND",0
+1598,"vulExists(webServer,v801,httpd,remoteExploit,privEscalation)","LEAF",1
+1599,"RULE 0 (remote exploit of a server program)","AND",0
+1600,"vulExists(webServer,v802,httpd,remoteExploit,privEscalation)","LEAF",1
+1601,"RULE 0 (remote exploit of a server program)","AND",0
+1602,"vulExists(webServer,v803,httpd,remoteExploit,privEscalation)","LEAF",1
+1603,"RULE 0 (remote exploit of a server program)","AND",0
+1604,"vulExists(webServer,v804,httpd,remoteExploit,privEscalation)","LEAF",1
+1605,"RULE 0 (remote exploit of a server program)","AND",0
+1606,"vulExists(webServer,v805,httpd,remoteExploit,privEscalation)","LEAF",1
+1607,"RULE 0 (remote exploit of a server program)","AND",0
+1608,"vulExists(webServer,v806,httpd,remoteExploit,privEscalation)","LEAF",1
+1609,"RULE 0 (remote exploit of a server program)","AND",0
+1610,"vulExists(webServer,v807,httpd,remoteExploit,privEscalation)","LEAF",1
+1611,"RULE 0 (remote exploit of a server program)","AND",0
+1612,"vulExists(webServer,v808,httpd,remoteExploit,privEscalation)","LEAF",1
+1613,"RULE 0 (remote exploit of a server program)","AND",0
+1614,"vulExists(webServer,v809,httpd,remoteExploit,privEscalation)","LEAF",1
+1615,"RULE 0 (remote exploit of a server program)","AND",0
+1616,"vulExists(webServer,v81,httpd,remoteExploit,privEscalation)","LEAF",1
+1617,"RULE 0 (remote exploit of a server program)","AND",0
+1618,"vulExists(webServer,v810,httpd,remoteExploit,privEscalation)","LEAF",1
+1619,"RULE 0 (remote exploit of a server program)","AND",0
+1620,"vulExists(webServer,v811,httpd,remoteExploit,privEscalation)","LEAF",1
+1621,"RULE 0 (remote exploit of a server program)","AND",0
+1622,"vulExists(webServer,v812,httpd,remoteExploit,privEscalation)","LEAF",1
+1623,"RULE 0 (remote exploit of a server program)","AND",0
+1624,"vulExists(webServer,v813,httpd,remoteExploit,privEscalation)","LEAF",1
+1625,"RULE 0 (remote exploit of a server program)","AND",0
+1626,"vulExists(webServer,v814,httpd,remoteExploit,privEscalation)","LEAF",1
+1627,"RULE 0 (remote exploit of a server program)","AND",0
+1628,"vulExists(webServer,v815,httpd,remoteExploit,privEscalation)","LEAF",1
+1629,"RULE 0 (remote exploit of a server program)","AND",0
+1630,"vulExists(webServer,v816,httpd,remoteExploit,privEscalation)","LEAF",1
+1631,"RULE 0 (remote exploit of a server program)","AND",0
+1632,"vulExists(webServer,v817,httpd,remoteExploit,privEscalation)","LEAF",1
+1633,"RULE 0 (remote exploit of a server program)","AND",0
+1634,"vulExists(webServer,v818,httpd,remoteExploit,privEscalation)","LEAF",1
+1635,"RULE 0 (remote exploit of a server program)","AND",0
+1636,"vulExists(webServer,v819,httpd,remoteExploit,privEscalation)","LEAF",1
+1637,"RULE 0 (remote exploit of a server program)","AND",0
+1638,"vulExists(webServer,v82,httpd,remoteExploit,privEscalation)","LEAF",1
+1639,"RULE 0 (remote exploit of a server program)","AND",0
+1640,"vulExists(webServer,v820,httpd,remoteExploit,privEscalation)","LEAF",1
+1641,"RULE 0 (remote exploit of a server program)","AND",0
+1642,"vulExists(webServer,v821,httpd,remoteExploit,privEscalation)","LEAF",1
+1643,"RULE 0 (remote exploit of a server program)","AND",0
+1644,"vulExists(webServer,v822,httpd,remoteExploit,privEscalation)","LEAF",1
+1645,"RULE 0 (remote exploit of a server program)","AND",0
+1646,"vulExists(webServer,v823,httpd,remoteExploit,privEscalation)","LEAF",1
+1647,"RULE 0 (remote exploit of a server program)","AND",0
+1648,"vulExists(webServer,v824,httpd,remoteExploit,privEscalation)","LEAF",1
+1649,"RULE 0 (remote exploit of a server program)","AND",0
+1650,"vulExists(webServer,v825,httpd,remoteExploit,privEscalation)","LEAF",1
+1651,"RULE 0 (remote exploit of a server program)","AND",0
+1652,"vulExists(webServer,v826,httpd,remoteExploit,privEscalation)","LEAF",1
+1653,"RULE 0 (remote exploit of a server program)","AND",0
+1654,"vulExists(webServer,v827,httpd,remoteExploit,privEscalation)","LEAF",1
+1655,"RULE 0 (remote exploit of a server program)","AND",0
+1656,"vulExists(webServer,v828,httpd,remoteExploit,privEscalation)","LEAF",1
+1657,"RULE 0 (remote exploit of a server program)","AND",0
+1658,"vulExists(webServer,v829,httpd,remoteExploit,privEscalation)","LEAF",1
+1659,"RULE 0 (remote exploit of a server program)","AND",0
+1660,"vulExists(webServer,v83,httpd,remoteExploit,privEscalation)","LEAF",1
+1661,"RULE 0 (remote exploit of a server program)","AND",0
+1662,"vulExists(webServer,v830,httpd,remoteExploit,privEscalation)","LEAF",1
+1663,"RULE 0 (remote exploit of a server program)","AND",0
+1664,"vulExists(webServer,v831,httpd,remoteExploit,privEscalation)","LEAF",1
+1665,"RULE 0 (remote exploit of a server program)","AND",0
+1666,"vulExists(webServer,v832,httpd,remoteExploit,privEscalation)","LEAF",1
+1667,"RULE 0 (remote exploit of a server program)","AND",0
+1668,"vulExists(webServer,v833,httpd,remoteExploit,privEscalation)","LEAF",1
+1669,"RULE 0 (remote exploit of a server program)","AND",0
+1670,"vulExists(webServer,v834,httpd,remoteExploit,privEscalation)","LEAF",1
+1671,"RULE 0 (remote exploit of a server program)","AND",0
+1672,"vulExists(webServer,v835,httpd,remoteExploit,privEscalation)","LEAF",1
+1673,"RULE 0 (remote exploit of a server program)","AND",0
+1674,"vulExists(webServer,v836,httpd,remoteExploit,privEscalation)","LEAF",1
+1675,"RULE 0 (remote exploit of a server program)","AND",0
+1676,"vulExists(webServer,v837,httpd,remoteExploit,privEscalation)","LEAF",1
+1677,"RULE 0 (remote exploit of a server program)","AND",0
+1678,"vulExists(webServer,v838,httpd,remoteExploit,privEscalation)","LEAF",1
+1679,"RULE 0 (remote exploit of a server program)","AND",0
+1680,"vulExists(webServer,v839,httpd,remoteExploit,privEscalation)","LEAF",1
+1681,"RULE 0 (remote exploit of a server program)","AND",0
+1682,"vulExists(webServer,v84,httpd,remoteExploit,privEscalation)","LEAF",1
+1683,"RULE 0 (remote exploit of a server program)","AND",0
+1684,"vulExists(webServer,v840,httpd,remoteExploit,privEscalation)","LEAF",1
+1685,"RULE 0 (remote exploit of a server program)","AND",0
+1686,"vulExists(webServer,v841,httpd,remoteExploit,privEscalation)","LEAF",1
+1687,"RULE 0 (remote exploit of a server program)","AND",0
+1688,"vulExists(webServer,v842,httpd,remoteExploit,privEscalation)","LEAF",1
+1689,"RULE 0 (remote exploit of a server program)","AND",0
+1690,"vulExists(webServer,v843,httpd,remoteExploit,privEscalation)","LEAF",1
+1691,"RULE 0 (remote exploit of a server program)","AND",0
+1692,"vulExists(webServer,v844,httpd,remoteExploit,privEscalation)","LEAF",1
+1693,"RULE 0 (remote exploit of a server program)","AND",0
+1694,"vulExists(webServer,v845,httpd,remoteExploit,privEscalation)","LEAF",1
+1695,"RULE 0 (remote exploit of a server program)","AND",0
+1696,"vulExists(webServer,v846,httpd,remoteExploit,privEscalation)","LEAF",1
+1697,"RULE 0 (remote exploit of a server program)","AND",0
+1698,"vulExists(webServer,v847,httpd,remoteExploit,privEscalation)","LEAF",1
+1699,"RULE 0 (remote exploit of a server program)","AND",0
+1700,"vulExists(webServer,v848,httpd,remoteExploit,privEscalation)","LEAF",1
+1701,"RULE 0 (remote exploit of a server program)","AND",0
+1702,"vulExists(webServer,v849,httpd,remoteExploit,privEscalation)","LEAF",1
+1703,"RULE 0 (remote exploit of a server program)","AND",0
+1704,"vulExists(webServer,v85,httpd,remoteExploit,privEscalation)","LEAF",1
+1705,"RULE 0 (remote exploit of a server program)","AND",0
+1706,"vulExists(webServer,v850,httpd,remoteExploit,privEscalation)","LEAF",1
+1707,"RULE 0 (remote exploit of a server program)","AND",0
+1708,"vulExists(webServer,v851,httpd,remoteExploit,privEscalation)","LEAF",1
+1709,"RULE 0 (remote exploit of a server program)","AND",0
+1710,"vulExists(webServer,v852,httpd,remoteExploit,privEscalation)","LEAF",1
+1711,"RULE 0 (remote exploit of a server program)","AND",0
+1712,"vulExists(webServer,v853,httpd,remoteExploit,privEscalation)","LEAF",1
+1713,"RULE 0 (remote exploit of a server program)","AND",0
+1714,"vulExists(webServer,v854,httpd,remoteExploit,privEscalation)","LEAF",1
+1715,"RULE 0 (remote exploit of a server program)","AND",0
+1716,"vulExists(webServer,v855,httpd,remoteExploit,privEscalation)","LEAF",1
+1717,"RULE 0 (remote exploit of a server program)","AND",0
+1718,"vulExists(webServer,v856,httpd,remoteExploit,privEscalation)","LEAF",1
+1719,"RULE 0 (remote exploit of a server program)","AND",0
+1720,"vulExists(webServer,v857,httpd,remoteExploit,privEscalation)","LEAF",1
+1721,"RULE 0 (remote exploit of a server program)","AND",0
+1722,"vulExists(webServer,v858,httpd,remoteExploit,privEscalation)","LEAF",1
+1723,"RULE 0 (remote exploit of a server program)","AND",0
+1724,"vulExists(webServer,v859,httpd,remoteExploit,privEscalation)","LEAF",1
+1725,"RULE 0 (remote exploit of a server program)","AND",0
+1726,"vulExists(webServer,v86,httpd,remoteExploit,privEscalation)","LEAF",1
+1727,"RULE 0 (remote exploit of a server program)","AND",0
+1728,"vulExists(webServer,v860,httpd,remoteExploit,privEscalation)","LEAF",1
+1729,"RULE 0 (remote exploit of a server program)","AND",0
+1730,"vulExists(webServer,v861,httpd,remoteExploit,privEscalation)","LEAF",1
+1731,"RULE 0 (remote exploit of a server program)","AND",0
+1732,"vulExists(webServer,v862,httpd,remoteExploit,privEscalation)","LEAF",1
+1733,"RULE 0 (remote exploit of a server program)","AND",0
+1734,"vulExists(webServer,v863,httpd,remoteExploit,privEscalation)","LEAF",1
+1735,"RULE 0 (remote exploit of a server program)","AND",0
+1736,"vulExists(webServer,v864,httpd,remoteExploit,privEscalation)","LEAF",1
+1737,"RULE 0 (remote exploit of a server program)","AND",0
+1738,"vulExists(webServer,v865,httpd,remoteExploit,privEscalation)","LEAF",1
+1739,"RULE 0 (remote exploit of a server program)","AND",0
+1740,"vulExists(webServer,v866,httpd,remoteExploit,privEscalation)","LEAF",1
+1741,"RULE 0 (remote exploit of a server program)","AND",0
+1742,"vulExists(webServer,v867,httpd,remoteExploit,privEscalation)","LEAF",1
+1743,"RULE 0 (remote exploit of a server program)","AND",0
+1744,"vulExists(webServer,v868,httpd,remoteExploit,privEscalation)","LEAF",1
+1745,"RULE 0 (remote exploit of a server program)","AND",0
+1746,"vulExists(webServer,v869,httpd,remoteExploit,privEscalation)","LEAF",1
+1747,"RULE 0 (remote exploit of a server program)","AND",0
+1748,"vulExists(webServer,v87,httpd,remoteExploit,privEscalation)","LEAF",1
+1749,"RULE 0 (remote exploit of a server program)","AND",0
+1750,"vulExists(webServer,v870,httpd,remoteExploit,privEscalation)","LEAF",1
+1751,"RULE 0 (remote exploit of a server program)","AND",0
+1752,"vulExists(webServer,v871,httpd,remoteExploit,privEscalation)","LEAF",1
+1753,"RULE 0 (remote exploit of a server program)","AND",0
+1754,"vulExists(webServer,v872,httpd,remoteExploit,privEscalation)","LEAF",1
+1755,"RULE 0 (remote exploit of a server program)","AND",0
+1756,"vulExists(webServer,v873,httpd,remoteExploit,privEscalation)","LEAF",1
+1757,"RULE 0 (remote exploit of a server program)","AND",0
+1758,"vulExists(webServer,v874,httpd,remoteExploit,privEscalation)","LEAF",1
+1759,"RULE 0 (remote exploit of a server program)","AND",0
+1760,"vulExists(webServer,v875,httpd,remoteExploit,privEscalation)","LEAF",1
+1761,"RULE 0 (remote exploit of a server program)","AND",0
+1762,"vulExists(webServer,v876,httpd,remoteExploit,privEscalation)","LEAF",1
+1763,"RULE 0 (remote exploit of a server program)","AND",0
+1764,"vulExists(webServer,v877,httpd,remoteExploit,privEscalation)","LEAF",1
+1765,"RULE 0 (remote exploit of a server program)","AND",0
+1766,"vulExists(webServer,v878,httpd,remoteExploit,privEscalation)","LEAF",1
+1767,"RULE 0 (remote exploit of a server program)","AND",0
+1768,"vulExists(webServer,v879,httpd,remoteExploit,privEscalation)","LEAF",1
+1769,"RULE 0 (remote exploit of a server program)","AND",0
+1770,"vulExists(webServer,v88,httpd,remoteExploit,privEscalation)","LEAF",1
+1771,"RULE 0 (remote exploit of a server program)","AND",0
+1772,"vulExists(webServer,v880,httpd,remoteExploit,privEscalation)","LEAF",1
+1773,"RULE 0 (remote exploit of a server program)","AND",0
+1774,"vulExists(webServer,v881,httpd,remoteExploit,privEscalation)","LEAF",1
+1775,"RULE 0 (remote exploit of a server program)","AND",0
+1776,"vulExists(webServer,v882,httpd,remoteExploit,privEscalation)","LEAF",1
+1777,"RULE 0 (remote exploit of a server program)","AND",0
+1778,"vulExists(webServer,v883,httpd,remoteExploit,privEscalation)","LEAF",1
+1779,"RULE 0 (remote exploit of a server program)","AND",0
+1780,"vulExists(webServer,v884,httpd,remoteExploit,privEscalation)","LEAF",1
+1781,"RULE 0 (remote exploit of a server program)","AND",0
+1782,"vulExists(webServer,v885,httpd,remoteExploit,privEscalation)","LEAF",1
+1783,"RULE 0 (remote exploit of a server program)","AND",0
+1784,"vulExists(webServer,v886,httpd,remoteExploit,privEscalation)","LEAF",1
+1785,"RULE 0 (remote exploit of a server program)","AND",0
+1786,"vulExists(webServer,v887,httpd,remoteExploit,privEscalation)","LEAF",1
+1787,"RULE 0 (remote exploit of a server program)","AND",0
+1788,"vulExists(webServer,v888,httpd,remoteExploit,privEscalation)","LEAF",1
+1789,"RULE 0 (remote exploit of a server program)","AND",0
+1790,"vulExists(webServer,v889,httpd,remoteExploit,privEscalation)","LEAF",1
+1791,"RULE 0 (remote exploit of a server program)","AND",0
+1792,"vulExists(webServer,v89,httpd,remoteExploit,privEscalation)","LEAF",1
+1793,"RULE 0 (remote exploit of a server program)","AND",0
+1794,"vulExists(webServer,v890,httpd,remoteExploit,privEscalation)","LEAF",1
+1795,"RULE 0 (remote exploit of a server program)","AND",0
+1796,"vulExists(webServer,v891,httpd,remoteExploit,privEscalation)","LEAF",1
+1797,"RULE 0 (remote exploit of a server program)","AND",0
+1798,"vulExists(webServer,v892,httpd,remoteExploit,privEscalation)","LEAF",1
+1799,"RULE 0 (remote exploit of a server program)","AND",0
+1800,"vulExists(webServer,v893,httpd,remoteExploit,privEscalation)","LEAF",1
+1801,"RULE 0 (remote exploit of a server program)","AND",0
+1802,"vulExists(webServer,v894,httpd,remoteExploit,privEscalation)","LEAF",1
+1803,"RULE 0 (remote exploit of a server program)","AND",0
+1804,"vulExists(webServer,v895,httpd,remoteExploit,privEscalation)","LEAF",1
+1805,"RULE 0 (remote exploit of a server program)","AND",0
+1806,"vulExists(webServer,v896,httpd,remoteExploit,privEscalation)","LEAF",1
+1807,"RULE 0 (remote exploit of a server program)","AND",0
+1808,"vulExists(webServer,v897,httpd,remoteExploit,privEscalation)","LEAF",1
+1809,"RULE 0 (remote exploit of a server program)","AND",0
+1810,"vulExists(webServer,v898,httpd,remoteExploit,privEscalation)","LEAF",1
+1811,"RULE 0 (remote exploit of a server program)","AND",0
+1812,"vulExists(webServer,v899,httpd,remoteExploit,privEscalation)","LEAF",1
+1813,"RULE 0 (remote exploit of a server program)","AND",0
+1814,"vulExists(webServer,v9,httpd,remoteExploit,privEscalation)","LEAF",1
+1815,"RULE 0 (remote exploit of a server program)","AND",0
+1816,"vulExists(webServer,v90,httpd,remoteExploit,privEscalation)","LEAF",1
+1817,"RULE 0 (remote exploit of a server program)","AND",0
+1818,"vulExists(webServer,v900,httpd,remoteExploit,privEscalation)","LEAF",1
+1819,"RULE 0 (remote exploit of a server program)","AND",0
+1820,"vulExists(webServer,v901,httpd,remoteExploit,privEscalation)","LEAF",1
+1821,"RULE 0 (remote exploit of a server program)","AND",0
+1822,"vulExists(webServer,v902,httpd,remoteExploit,privEscalation)","LEAF",1
+1823,"RULE 0 (remote exploit of a server program)","AND",0
+1824,"vulExists(webServer,v903,httpd,remoteExploit,privEscalation)","LEAF",1
+1825,"RULE 0 (remote exploit of a server program)","AND",0
+1826,"vulExists(webServer,v904,httpd,remoteExploit,privEscalation)","LEAF",1
+1827,"RULE 0 (remote exploit of a server program)","AND",0
+1828,"vulExists(webServer,v905,httpd,remoteExploit,privEscalation)","LEAF",1
+1829,"RULE 0 (remote exploit of a server program)","AND",0
+1830,"vulExists(webServer,v906,httpd,remoteExploit,privEscalation)","LEAF",1
+1831,"RULE 0 (remote exploit of a server program)","AND",0
+1832,"vulExists(webServer,v907,httpd,remoteExploit,privEscalation)","LEAF",1
+1833,"RULE 0 (remote exploit of a server program)","AND",0
+1834,"vulExists(webServer,v908,httpd,remoteExploit,privEscalation)","LEAF",1
+1835,"RULE 0 (remote exploit of a server program)","AND",0
+1836,"vulExists(webServer,v909,httpd,remoteExploit,privEscalation)","LEAF",1
+1837,"RULE 0 (remote exploit of a server program)","AND",0
+1838,"vulExists(webServer,v91,httpd,remoteExploit,privEscalation)","LEAF",1
+1839,"RULE 0 (remote exploit of a server program)","AND",0
+1840,"vulExists(webServer,v910,httpd,remoteExploit,privEscalation)","LEAF",1
+1841,"RULE 0 (remote exploit of a server program)","AND",0
+1842,"vulExists(webServer,v911,httpd,remoteExploit,privEscalation)","LEAF",1
+1843,"RULE 0 (remote exploit of a server program)","AND",0
+1844,"vulExists(webServer,v912,httpd,remoteExploit,privEscalation)","LEAF",1
+1845,"RULE 0 (remote exploit of a server program)","AND",0
+1846,"vulExists(webServer,v913,httpd,remoteExploit,privEscalation)","LEAF",1
+1847,"RULE 0 (remote exploit of a server program)","AND",0
+1848,"vulExists(webServer,v914,httpd,remoteExploit,privEscalation)","LEAF",1
+1849,"RULE 0 (remote exploit of a server program)","AND",0
+1850,"vulExists(webServer,v915,httpd,remoteExploit,privEscalation)","LEAF",1
+1851,"RULE 0 (remote exploit of a server program)","AND",0
+1852,"vulExists(webServer,v916,httpd,remoteExploit,privEscalation)","LEAF",1
+1853,"RULE 0 (remote exploit of a server program)","AND",0
+1854,"vulExists(webServer,v917,httpd,remoteExploit,privEscalation)","LEAF",1
+1855,"RULE 0 (remote exploit of a server program)","AND",0
+1856,"vulExists(webServer,v918,httpd,remoteExploit,privEscalation)","LEAF",1
+1857,"RULE 0 (remote exploit of a server program)","AND",0
+1858,"vulExists(webServer,v919,httpd,remoteExploit,privEscalation)","LEAF",1
+1859,"RULE 0 (remote exploit of a server program)","AND",0
+1860,"vulExists(webServer,v92,httpd,remoteExploit,privEscalation)","LEAF",1
+1861,"RULE 0 (remote exploit of a server program)","AND",0
+1862,"vulExists(webServer,v920,httpd,remoteExploit,privEscalation)","LEAF",1
+1863,"RULE 0 (remote exploit of a server program)","AND",0
+1864,"vulExists(webServer,v921,httpd,remoteExploit,privEscalation)","LEAF",1
+1865,"RULE 0 (remote exploit of a server program)","AND",0
+1866,"vulExists(webServer,v922,httpd,remoteExploit,privEscalation)","LEAF",1
+1867,"RULE 0 (remote exploit of a server program)","AND",0
+1868,"vulExists(webServer,v923,httpd,remoteExploit,privEscalation)","LEAF",1
+1869,"RULE 0 (remote exploit of a server program)","AND",0
+1870,"vulExists(webServer,v924,httpd,remoteExploit,privEscalation)","LEAF",1
+1871,"RULE 0 (remote exploit of a server program)","AND",0
+1872,"vulExists(webServer,v925,httpd,remoteExploit,privEscalation)","LEAF",1
+1873,"RULE 0 (remote exploit of a server program)","AND",0
+1874,"vulExists(webServer,v926,httpd,remoteExploit,privEscalation)","LEAF",1
+1875,"RULE 0 (remote exploit of a server program)","AND",0
+1876,"vulExists(webServer,v927,httpd,remoteExploit,privEscalation)","LEAF",1
+1877,"RULE 0 (remote exploit of a server program)","AND",0
+1878,"vulExists(webServer,v928,httpd,remoteExploit,privEscalation)","LEAF",1
+1879,"RULE 0 (remote exploit of a server program)","AND",0
+1880,"vulExists(webServer,v929,httpd,remoteExploit,privEscalation)","LEAF",1
+1881,"RULE 0 (remote exploit of a server program)","AND",0
+1882,"vulExists(webServer,v93,httpd,remoteExploit,privEscalation)","LEAF",1
+1883,"RULE 0 (remote exploit of a server program)","AND",0
+1884,"vulExists(webServer,v930,httpd,remoteExploit,privEscalation)","LEAF",1
+1885,"RULE 0 (remote exploit of a server program)","AND",0
+1886,"vulExists(webServer,v931,httpd,remoteExploit,privEscalation)","LEAF",1
+1887,"RULE 0 (remote exploit of a server program)","AND",0
+1888,"vulExists(webServer,v932,httpd,remoteExploit,privEscalation)","LEAF",1
+1889,"RULE 0 (remote exploit of a server program)","AND",0
+1890,"vulExists(webServer,v933,httpd,remoteExploit,privEscalation)","LEAF",1
+1891,"RULE 0 (remote exploit of a server program)","AND",0
+1892,"vulExists(webServer,v934,httpd,remoteExploit,privEscalation)","LEAF",1
+1893,"RULE 0 (remote exploit of a server program)","AND",0
+1894,"vulExists(webServer,v935,httpd,remoteExploit,privEscalation)","LEAF",1
+1895,"RULE 0 (remote exploit of a server program)","AND",0
+1896,"vulExists(webServer,v936,httpd,remoteExploit,privEscalation)","LEAF",1
+1897,"RULE 0 (remote exploit of a server program)","AND",0
+1898,"vulExists(webServer,v937,httpd,remoteExploit,privEscalation)","LEAF",1
+1899,"RULE 0 (remote exploit of a server program)","AND",0
+1900,"vulExists(webServer,v938,httpd,remoteExploit,privEscalation)","LEAF",1
+1901,"RULE 0 (remote exploit of a server program)","AND",0
+1902,"vulExists(webServer,v939,httpd,remoteExploit,privEscalation)","LEAF",1
+1903,"RULE 0 (remote exploit of a server program)","AND",0
+1904,"vulExists(webServer,v94,httpd,remoteExploit,privEscalation)","LEAF",1
+1905,"RULE 0 (remote exploit of a server program)","AND",0
+1906,"vulExists(webServer,v940,httpd,remoteExploit,privEscalation)","LEAF",1
+1907,"RULE 0 (remote exploit of a server program)","AND",0
+1908,"vulExists(webServer,v941,httpd,remoteExploit,privEscalation)","LEAF",1
+1909,"RULE 0 (remote exploit of a server program)","AND",0
+1910,"vulExists(webServer,v942,httpd,remoteExploit,privEscalation)","LEAF",1
+1911,"RULE 0 (remote exploit of a server program)","AND",0
+1912,"vulExists(webServer,v943,httpd,remoteExploit,privEscalation)","LEAF",1
+1913,"RULE 0 (remote exploit of a server program)","AND",0
+1914,"vulExists(webServer,v944,httpd,remoteExploit,privEscalation)","LEAF",1
+1915,"RULE 0 (remote exploit of a server program)","AND",0
+1916,"vulExists(webServer,v945,httpd,remoteExploit,privEscalation)","LEAF",1
+1917,"RULE 0 (remote exploit of a server program)","AND",0
+1918,"vulExists(webServer,v946,httpd,remoteExploit,privEscalation)","LEAF",1
+1919,"RULE 0 (remote exploit of a server program)","AND",0
+1920,"vulExists(webServer,v947,httpd,remoteExploit,privEscalation)","LEAF",1
+1921,"RULE 0 (remote exploit of a server program)","AND",0
+1922,"vulExists(webServer,v948,httpd,remoteExploit,privEscalation)","LEAF",1
+1923,"RULE 0 (remote exploit of a server program)","AND",0
+1924,"vulExists(webServer,v949,httpd,remoteExploit,privEscalation)","LEAF",1
+1925,"RULE 0 (remote exploit of a server program)","AND",0
+1926,"vulExists(webServer,v95,httpd,remoteExploit,privEscalation)","LEAF",1
+1927,"RULE 0 (remote exploit of a server program)","AND",0
+1928,"vulExists(webServer,v950,httpd,remoteExploit,privEscalation)","LEAF",1
+1929,"RULE 0 (remote exploit of a server program)","AND",0
+1930,"vulExists(webServer,v951,httpd,remoteExploit,privEscalation)","LEAF",1
+1931,"RULE 0 (remote exploit of a server program)","AND",0
+1932,"vulExists(webServer,v952,httpd,remoteExploit,privEscalation)","LEAF",1
+1933,"RULE 0 (remote exploit of a server program)","AND",0
+1934,"vulExists(webServer,v953,httpd,remoteExploit,privEscalation)","LEAF",1
+1935,"RULE 0 (remote exploit of a server program)","AND",0
+1936,"vulExists(webServer,v954,httpd,remoteExploit,privEscalation)","LEAF",1
+1937,"RULE 0 (remote exploit of a server program)","AND",0
+1938,"vulExists(webServer,v955,httpd,remoteExploit,privEscalation)","LEAF",1
+1939,"RULE 0 (remote exploit of a server program)","AND",0
+1940,"vulExists(webServer,v956,httpd,remoteExploit,privEscalation)","LEAF",1
+1941,"RULE 0 (remote exploit of a server program)","AND",0
+1942,"vulExists(webServer,v957,httpd,remoteExploit,privEscalation)","LEAF",1
+1943,"RULE 0 (remote exploit of a server program)","AND",0
+1944,"vulExists(webServer,v958,httpd,remoteExploit,privEscalation)","LEAF",1
+1945,"RULE 0 (remote exploit of a server program)","AND",0
+1946,"vulExists(webServer,v959,httpd,remoteExploit,privEscalation)","LEAF",1
+1947,"RULE 0 (remote exploit of a server program)","AND",0
+1948,"vulExists(webServer,v96,httpd,remoteExploit,privEscalation)","LEAF",1
+1949,"RULE 0 (remote exploit of a server program)","AND",0
+1950,"vulExists(webServer,v960,httpd,remoteExploit,privEscalation)","LEAF",1
+1951,"RULE 0 (remote exploit of a server program)","AND",0
+1952,"vulExists(webServer,v961,httpd,remoteExploit,privEscalation)","LEAF",1
+1953,"RULE 0 (remote exploit of a server program)","AND",0
+1954,"vulExists(webServer,v962,httpd,remoteExploit,privEscalation)","LEAF",1
+1955,"RULE 0 (remote exploit of a server program)","AND",0
+1956,"vulExists(webServer,v963,httpd,remoteExploit,privEscalation)","LEAF",1
+1957,"RULE 0 (remote exploit of a server program)","AND",0
+1958,"vulExists(webServer,v964,httpd,remoteExploit,privEscalation)","LEAF",1
+1959,"RULE 0 (remote exploit of a server program)","AND",0
+1960,"vulExists(webServer,v965,httpd,remoteExploit,privEscalation)","LEAF",1
+1961,"RULE 0 (remote exploit of a server program)","AND",0
+1962,"vulExists(webServer,v966,httpd,remoteExploit,privEscalation)","LEAF",1
+1963,"RULE 0 (remote exploit of a server program)","AND",0
+1964,"vulExists(webServer,v967,httpd,remoteExploit,privEscalation)","LEAF",1
+1965,"RULE 0 (remote exploit of a server program)","AND",0
+1966,"vulExists(webServer,v968,httpd,remoteExploit,privEscalation)","LEAF",1
+1967,"RULE 0 (remote exploit of a server program)","AND",0
+1968,"vulExists(webServer,v969,httpd,remoteExploit,privEscalation)","LEAF",1
+1969,"RULE 0 (remote exploit of a server program)","AND",0
+1970,"vulExists(webServer,v97,httpd,remoteExploit,privEscalation)","LEAF",1
+1971,"RULE 0 (remote exploit of a server program)","AND",0
+1972,"vulExists(webServer,v970,httpd,remoteExploit,privEscalation)","LEAF",1
+1973,"RULE 0 (remote exploit of a server program)","AND",0
+1974,"vulExists(webServer,v971,httpd,remoteExploit,privEscalation)","LEAF",1
+1975,"RULE 0 (remote exploit of a server program)","AND",0
+1976,"vulExists(webServer,v972,httpd,remoteExploit,privEscalation)","LEAF",1
+1977,"RULE 0 (remote exploit of a server program)","AND",0
+1978,"vulExists(webServer,v973,httpd,remoteExploit,privEscalation)","LEAF",1
+1979,"RULE 0 (remote exploit of a server program)","AND",0
+1980,"vulExists(webServer,v974,httpd,remoteExploit,privEscalation)","LEAF",1
+1981,"RULE 0 (remote exploit of a server program)","AND",0
+1982,"vulExists(webServer,v975,httpd,remoteExploit,privEscalation)","LEAF",1
+1983,"RULE 0 (remote exploit of a server program)","AND",0
+1984,"vulExists(webServer,v976,httpd,remoteExploit,privEscalation)","LEAF",1
+1985,"RULE 0 (remote exploit of a server program)","AND",0
+1986,"vulExists(webServer,v977,httpd,remoteExploit,privEscalation)","LEAF",1
+1987,"RULE 0 (remote exploit of a server program)","AND",0
+1988,"vulExists(webServer,v978,httpd,remoteExploit,privEscalation)","LEAF",1
+1989,"RULE 0 (remote exploit of a server program)","AND",0
+1990,"vulExists(webServer,v979,httpd,remoteExploit,privEscalation)","LEAF",1
+1991,"RULE 0 (remote exploit of a server program)","AND",0
+1992,"vulExists(webServer,v98,httpd,remoteExploit,privEscalation)","LEAF",1
+1993,"RULE 0 (remote exploit of a server program)","AND",0
+1994,"vulExists(webServer,v980,httpd,remoteExploit,privEscalation)","LEAF",1
+1995,"RULE 0 (remote exploit of a server program)","AND",0
+1996,"vulExists(webServer,v981,httpd,remoteExploit,privEscalation)","LEAF",1
+1997,"RULE 0 (remote exploit of a server program)","AND",0
+1998,"vulExists(webServer,v982,httpd,remoteExploit,privEscalation)","LEAF",1
+1999,"RULE 0 (remote exploit of a server program)","AND",0
+2000,"vulExists(webServer,v983,httpd,remoteExploit,privEscalation)","LEAF",1
+2001,"RULE 0 (remote exploit of a server program)","AND",0
+2002,"vulExists(webServer,v984,httpd,remoteExploit,privEscalation)","LEAF",1
+2003,"RULE 0 (remote exploit of a server program)","AND",0
+2004,"vulExists(webServer,v985,httpd,remoteExploit,privEscalation)","LEAF",1
+2005,"RULE 0 (remote exploit of a server program)","AND",0
+2006,"vulExists(webServer,v986,httpd,remoteExploit,privEscalation)","LEAF",1
+2007,"RULE 0 (remote exploit of a server program)","AND",0
+2008,"vulExists(webServer,v987,httpd,remoteExploit,privEscalation)","LEAF",1
+2009,"RULE 0 (remote exploit of a server program)","AND",0
+2010,"vulExists(webServer,v988,httpd,remoteExploit,privEscalation)","LEAF",1
+2011,"RULE 0 (remote exploit of a server program)","AND",0
+2012,"vulExists(webServer,v989,httpd,remoteExploit,privEscalation)","LEAF",1
+2013,"RULE 0 (remote exploit of a server program)","AND",0
+2014,"vulExists(webServer,v99,httpd,remoteExploit,privEscalation)","LEAF",1
+2015,"RULE 0 (remote exploit of a server program)","AND",0
+2016,"vulExists(webServer,v990,httpd,remoteExploit,privEscalation)","LEAF",1
+2017,"RULE 0 (remote exploit of a server program)","AND",0
+2018,"vulExists(webServer,v991,httpd,remoteExploit,privEscalation)","LEAF",1
+2019,"RULE 0 (remote exploit of a server program)","AND",0
+2020,"vulExists(webServer,v992,httpd,remoteExploit,privEscalation)","LEAF",1
+2021,"RULE 0 (remote exploit of a server program)","AND",0
+2022,"RULE 0 (remote exploit of a server program)","AND",0
+2023,"RULE 0 (remote exploit of a server program)","AND",0
+2024,"RULE 0 (remote exploit of a server program)","AND",0
+2025,"RULE 0 (remote exploit of a server program)","AND",0
+2026,"RULE 0 (remote exploit of a server program)","AND",0
+2027,"RULE 0 (remote exploit of a server program)","AND",0
+2028,"RULE 0 (remote exploit of a server program)","AND",0
+2029,"RULE 0 (remote exploit of a server program)","AND",0
+2030,"RULE 9 (multi-hop access same LAN)","AND",0

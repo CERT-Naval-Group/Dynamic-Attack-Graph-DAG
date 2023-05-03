@@ -1,0 +1,4 @@
+:- import bootstrap_package/2 from packaging.
+
+:- bootstrap_package(['persistent_tables'],'persistent_tables').
+:- [persistent_tables].

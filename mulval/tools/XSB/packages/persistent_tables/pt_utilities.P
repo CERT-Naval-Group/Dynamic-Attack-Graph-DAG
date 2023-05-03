@@ -1,0 +1,222 @@
+:- export load_pt_directory/2.
+:- export save_pt_directory/2.
+:- export lock_tables/2.
+:- export unlock_tables/2, unlock_tables/3.
+:- export ensure_directories_exist/2.
+:- export directory_from_filename/2.
+:- export write_in_fmt/3.
+:- export get_table_filename/5.
+:- export get_stdout_filename/4.
+:- export new_tableid/2.
+:- export tabdir_time/3.
+:- export new_timestamp/1.
+:- export reset_timestamp/1.
+:- export get_pt_dir_dir/3.
+
+:- import member/2 from basics.
+:- import sys_mkdir/2, rm/1, create_lockfile/1 from shell.
+:- import call_c/1 from standard.
+:- import concat_atom/2 from string.
+:- import file_time/2 from file_io.
+
+:- import table_instance_cnt/2 from usermod.
+
+pt_subdir_name('xsb_persistent_tables').
+pt_directory_name('PT_Directory.P').
+pt_lockfile_name('lock_pt_directory').
+pt_table_prefix('table_').
+pt_stdout_prefix('stdout_for_').
+
+pt_instance_pred(table_instance(_,_,_,_,_,_,_,_)).
+pt_instance_pred(table_instance_cnt(_,_)).
+
+write_in_fmt(canonical,OStr,Ans) :-
+	write_canonical(OStr,Ans),
+	writeln(OStr,'.').
+write_in_fmt(delimited(Opts),OStr,Ans) :-
+	sep_from_opts(Opts,Sep),
+	write_delimited(Ans,OStr,Sep).
+
+:- table sep_from_opts/2.
+sep_from_opts(Opts,Sep) :-
+	(member(separator=Sep,Opts) % refactor so dont search every write!
+	 ->	true
+	 ;	Sep = '\t'
+	).
+
+write_delimited([Val|Vals],OStr,Sep) :-
+	write(OStr,Val),
+	(Vals == []
+	 ->	nl(OStr)
+	 ;	write(OStr,Sep),
+		write_delimited(Vals,OStr,Sep)
+	).
+
+get_pt_dir_dir(ModuleDir,Module,PathETDir) :-
+	pt_subdir_name(SubDir),
+	concat_atom([ModuleDir,'/',SubDir,'/',Module,'/'],PathETDir).
+
+get_table_filename(ModuleDir,Module,TableId,Fmt,TableFileName) :-
+	(Fmt == canonical -> Suff = 'P' ; Fmt = delimited(_) -> Suff = txt),
+	get_pt_dir_dir(ModuleDir,Module,ETDir),
+	pt_table_prefix(TablePref),
+	concat_atom([ETDir,TablePref,TableId,'.',Suff],TableFileName),
+	ensure_directories_exist(TableFileName,userout).
+
+get_stdout_filename(ModuleDir,Module,TableId,StdoutFileName) :-
+	get_pt_dir_dir(ModuleDir,Module,ETPath),
+	pt_stdout_prefix(StdoutPrefix),
+	concat_atom([ETPath,StdoutPrefix,TableId,'.txt'],StdoutFileName),
+	ensure_directories_exist(StdoutFileName,userout).
+
+/********************************************************/
+/* file load utilities					*/
+/********************************************************/
+
+directory_from_filename(FileName0,ModuleDir) :-
+	xsb_filename(FileName0,FileName),
+	atom_codes(FileName,FileCodes),
+	(llappend(DirCodes,[0'/|_],FileCodes)
+	 ->	atom_codes(ModuleDir,DirCodes)
+	 ;	abort(('[PERSISTENT TABLES] Cannot find module directory from: ',FileName))
+	).
+
+load_pt_directory(ModuleDir,Module) :-
+	(pt_instance_pred(Goal)
+	 do_all
+	 retractall(Goal)
+	),
+	table_instance_file_name(ModuleDir,Module,TableInstFile),
+	readin_tablefile(TableInstFile).
+
+readin_tablefile(TableFile) :-
+	%%writeln(readin_file(TableFile)),
+	(file_exists(TableFile)
+	 ->	open(TableFile,read,IStr),
+		repeat,
+		read_canonical(IStr,Term),
+		(Term \== end_of_file
+		 ->	assert(Term),
+			fail
+		 ;	!
+		),
+		close(IStr)
+	 ;	true
+	).
+
+save_pt_directory(ModuleDir,Module) :-
+	table_instance_file_name(ModuleDir,Module,InstanceFile),
+	ensure_directories_exist(InstanceFile,userout),
+	open(InstanceFile,write,OStr),
+	(do_all
+	 pt_instance_pred(Goal),
+	 call_c(Goal),
+	 write_canonical(OStr,Goal),
+	 writeln(OStr,'.'),nl(OStr)
+	),
+	close(OStr).
+	
+new_tableid(Pred,TableId) :-
+	(table_instance_cnt(Cnt,Time)
+	 ->	TableIdNo is Cnt + 1,
+		retractall(table_instance_cnt(_,_))
+	 ;	TableIdNo = 1,
+		Time = 0
+	),
+	assert(table_instance_cnt(TableIdNo,Time)),
+	concat_atom([Pred,'_',TableIdNo],TableId),
+	writeln(userout,new_tableid_for(Pred,TableId)).
+
+new_timestamp(NTime) :-
+	(table_instance_cnt(Cnt,Time)
+	 ->	NTime is Time + 1,
+		retractall(table_instance_cnt(_,_))
+	 ;	Cnt = 0, NTime = 1
+	),
+	assert(table_instance_cnt(Cnt,NTime)),
+	writeln(userout,new_timestamp(NTime)).
+
+reset_timestamp(OTime) :-
+	(table_instance_cnt(Cnt,_Time)
+	 ->	retractall(table_instance_cnt(_,_))
+	 ;	Cnt = 0, OTime = 1
+	),
+	assert(table_instance_cnt(Cnt,OTime)),
+	writeln(userout,reset_timestamp(OTime)).
+
+
+
+/********************************************************/
+/* Locking routines 					*/
+/********************************************************/
+
+lock_tables(Dir,Module) :-
+	table_lockfile_name(Dir,Module,TablelockFile),
+	get_lock(TablelockFile,1).
+
+unlock_tables(Dir,Module) :-
+	table_lockfile_name(Dir,Module,TablelockFile),
+	%%writeln(removing_lockfile),
+	rm(TablelockFile).
+
+tabdir_time(Dir,Module,FileTime) :-
+	table_instance_file_name(Dir,Module,InstanceFile),
+	file_time(InstanceFile,FileTime).	
+
+unlock_tables(Dir,Module,FileTime) :-
+	table_lockfile_name(Dir,Module,TablelockFile),
+	tabdir_time(Dir,Module,FileTime),
+	%%writeln(removing_lockfile),
+	rm(TablelockFile).
+
+table_lockfile_name(ModuleDir,Module,TablelockFile) :-
+	get_pt_dir_dir(ModuleDir,Module,ETDir),
+	pt_lockfile_name(LockFile),
+	concat_atom([ETDir,LockFile],TablelockFile),
+	ensure_directories_exist(TablelockFile,userout).
+
+table_instance_file_name(ModuleDir,Module,InstanceFile) :-
+	get_pt_dir_dir(ModuleDir,Module,ETDir),
+	pt_directory_name(ETDirName),
+	concat_atom([ETDir,ETDirName],InstanceFile),
+	ensure_directories_exist(InstanceFile,userout).
+
+get_lock(LockFile,N) :-
+	(create_lockfile(LockFile)
+	 ->	true %,writeln(created_lockfile)
+	 ;	(N mod 5 =:= 0
+		 ->	writeln('Failed to get lock, still trying '(N,LockFile))
+		 ;	true
+		),
+		N1 is N+1,
+		sleep(1),
+		get_lock(LockFile,N1)
+	).
+
+:- table ensure_directories_exist/2.
+ensure_directories_exist(File,OStr) :-
+	(split_dir_path(File,Dir)
+	 ->	(file_exists(Dir)
+		 ->	true
+		 ;	ensure_directories_exist(Dir,OStr),
+			sys_mkdir(Dir,Res),
+			(Res =:= 0
+			 ->	fmt_write(OStr,'Created Directory: %s\n',args(Dir))
+			 ;	throw(error('trying to create directory',Dir))
+			)
+		)
+	 ;	true
+	).
+
+split_dir_path(Name,Dir) :-
+	atom_codes(Name,NameC),
+	(llappend(DirC,[0'/|FileC],NameC),FileC \== []
+	 ->	true
+	 ; llappend(DirC,[0'\\|FileC],NameC),FileC \== []
+	 ->	true
+	 ;	fail
+	),
+	atom_codes(Dir,DirC).
+
+llappend([X|L1],L2,[X|L3]) :- llappend(L1,L2,L3).
+llappend([],L,L).

@@ -1,0 +1,201 @@
+/* develop code to partition a set of answers into multiple tables
+based on the value of a set of arguments. */
+
+:- export call_and_distribute/8.
+
+%% for testing
+:- export gen_data/2.
+:- export p/4.
+
+:- import append/3, member/2, length/2, for/3 from basics.
+:- import parsort/4 from machine.
+:- import conset/2, coninc/1, conget/2, gensym/2 from gensym.
+:- import write_in_fmt/3, get_table_filename/5, lock_tables/2, unlock_tables/2,
+	new_tableid/2, load_pt_directory/2, save_pt_directory/2
+	from pt_utilities.
+
+max_open_streams(6).
+max_in_oflow(10000).
+
+/* group(Id,GVal,TableId,FileName,OStr).
+Id is a constant that uniquely identifies this particular partition process
+GVal is group value (that identifies group)
+TableId is the tableId for this group
+FileName is the name of the file that this group will go into.
+   'none' if no file has been assigned yet.
+OStr is the output stream for writing to the file if it is open,
+and 0 if not open. */
+
+:- index(group/5,trie).
+:- dynamic group/5.		% group(Gid,GVals,TableId,FileName,Stream)
+
+/* oflowdata(Id,GVal,DataLisr) contains computed but not yet written to a
+file. */
+
+:- index(oflowdata/3,trie).
+:- dynamic oflowdata/3.
+
+%% oflow_ctrs(Gid,GVals,CtrName).
+:- index(oflow_ctrs/3,trie).
+:- dynamic oflow_ctrs/3.
+
+:- comment(call_and_distribute/8," @pred{call_and_distribute(+Goal,
++GoalDef, +Module, +ModuleDir, +Fmt, +GVals, +AnsVals, -Groups)} generates
+multiple files for a goal @var{GoalDef}. @var{ModuleDir} is the module
+directory.  @var{Fmt} is the format (TableInfo) for the generated
+tables.  @var{GVals} is dthea list of variables to use for grouping.
+@var{AnsVals} is the list of answer variables.  @var{Groups} is a list
+of @tt{grp(GVals,TableId)} records, where @var{GVals} is a list of
+group values and @var{TableId} is the Table Id of the table
+corresponding to that group.").
+
+call_and_distribute(Goal,GoalDef,Module,ModuleDir,Fmt,GVals,AnsVals,Groups) :-
+	gensym(grpid,Gid),
+	gensym(openstreamcnt,OpenStreamCtr),
+	conset(OpenStreamCtr,0),
+	gensym(numinoflowdata,OFlowCtr),
+	conset(OFlowCtr,0),
+	functor(Goal,Pred,_),
+	(do_all
+	 PAArgs = paargs(Fmt,GVals,AnsVals,Gid,Pred,Module,ModuleDir,OpenStreamCtr,OFlowCtr),
+	 call(GoalDef),
+	 process_ans(PAArgs)
+	),
+	flush_oflow(Gid,OFlowCtr,OpenStreamCtr,Fmt,Groups).
+
+process_ans(PAArgs) :-
+	PAArgs = paargs(Fmt,GVals,AnsVals,Gid,Pred,Module,ModuleDir,OpenStreamCtr,OFlowCtr),
+	(group(Gid,GVals,TableId,FileName,Stream)
+	 ->	(Stream > 0	% stream open, write directly to file
+		 ->	write_in_fmt(Fmt,Stream,AnsVals),
+			fail
+		 ; conget(OpenStreamCtr,NumOpenStreams),
+		   max_open_streams(MaxStreams),
+		   NumOpenStreams < MaxStreams % stream available, open new stream
+		 ->	open(FileName,append,NStream),
+			coninc(OpenStreamCtr),
+			retractall(group(Gid,GVals,_,_,_)),
+			assert(group(Gid,GVals,TableId,FileName,NStream)),
+			process_ans(PAArgs)		 
+		 ;	conget(OFlowCtr,OFlowCnt), % no stream, copy to overflow area
+			max_in_oflow(MaxOFlowCnt),
+			(OFlowCnt < MaxOFlowCnt % room in overflow area, copy
+			 ->	assert(oflowdata(Gid,GVals,AnsVals)),
+				coninc(OFlowCtr),
+				inc_oflow_grp_ctr(Gid,GVals),
+				fail
+			 ;	write_from_oflow(Gid,OFlowCtr,OpenStreamCtr,Fmt), % write from overflow
+				process_ans(PAArgs)
+			)
+		)
+	 ;	get_new_group_filename(Pred,Module,ModuleDir,Fmt,TableId,FileName), % new group
+		(conget(OpenStreamCtr,NumOpenStreams),
+		 max_open_streams(MaxStreams),
+		 NumOpenStreams < MaxStreams
+		 ->	open(FileName,write,Stream),
+			coninc(OpenStreamCtr)
+		 ;	Stream = 0
+		),
+		assert(group(Gid,GVals,TableId,FileName,Stream)),
+		process_ans(PAArgs)
+	).
+
+inc_oflow_grp_ctr(Gid,GVals) :-
+	(oflow_ctrs(Gid,GVals,CtrName)
+	 ->	coninc(CtrName)
+	 ;	gensym(oflowgrpctr,CtrName),
+		conset(CtrName,1),
+		assert(oflow_ctrs(Gid,GVals,CtrName))
+	).
+
+flush_oflow(Gid,OFlowCtr,OpenStreamCtr,Fmt,Groups) :-
+	(oflowdata(Gid,_,_)
+	 ->	write_from_oflow(Gid,OFlowCtr,OpenStreamCtr,Fmt),
+		flush_oflow(Gid,OFlowCtr,OpenStreamCtr,Fmt,Groups)
+	 ;	close_open_streams(Gid,OpenStreamCtr),
+		findall(grp(GVals,TableId),group(Gid,GVals,TableId,_,_),Groups),
+		retractall(group(Gid,_,_,_,_))
+	).
+
+%% called only if oflow full, every group in oflow has a group fact (with closed stream)
+write_from_oflow(Gid,OFlowCtr,OpenStreamCtr,Fmt) :-
+	conset('_recs_from_oflow',0),
+	close_open_streams(Gid,OpenStreamCtr),
+	findall(grp(GVals,GCnt),
+		(oflow_ctrs(Gid,GVals,CtrName),
+		 conget(CtrName,GCnt)),
+		GroupCnts),
+	parsort(GroupCnts,[desc(2)],0,DescGroupCnts),
+	max_open_streams(MaxStreams),
+	
+	(length(MaxGroupCnts,MaxStreams),
+	 append(MaxGroupCnts,_,DescGroupCnts)
+	 ->	true
+	 ;	MaxGroupCnts = DescGroupCnts
+	),
+	sum_grp_cnts(MaxGroupCnts,0,WrtCnt),
+	conget(OFlowCtr,OFlowCnt),
+	NewOFlowCnt is OFlowCnt - WrtCnt,
+	conset(OFlowCtr,NewOFlowCnt),
+	write_groups(MaxGroupCnts,Gid,OpenStreamCtr,Fmt).
+
+sum_grp_cnts([],WrtCnt,WrtCnt).
+sum_grp_cnts([grp(_,Cnt)|MaxGroupCnts],WrtCnt0,WrtCnt) :-
+	WrtCnt1 is WrtCnt0 + Cnt,
+	sum_grp_cnts(MaxGroupCnts,WrtCnt1,WrtCnt).
+
+
+close_open_streams(Gid,OpenStreamCtr) :-
+	(group(Gid,GVals,TableId,FileName,Stream),
+	 Stream > 0
+	 do_all
+	 close(Stream),
+	 conget(OpenStreamCtr,NumOpen),
+	 NumOpen1 is NumOpen - 1,
+	 conset(OpenStreamCtr,NumOpen1),
+	 retractall(group(Gid,GVals,_,_,_)),
+	 assert(group(Gid,GVals,TableId,FileName,0))
+	).
+
+write_groups([],_Gid,_OpenStreamCtr,_Fmt) :-
+	conget('_recs_from_oflow',Cnt),writeln(userout,cnt_from_oflow=Cnt).
+write_groups([grp(GVals,_Cnt)|MaxGroupCnts],Gid,OpenStreamCtr,Fmt) :-
+	(group(Gid,GVals,TableId,FileName,_)
+	 do_all
+	 open(FileName,append,Stream),
+	 coninc(OpenStreamCtr),
+	 retractall(group(Gid,GVals,TableId,FileName,_)),
+	 assert(group(Gid,GVals,TableId,FileName,Stream)),
+	 (do_all
+	  oflowdata(Gid,GVals,Data),
+	  coninc('_recs_from_oflow'),
+	  write_in_fmt(Fmt,Stream,Data)
+	 ),
+	 retractall(oflowdata(Gid,GVals,_)),
+	 oflow_ctrs(Gid,GVals,CtrName),
+	 conset(CtrName,0)
+	),
+	write_groups(MaxGroupCnts,Gid,OpenStreamCtr,Fmt).
+
+get_new_group_filename(Pred,Module,ModuleDir,Fmt,TableId,FileName) :-
+	lock_tables(ModuleDir,Module),
+	load_pt_directory(ModuleDir,Module),
+	new_tableid(Pred,TableId),
+	save_pt_directory(ModuleDir,Module),
+	unlock_tables(ModuleDir,Module),
+	get_table_filename(ModuleDir,Module,TableId,Fmt,FileName).
+
+
+:- dynamic p/4.
+
+% gen_data(7,800).
+gen_data(KGrps,NTuplesPerGrp) :-
+	retractall(p(_,_,_,_)),
+	(do_all
+	 for(I,1,NTuplesPerGrp),
+	 for(J,1,KGrps),
+	 asserta(p(J,I,aaa,bbb))
+	),
+	asserta(p(1,0,aaa,bbb)),
+	asserta(p(2,0,aaa,bbb)).
+

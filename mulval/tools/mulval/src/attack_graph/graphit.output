@@ -1,0 +1,991 @@
+Grammar
+
+    0 $accept: lines $end
+
+    1 lines: %empty
+    2      | lines line
+
+    3 line: blank_line
+    4     | trace_step
+    5     | attack_fact
+    6     | predicate_type
+    7     | fact_metric
+
+    8 blank_line: END_LINE
+    9           | SP END_LINE
+
+   10 predicate_type: PRIMITIVE '(' ATOM ',' ATOM ')' '.' END_LINE
+   11               | DERIVED '(' ATOM ',' ATOM ')' '.' END_LINE
+   12               | META '(' ATOM ',' ATOM ')' '.' END_LINE
+
+   13 fact_metric: METRIC '(' fact ',' metric ')' '.' END_LINE
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+   15 metric: ATOM
+   16       | FLOAT
+   17       | cvss_metric
+   18       | cap_metric
+
+   19 cvss_metric: CVSS_AC '(' ATOM ')'
+
+   20 cap_metric: CAP_LUCK '(' ATOM ')'
+
+   21 attack_fact: ATTACK_TOKEN '(' fact ')' '.' END_LINE
+
+   22 special_char: SP
+   23             | '('
+   24             | ')'
+   25             | '['
+   26             | ']'
+
+   27 quoted_name: ATOM
+   28            | quoted_name ATOM
+   29            | quoted_name special_char
+
+   30 desc: %empty
+   31     | ATOM
+   32     | desc SP ATOM
+
+   33 arglist: factString
+   34        | arglist ',' factString
+
+   35 factString: ATOM
+   36           | QUOTE quoted_name QUOTE
+
+   37 facts: %empty
+   38      | fact
+   39      | facts ',' fact
+
+   40 fact: ATOM '(' arglist ')'
+
+   41 conjunct: '[' facts ']'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 10 11 12 13 14 19 20 21 23 40
+')' (41) 10 11 12 13 14 19 20 21 24 40
+',' (44) 10 11 12 13 14 34 39
+'.' (46) 10 11 12 13 14 21
+'[' (91) 25 41
+']' (93) 26 41
+error (256)
+ATTACK_TOKEN (258) 21
+TRACESTEP_TOKEN (259) 14
+BECAUSE_TOKEN (260) 14
+ATOM (261) 10 11 12 14 15 19 20 27 28 31 32 35 40
+QUOTE (262) 14 36
+SP (263) 9 22 32
+END_LINE (264) 8 9 10 11 12 13 14 21
+PRIMITIVE (265) 10
+DERIVED (266) 11
+META (267) 12
+METRIC (268) 13
+DESC (269) 14
+FLOAT (270) 16
+CVSS_AC (271) 19
+CAP_LUCK (272) 20
+
+
+Nonterminals, with rules where they appear
+
+$accept (24)
+    on left: 0
+lines (25)
+    on left: 1 2, on right: 0 2
+line (26)
+    on left: 3 4 5 6 7, on right: 2
+blank_line (27)
+    on left: 8 9, on right: 3
+predicate_type (28)
+    on left: 10 11 12, on right: 6
+fact_metric (29)
+    on left: 13, on right: 7
+trace_step (30)
+    on left: 14, on right: 4
+metric (31)
+    on left: 15 16 17 18, on right: 13 14
+cvss_metric (32)
+    on left: 19, on right: 17
+cap_metric (33)
+    on left: 20, on right: 18
+attack_fact (34)
+    on left: 21, on right: 5
+special_char (35)
+    on left: 22 23 24 25 26, on right: 29
+quoted_name (36)
+    on left: 27 28 29, on right: 28 29 36
+desc (37)
+    on left: 30 31 32, on right: 14 32
+arglist (38)
+    on left: 33 34, on right: 34 40
+factString (39)
+    on left: 35 36, on right: 33 34
+facts (40)
+    on left: 37 38 39, on right: 39 41
+fact (41)
+    on left: 40, on right: 13 14 21 38 39
+conjunct (42)
+    on left: 41, on right: 14
+
+
+State 0
+
+    0 $accept: . lines $end
+
+    $default  reduce using rule 1 (lines)
+
+    lines  go to state 1
+
+
+State 1
+
+    0 $accept: lines . $end
+    2 lines: lines . line
+
+    $end             shift, and go to state 2
+    ATTACK_TOKEN     shift, and go to state 3
+    TRACESTEP_TOKEN  shift, and go to state 4
+    SP               shift, and go to state 5
+    END_LINE         shift, and go to state 6
+    PRIMITIVE        shift, and go to state 7
+    DERIVED          shift, and go to state 8
+    META             shift, and go to state 9
+    METRIC           shift, and go to state 10
+
+    line            go to state 11
+    blank_line      go to state 12
+    predicate_type  go to state 13
+    fact_metric     go to state 14
+    trace_step      go to state 15
+    attack_fact     go to state 16
+
+
+State 2
+
+    0 $accept: lines $end .
+
+    $default  accept
+
+
+State 3
+
+   21 attack_fact: ATTACK_TOKEN . '(' fact ')' '.' END_LINE
+
+    '('  shift, and go to state 17
+
+
+State 4
+
+   14 trace_step: TRACESTEP_TOKEN . '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    '('  shift, and go to state 18
+
+
+State 5
+
+    9 blank_line: SP . END_LINE
+
+    END_LINE  shift, and go to state 19
+
+
+State 6
+
+    8 blank_line: END_LINE .
+
+    $default  reduce using rule 8 (blank_line)
+
+
+State 7
+
+   10 predicate_type: PRIMITIVE . '(' ATOM ',' ATOM ')' '.' END_LINE
+
+    '('  shift, and go to state 20
+
+
+State 8
+
+   11 predicate_type: DERIVED . '(' ATOM ',' ATOM ')' '.' END_LINE
+
+    '('  shift, and go to state 21
+
+
+State 9
+
+   12 predicate_type: META . '(' ATOM ',' ATOM ')' '.' END_LINE
+
+    '('  shift, and go to state 22
+
+
+State 10
+
+   13 fact_metric: METRIC . '(' fact ',' metric ')' '.' END_LINE
+
+    '('  shift, and go to state 23
+
+
+State 11
+
+    2 lines: lines line .
+
+    $default  reduce using rule 2 (lines)
+
+
+State 12
+
+    3 line: blank_line .
+
+    $default  reduce using rule 3 (line)
+
+
+State 13
+
+    6 line: predicate_type .
+
+    $default  reduce using rule 6 (line)
+
+
+State 14
+
+    7 line: fact_metric .
+
+    $default  reduce using rule 7 (line)
+
+
+State 15
+
+    4 line: trace_step .
+
+    $default  reduce using rule 4 (line)
+
+
+State 16
+
+    5 line: attack_fact .
+
+    $default  reduce using rule 5 (line)
+
+
+State 17
+
+   21 attack_fact: ATTACK_TOKEN '(' . fact ')' '.' END_LINE
+
+    ATOM  shift, and go to state 24
+
+    fact  go to state 25
+
+
+State 18
+
+   14 trace_step: TRACESTEP_TOKEN '(' . BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    BECAUSE_TOKEN  shift, and go to state 26
+
+
+State 19
+
+    9 blank_line: SP END_LINE .
+
+    $default  reduce using rule 9 (blank_line)
+
+
+State 20
+
+   10 predicate_type: PRIMITIVE '(' . ATOM ',' ATOM ')' '.' END_LINE
+
+    ATOM  shift, and go to state 27
+
+
+State 21
+
+   11 predicate_type: DERIVED '(' . ATOM ',' ATOM ')' '.' END_LINE
+
+    ATOM  shift, and go to state 28
+
+
+State 22
+
+   12 predicate_type: META '(' . ATOM ',' ATOM ')' '.' END_LINE
+
+    ATOM  shift, and go to state 29
+
+
+State 23
+
+   13 fact_metric: METRIC '(' . fact ',' metric ')' '.' END_LINE
+
+    ATOM  shift, and go to state 24
+
+    fact  go to state 30
+
+
+State 24
+
+   40 fact: ATOM . '(' arglist ')'
+
+    '('  shift, and go to state 31
+
+
+State 25
+
+   21 attack_fact: ATTACK_TOKEN '(' fact . ')' '.' END_LINE
+
+    ')'  shift, and go to state 32
+
+
+State 26
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN . '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    '('  shift, and go to state 33
+
+
+State 27
+
+   10 predicate_type: PRIMITIVE '(' ATOM . ',' ATOM ')' '.' END_LINE
+
+    ','  shift, and go to state 34
+
+
+State 28
+
+   11 predicate_type: DERIVED '(' ATOM . ',' ATOM ')' '.' END_LINE
+
+    ','  shift, and go to state 35
+
+
+State 29
+
+   12 predicate_type: META '(' ATOM . ',' ATOM ')' '.' END_LINE
+
+    ','  shift, and go to state 36
+
+
+State 30
+
+   13 fact_metric: METRIC '(' fact . ',' metric ')' '.' END_LINE
+
+    ','  shift, and go to state 37
+
+
+State 31
+
+   40 fact: ATOM '(' . arglist ')'
+
+    ATOM   shift, and go to state 38
+    QUOTE  shift, and go to state 39
+
+    arglist     go to state 40
+    factString  go to state 41
+
+
+State 32
+
+   21 attack_fact: ATTACK_TOKEN '(' fact ')' . '.' END_LINE
+
+    '.'  shift, and go to state 42
+
+
+State 33
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' . ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    ATOM  shift, and go to state 43
+
+
+State 34
+
+   10 predicate_type: PRIMITIVE '(' ATOM ',' . ATOM ')' '.' END_LINE
+
+    ATOM  shift, and go to state 44
+
+
+State 35
+
+   11 predicate_type: DERIVED '(' ATOM ',' . ATOM ')' '.' END_LINE
+
+    ATOM  shift, and go to state 45
+
+
+State 36
+
+   12 predicate_type: META '(' ATOM ',' . ATOM ')' '.' END_LINE
+
+    ATOM  shift, and go to state 46
+
+
+State 37
+
+   13 fact_metric: METRIC '(' fact ',' . metric ')' '.' END_LINE
+
+    ATOM      shift, and go to state 47
+    FLOAT     shift, and go to state 48
+    CVSS_AC   shift, and go to state 49
+    CAP_LUCK  shift, and go to state 50
+
+    metric       go to state 51
+    cvss_metric  go to state 52
+    cap_metric   go to state 53
+
+
+State 38
+
+   35 factString: ATOM .
+
+    $default  reduce using rule 35 (factString)
+
+
+State 39
+
+   36 factString: QUOTE . quoted_name QUOTE
+
+    ATOM  shift, and go to state 54
+
+    quoted_name  go to state 55
+
+
+State 40
+
+   34 arglist: arglist . ',' factString
+   40 fact: ATOM '(' arglist . ')'
+
+    ','  shift, and go to state 56
+    ')'  shift, and go to state 57
+
+
+State 41
+
+   33 arglist: factString .
+
+    $default  reduce using rule 33 (arglist)
+
+
+State 42
+
+   21 attack_fact: ATTACK_TOKEN '(' fact ')' '.' . END_LINE
+
+    END_LINE  shift, and go to state 58
+
+
+State 43
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM . ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    ','  shift, and go to state 59
+
+
+State 44
+
+   10 predicate_type: PRIMITIVE '(' ATOM ',' ATOM . ')' '.' END_LINE
+
+    ')'  shift, and go to state 60
+
+
+State 45
+
+   11 predicate_type: DERIVED '(' ATOM ',' ATOM . ')' '.' END_LINE
+
+    ')'  shift, and go to state 61
+
+
+State 46
+
+   12 predicate_type: META '(' ATOM ',' ATOM . ')' '.' END_LINE
+
+    ')'  shift, and go to state 62
+
+
+State 47
+
+   15 metric: ATOM .
+
+    $default  reduce using rule 15 (metric)
+
+
+State 48
+
+   16 metric: FLOAT .
+
+    $default  reduce using rule 16 (metric)
+
+
+State 49
+
+   19 cvss_metric: CVSS_AC . '(' ATOM ')'
+
+    '('  shift, and go to state 63
+
+
+State 50
+
+   20 cap_metric: CAP_LUCK . '(' ATOM ')'
+
+    '('  shift, and go to state 64
+
+
+State 51
+
+   13 fact_metric: METRIC '(' fact ',' metric . ')' '.' END_LINE
+
+    ')'  shift, and go to state 65
+
+
+State 52
+
+   17 metric: cvss_metric .
+
+    $default  reduce using rule 17 (metric)
+
+
+State 53
+
+   18 metric: cap_metric .
+
+    $default  reduce using rule 18 (metric)
+
+
+State 54
+
+   27 quoted_name: ATOM .
+
+    $default  reduce using rule 27 (quoted_name)
+
+
+State 55
+
+   28 quoted_name: quoted_name . ATOM
+   29            | quoted_name . special_char
+   36 factString: QUOTE quoted_name . QUOTE
+
+    ATOM   shift, and go to state 66
+    QUOTE  shift, and go to state 67
+    SP     shift, and go to state 68
+    '('    shift, and go to state 69
+    ')'    shift, and go to state 70
+    '['    shift, and go to state 71
+    ']'    shift, and go to state 72
+
+    special_char  go to state 73
+
+
+State 56
+
+   34 arglist: arglist ',' . factString
+
+    ATOM   shift, and go to state 38
+    QUOTE  shift, and go to state 39
+
+    factString  go to state 74
+
+
+State 57
+
+   40 fact: ATOM '(' arglist ')' .
+
+    $default  reduce using rule 40 (fact)
+
+
+State 58
+
+   21 attack_fact: ATTACK_TOKEN '(' fact ')' '.' END_LINE .
+
+    $default  reduce using rule 21 (attack_fact)
+
+
+State 59
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' . DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    DESC  shift, and go to state 75
+
+
+State 60
+
+   10 predicate_type: PRIMITIVE '(' ATOM ',' ATOM ')' . '.' END_LINE
+
+    '.'  shift, and go to state 76
+
+
+State 61
+
+   11 predicate_type: DERIVED '(' ATOM ',' ATOM ')' . '.' END_LINE
+
+    '.'  shift, and go to state 77
+
+
+State 62
+
+   12 predicate_type: META '(' ATOM ',' ATOM ')' . '.' END_LINE
+
+    '.'  shift, and go to state 78
+
+
+State 63
+
+   19 cvss_metric: CVSS_AC '(' . ATOM ')'
+
+    ATOM  shift, and go to state 79
+
+
+State 64
+
+   20 cap_metric: CAP_LUCK '(' . ATOM ')'
+
+    ATOM  shift, and go to state 80
+
+
+State 65
+
+   13 fact_metric: METRIC '(' fact ',' metric ')' . '.' END_LINE
+
+    '.'  shift, and go to state 81
+
+
+State 66
+
+   28 quoted_name: quoted_name ATOM .
+
+    $default  reduce using rule 28 (quoted_name)
+
+
+State 67
+
+   36 factString: QUOTE quoted_name QUOTE .
+
+    $default  reduce using rule 36 (factString)
+
+
+State 68
+
+   22 special_char: SP .
+
+    $default  reduce using rule 22 (special_char)
+
+
+State 69
+
+   23 special_char: '(' .
+
+    $default  reduce using rule 23 (special_char)
+
+
+State 70
+
+   24 special_char: ')' .
+
+    $default  reduce using rule 24 (special_char)
+
+
+State 71
+
+   25 special_char: '[' .
+
+    $default  reduce using rule 25 (special_char)
+
+
+State 72
+
+   26 special_char: ']' .
+
+    $default  reduce using rule 26 (special_char)
+
+
+State 73
+
+   29 quoted_name: quoted_name special_char .
+
+    $default  reduce using rule 29 (quoted_name)
+
+
+State 74
+
+   34 arglist: arglist ',' factString .
+
+    $default  reduce using rule 34 (arglist)
+
+
+State 75
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC . '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    '('  shift, and go to state 82
+
+
+State 76
+
+   10 predicate_type: PRIMITIVE '(' ATOM ',' ATOM ')' '.' . END_LINE
+
+    END_LINE  shift, and go to state 83
+
+
+State 77
+
+   11 predicate_type: DERIVED '(' ATOM ',' ATOM ')' '.' . END_LINE
+
+    END_LINE  shift, and go to state 84
+
+
+State 78
+
+   12 predicate_type: META '(' ATOM ',' ATOM ')' '.' . END_LINE
+
+    END_LINE  shift, and go to state 85
+
+
+State 79
+
+   19 cvss_metric: CVSS_AC '(' ATOM . ')'
+
+    ')'  shift, and go to state 86
+
+
+State 80
+
+   20 cap_metric: CAP_LUCK '(' ATOM . ')'
+
+    ')'  shift, and go to state 87
+
+
+State 81
+
+   13 fact_metric: METRIC '(' fact ',' metric ')' '.' . END_LINE
+
+    END_LINE  shift, and go to state 88
+
+
+State 82
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' . QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    QUOTE  shift, and go to state 89
+
+
+State 83
+
+   10 predicate_type: PRIMITIVE '(' ATOM ',' ATOM ')' '.' END_LINE .
+
+    $default  reduce using rule 10 (predicate_type)
+
+
+State 84
+
+   11 predicate_type: DERIVED '(' ATOM ',' ATOM ')' '.' END_LINE .
+
+    $default  reduce using rule 11 (predicate_type)
+
+
+State 85
+
+   12 predicate_type: META '(' ATOM ',' ATOM ')' '.' END_LINE .
+
+    $default  reduce using rule 12 (predicate_type)
+
+
+State 86
+
+   19 cvss_metric: CVSS_AC '(' ATOM ')' .
+
+    $default  reduce using rule 19 (cvss_metric)
+
+
+State 87
+
+   20 cap_metric: CAP_LUCK '(' ATOM ')' .
+
+    $default  reduce using rule 20 (cap_metric)
+
+
+State 88
+
+   13 fact_metric: METRIC '(' fact ',' metric ')' '.' END_LINE .
+
+    $default  reduce using rule 13 (fact_metric)
+
+
+State 89
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE . desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    ATOM  shift, and go to state 90
+
+    $default  reduce using rule 30 (desc)
+
+    desc  go to state 91
+
+
+State 90
+
+   31 desc: ATOM .
+
+    $default  reduce using rule 31 (desc)
+
+
+State 91
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc . QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+   32 desc: desc . SP ATOM
+
+    QUOTE  shift, and go to state 92
+    SP     shift, and go to state 93
+
+
+State 92
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE . ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    ','  shift, and go to state 94
+
+
+State 93
+
+   32 desc: desc SP . ATOM
+
+    ATOM  shift, and go to state 95
+
+
+State 94
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' . metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    ATOM      shift, and go to state 47
+    FLOAT     shift, and go to state 48
+    CVSS_AC   shift, and go to state 49
+    CAP_LUCK  shift, and go to state 50
+
+    metric       go to state 96
+    cvss_metric  go to state 52
+    cap_metric   go to state 53
+
+
+State 95
+
+   32 desc: desc SP ATOM .
+
+    $default  reduce using rule 32 (desc)
+
+
+State 96
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric . ')' ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    ')'  shift, and go to state 97
+
+
+State 97
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' . ',' fact ',' conjunct ')' ')' '.' END_LINE
+
+    ','  shift, and go to state 98
+
+
+State 98
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' . fact ',' conjunct ')' ')' '.' END_LINE
+
+    ATOM  shift, and go to state 24
+
+    fact  go to state 99
+
+
+State 99
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact . ',' conjunct ')' ')' '.' END_LINE
+
+    ','  shift, and go to state 100
+
+
+State 100
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' . conjunct ')' ')' '.' END_LINE
+
+    '['  shift, and go to state 101
+
+    conjunct  go to state 102
+
+
+State 101
+
+   41 conjunct: '[' . facts ']'
+
+    ATOM  shift, and go to state 24
+
+    $default  reduce using rule 37 (facts)
+
+    facts  go to state 103
+    fact   go to state 104
+
+
+State 102
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct . ')' ')' '.' END_LINE
+
+    ')'  shift, and go to state 105
+
+
+State 103
+
+   39 facts: facts . ',' fact
+   41 conjunct: '[' facts . ']'
+
+    ','  shift, and go to state 106
+    ']'  shift, and go to state 107
+
+
+State 104
+
+   38 facts: fact .
+
+    $default  reduce using rule 38 (facts)
+
+
+State 105
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' . ')' '.' END_LINE
+
+    ')'  shift, and go to state 108
+
+
+State 106
+
+   39 facts: facts ',' . fact
+
+    ATOM  shift, and go to state 24
+
+    fact  go to state 109
+
+
+State 107
+
+   41 conjunct: '[' facts ']' .
+
+    $default  reduce using rule 41 (conjunct)
+
+
+State 108
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' . '.' END_LINE
+
+    '.'  shift, and go to state 110
+
+
+State 109
+
+   39 facts: facts ',' fact .
+
+    $default  reduce using rule 39 (facts)
+
+
+State 110
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' . END_LINE
+
+    END_LINE  shift, and go to state 111
+
+
+State 111
+
+   14 trace_step: TRACESTEP_TOKEN '(' BECAUSE_TOKEN '(' ATOM ',' DESC '(' QUOTE desc QUOTE ',' metric ')' ',' fact ',' conjunct ')' ')' '.' END_LINE .
+
+    $default  reduce using rule 14 (trace_step)

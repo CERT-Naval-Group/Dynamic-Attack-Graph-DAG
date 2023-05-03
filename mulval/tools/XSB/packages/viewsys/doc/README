@@ -1,0 +1,5 @@
+To generate documentation for viewsys into , in this directory do:
+
+xsb
+[xsbdoc].
+xsbdoc(viewsys_format,pdf).

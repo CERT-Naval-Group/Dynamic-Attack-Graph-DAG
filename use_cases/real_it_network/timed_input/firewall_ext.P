@@ -1,0 +1,35 @@
+/***********************************************************************/
+/********************** Firewall EXT architecture **********************/
+/***********************************************************************/
+
+vlanInterface('FW-PA-EXT', VAR_VLAN_FW_EXT_PA).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('FW-ST-EXT', VAR_VLAN_FW_EXT_ST).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('FW-MA-EXT', VAR_VLAN_FW_EXT_MA).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('FW-LY-EXT', VAR_VLAN_FW_EXT_LY).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('FW-BR-EXT', VAR_VLAN_FW_EXT_BR).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('FW-PA-EXT', internet, 'VPNStormShield', tls, 40000, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-PA-EXT', 'vlan-pa-100', ssh, tls, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-PA-EXT', 'vlan-pa-100', stormShieldHTTPD, https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('FW-ST-EXT', internet, 'VPNStormShield', tls, 40000, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-ST-EXT', 'vlan-st-100', ssh, tls, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-ST-EXT', 'vlan-st-100', stormShieldHTTPD, https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('FW-MA-EXT', internet, 'VPNStormShield', tls, 40000, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-MA-EXT', 'vlan-ma-100', ssh, tls, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-MA-EXT', 'vlan-ma-100', stormShieldHTTPD, https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('FW-LY-EXT', internet, 'VPNStormShield', tls, 40000, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-LY-EXT', 'vlan-ly-100', ssh, tls, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-LY-EXT', 'vlan-ly-100', stormShieldHTTPD, https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('FW-BR-EXT', internet, 'VPNStormShield', tls, 40000, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-BR-EXT', 'vlan-br-100', ssh, tls, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('FW-BR-EXT', 'vlan-br-100', stormShieldHTTPD, https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(_, internet, 'FW-PA-EXT', internet, tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, internet, 'FW-ST-EXT', internet, tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, internet, 'FW-MA-EXT', internet, tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, internet, 'FW-LY-EXT', internet, tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(_, internet, 'FW-BR-EXT', internet, tls, 40000).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]

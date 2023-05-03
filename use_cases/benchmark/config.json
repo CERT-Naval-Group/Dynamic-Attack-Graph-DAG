@@ -1,0 +1,25 @@
+{
+  "start" : "2021-01-04 00:00:00",
+  "end": "2021-01-24 23:59:59",
+  "timeUnit": "hour",
+  "projectName": "benchmark",
+  "timedInputDir": "timed_input/",
+  "working_dir": "<USE CASE PATH>",
+  "database": {
+    "host": "localhost",
+    "user": "phpmyadm",
+    "passwd": "QRBIhj_ojXoUuzTS65vH",
+    "dbName": "rpc"
+  },
+  "stateNodes": [
+    "execCode"
+  ],
+  "actions": [
+    "vulExists"
+  ],
+  "nbSimulations": 1,
+  "rules_path": "/opt/dynamic-attack-graph-dag/mulval/tools/mulval/kb/optimized_rules.P",
+  "optimization": true
+}
+
+

@@ -1,0 +1,78 @@
+/**
+This is a toy example view system, as defined in
+./viewsys_view_info.P.  The view dependency tree is:
+
+aview
+    bview
+        cview
+	    dfile
+	efile
+    fview
+	dfile
+
+so the base views: dfile and efile
+
+Definition of the views is:
+***/
+
+a(X,Y) :- b(X,Y), f(Y).
+b(X,Y) :- c(X,Z), e(Z,Y).
+c(X,Y) :- d(X,Y), X < 10.
+f(X) :- d(X,_).
+
+So a/2 is the relation defined by view aview, etc.
+Base data for d/2 and e/2 are in dfile.P and efile.P and reproduced below.
+The view aview is defined (in viewsys_view_info.P) to have its contents
+    stored in the file aview.P, etc.
+
+To test the view system, get into a shell in this directory, and then:
+
+% xsb
+| ?- [viewsys].
+| ?- generate_new_instance('.',main).  % to generate a view instance
+| ?- update_views('.',all,updater,2).  % to generate the contents of the views
+
+This last should run in a few seconds, logging Spawned and Finished
+messages as it goes, and generate several files.  The main file is
+aview.P, which should contain the facts of the a/2 predicate:
+
+a(1,2).
+a(2,3).
+a(3,4).
+a(4,5).
+a(6,7).
+a(7,8).
+a(8,9).
+a(9,10).
+
+Base data:
+
+d(1,1).
+d(2,2).
+d(3,3).
+d(4,4).
+d(5,5).
+d(6,6).
+d(7,7).
+d(8,8).
+d(9,9).
+d(10,10).
+d(11,11).
+d(12,12).
+d(13,13).
+d(14,14).
+
+e(1,2).
+e(2,3).
+e(3,4).
+e(4,5).
+e(5,6).
+e(6,7).
+e(7,8).
+e(8,9).
+e(9,10).
+e(10,11).
+e(11,12).
+e(12,13).
+e(13,14).
+e(14,15).

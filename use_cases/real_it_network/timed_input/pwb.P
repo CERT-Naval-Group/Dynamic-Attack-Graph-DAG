@@ -1,0 +1,68 @@
+/*************************************************************************/
+/********************** Proxy Bluecoat architecture **********************/
+/*************************************************************************/
+
+vlanInterface('PWB_PA', 'vlan-pa-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('PWB_PA', 'vlan-pa-100').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+vlanInterface('PWB_ST', 'vlan-st-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('PWB_ST', 'vlan-st-100').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+vlanInterface('PWB_MA', 'vlan-ma-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('PWB_MA', 'vlan-ma-100').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+vlanInterface('PWB_LY', 'vlan-ly-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('PWB_LY', 'vlan-ly-100').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+vlanInterface('PWB_BR', 'vlan-br-400').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+vlanInterface('PWB_BR', 'vlan-br-100').[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PWB_PA', 'vlan-pa-400', 'pwb-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('PWB_PA', 'vlan-pa-400', 'pwb-http-server', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('PWB_PA', 'vlan-pa-100', 'pwb-ssh-server', ssh, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PWB_ST', 'vlan-st-400', 'pwb-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('PWB_ST', 'vlan-st-400', 'pwb-http-server', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('PWB_ST', 'vlan-st-100', 'pwb-ssh-server', ssh, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PWB_MA', 'vlan-ma-400', 'pwb-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('PWB_MA', 'vlan-ma-400', 'pwb-http-server', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('PWB_MA', 'vlan-ma-100', 'pwb-ssh-server', ssh, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PWB_LY', 'vlan-ly-400', 'pwb-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('PWB_LY', 'vlan-ly-400', 'pwb-http-server', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('PWB_LY', 'vlan-ly-100', 'pwb-ssh-server', ssh, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+networkServiceInfo('PWB_BR', 'vlan-br-400', 'pwb-http-server', http, 80, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('PWB_BR', 'vlan-br-400', 'pwb-http-server', https, 443, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+networkServiceInfo('PWB_BR', 'vlan-br-100', 'pwb-ssh-server', ssh, 22, root).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(VAR_P_PA, 'vlan-pa-300', 'PWB_PA', 'vlan-pa-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_PA, 'vlan-pa-700', 'PWB_PA', 'vlan-pa-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_PA, 'vlan-pa-300', 'PWB_PA', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_PA, 'vlan-pa-700', 'PWB_PA', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PWB_PA', 'vlan-pa-400', 'ADDC-PA', 'vlan-pa-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(VAR_P_ST, 'vlan-st-300', 'PWB_ST', 'vlan-st-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_ST, 'vlan-st-700', 'PWB_ST', 'vlan-st-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_ST, 'vlan-st-300', 'PWB_ST', 'vlan-st-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_ST, 'vlan-st-700', 'PWB_ST', 'vlan-st-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PWB_ST', 'vlan-st-400', 'ADDC-ST', 'vlan-st-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(VAR_P_MA, 'vlan-ma-300', 'PWB_MA', 'vlan-ma-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_MA, 'vlan-ma-700', 'PWB_MA', 'vlan-ma-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_MA, 'vlan-ma-300', 'PWB_MA', 'vlan-ma-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_MA, 'vlan-ma-700', 'PWB_MA', 'vlan-ma-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PWB_MA', 'vlan-ma-400', 'ADDC-MA', 'vlan-ma-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(VAR_P_LY, 'vlan-ly-300', 'PWB_LY', 'vlan-ly-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_LY, 'vlan-ly-700', 'PWB_LY', 'vlan-ly-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_LY, 'vlan-ly-300', 'PWB_LY', 'vlan-ly-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_LY, 'vlan-ly-700', 'PWB_LY', 'vlan-ly-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PWB_LY', 'vlan-ly-400', 'ADDC-LY', 'vlan-ly-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+
+firewallRule(VAR_P_BR, 'vlan-br-300', 'PWB_BR', 'vlan-br-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_BR, 'vlan-br-700', 'PWB_BR', 'vlan-br-400', http, 80).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_BR, 'vlan-br-300', 'PWB_BR', 'vlan-br-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule(VAR_P_BR, 'vlan-br-700', 'PWB_BR', 'vlan-br-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]
+firewallRule('PWB_BR', 'vlan-br-400', 'ADDC-BR', 'vlan-br-400', https, 443).[(2021-01-04 00:00:00,2021-01-10 23:59:59,1)]

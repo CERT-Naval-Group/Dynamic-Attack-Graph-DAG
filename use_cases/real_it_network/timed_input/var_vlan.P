@@ -1,0 +1,28 @@
+VAR_VLAN_FW_INT_PA = ['vlan-pa-100', 'vlan-pa-200', 'vlan-pa-300', 'vlan-pa-400', 'vlan-800']
+VAR_VLAN_FW_INT_ST = ['vlan-st-100', 'vlan-st-200', 'vlan-st-300', 'vlan-st-400', 'vlan-800']
+VAR_VLAN_FW_INT_MA = ['vlan-ma-100', 'vlan-ma-200', 'vlan-ma-300', 'vlan-ma-400', 'vlan-800']
+VAR_VLAN_FW_INT_LY = ['vlan-ly-100', 'vlan-ly-200', 'vlan-ly-300', 'vlan-ly-400', 'vlan-800']
+VAR_VLAN_FW_INT_BR = ['vlan-br-100', 'vlan-br-200', 'vlan-br-300', 'vlan-br-400', 'vlan-800']
+
+VAR_VLAN_FW_EXT_PA = ['vlan-pa-300', 'vlan-pa-400', 'vlan-pa-500', 'vlan-pa-600', 'vlan-pa-700', internet]
+VAR_VLAN_FW_EXT_ST = ['vlan-st-300', 'vlan-st-400', 'vlan-st-500', 'vlan-st-600', 'vlan-st-700', internet]
+VAR_VLAN_FW_EXT_MA = ['vlan-ma-300', 'vlan-ma-400', 'vlan-ma-500', 'vlan-ma-600', 'vlan-ma-700', internet]
+VAR_VLAN_FW_EXT_LY = ['vlan-ly-300', 'vlan-ly-400', 'vlan-ly-500', 'vlan-ly-600', 'vlan-ly-700', internet]
+VAR_VLAN_FW_EXT_BR = ['vlan-br-300', 'vlan-br-400', 'vlan-br-500', 'vlan-br-600', 'vlan-br-700', internet]
+
+VAR_VLAN_100 = ['vlan-pa-100', 'vlan-st-100', 'vlan-ma-100', 'vlan-ly-100', 'vlan-br-100']
+VAR_VLAN_200 = ['vlan-pa-200', 'vlan-st-200', 'vlan-ma-200', 'vlan-ly-200', 'vlan-br-200']
+VAR_VLAN_300 = ['vlan-pa-300', 'vlan-st-300', 'vlan-ma-300', 'vlan-ly-300', 'vlan-br-300']
+VAR_VLAN_400 = ['vlan-pa-400', 'vlan-st-400', 'vlan-ma-400', 'vlan-ly-400', 'vlan-br-400']
+VAR_VLAN_500 = ['vlan-pa-500', 'vlan-st-500', 'vlan-ma-500', 'vlan-ly-500', 'vlan-br-500']
+VAR_VLAN_600 = ['vlan-pa-600', 'vlan-st-600', 'vlan-ma-600', 'vlan-ly-600', 'vlan-br-600']
+VAR_VLAN_700 = ['vlan-pa-700', 'vlan-st-700', 'vlan-ma-700', 'vlan-ly-700', 'vlan-br-700']
+
+VAR_VLAN_AD_PA = ['vlan-pa-100', 'vlan-pa-200', 'vlan-pa-300', 'vlan-pa-400', 'vlan-pa-500', 'vlan-pa-700']
+VAR_VLAN_AD_ST = ['vlan-st-100', 'vlan-st-200', 'vlan-st-300', 'vlan-st-400', 'vlan-st-500', 'vlan-st-700']
+VAR_VLAN_AD_MA = ['vlan-ma-100', 'vlan-ma-200', 'vlan-ma-300', 'vlan-ma-400', 'vlan-ma-500', 'vlan-ma-700']
+VAR_VLAN_AD_LY = ['vlan-ly-100', 'vlan-ly-200', 'vlan-ly-300', 'vlan-ly-400', 'vlan-ly-500', 'vlan-ly-700']
+VAR_VLAN_AD_BR = ['vlan-br-100', 'vlan-br-200', 'vlan-br-300', 'vlan-br-400', 'vlan-br-500', 'vlan-br-700']
+
+/VAR_VLAN_ADM = ['vlan-pa-200', 'vlan-st-200', 'vlan-ma-200', 'vlan-ly-200', 'vlan-br-200', 'vlan-pa-300', 'vlan-st-300', 'vlan-ma-300', 'vlan-ly-300', 'vlan-br-300', 'vlan-pa-400', 'vlan-st-400', 'vlan-ma-400', 'vlan-ly-400', 'vlan-br-400', 'vlan-pa-500', 'vlan-st-500', 'vlan-ma-500', 'vlan-ly-500', 'vlan-br-500', 'vlan-pa-700', 'vlan-st-700', 'vlan-ma-700', 'vlan-ly-700', 'vlan-br-700', 'vlan800']
+VAR_VLAN_ADM = ['vlan-pa-100', 'vlan-st-100', 'vlan-ma-100', 'vlan-ly-100', 'vlan-br-100', 'vlan-pa-200', 'vlan-st-200', 'vlan-ma-200', 'vlan-ly-200', 'vlan-br-200', 'vlan-pa-300', 'vlan-st-300', 'vlan-ma-300', 'vlan-ly-300', 'vlan-br-300', 'vlan-pa-700', 'vlan-st-700', 'vlan-ma-700', 'vlan-ly-700', 'vlan-br-700']

@@ -1,0 +1,1100 @@
+(:- compiler_options([singleton_warnings_off])) .
+
+(:- import activate_constraint / 3,remove_constraint_internal / 2,insert_constraint_internal / 5,allocate_constraint / 4,constraint_generation / 3,sbag_member / 2,sbag_del_element / 3,run_suspensions / 1,run_suspensions_loop / 1,change_state / 2,extend_history / 2,novel_production / 2,merge_attributes / 3,lock / 1,unlock / 1,via / 2,via_1 / 2,via_2 / 3,merge / 3,not_locked / 1,global_term_ref_1 / 1 from chr_interp) .
+
+(:- import get_mutable / 2,update_mutable / 2 from mutablevar) .
+
+(:- import get_attr / 3,put_attr / 3,del_attr / 2 from machine) .
+
+(:- import install_verify_attribute_handler / 4 from machine) .
+
+(:- local attr_unify_hook / 2) .
+
+(:- install_verify_attribute_handler(timeConstraints,A,B,attr_unify_hook(A,B))) .
+
+(:- export arc / 4,path / 6,labeling / 0) .
+
+(:- import globalize / 1,var_compare / 3,lookup_variable_id / 2 from constraintLib) .
+
+(:- import ground / 1,length / 2,member / 2 from basics) .
+
+(:- import transl / 4,intersection / 3,equality / 2,shift_interval / 3,bind_value / 3,unique / 1,universal / 3,empty / 2,path1 / 5 from time) .
+
+(:- ensure_loaded(chr_TimeMachine)) .
+
+(:- import chr_TraceNewPath / 1,chr_TraceConstraintRuleFired / 2,chr_TraceConstraintRuleFired / 3,chr_GraphStep / 0 from chr_TimeMachine) .
+
+nonground(A) :-
+        \+ ground(A) .
+
+'attach_arc/4'([],A) .
+
+'attach_arc/4'([A|B],C) :-
+        (  get_attr(A,timeConstraints,v(D,E,F,G)) ->
+             (  D /\ 1 =:= 1 ->
+                  put_attr(A,timeConstraints,v(D,[C|E],F,G))
+             ;
+                  H is D \/ 1,
+                  put_attr(A,timeConstraints,v(H,[C],F,G))
+             )
+        ;
+             put_attr(A,timeConstraints,v(1,[C],[],[]))
+        ),
+        'attach_arc/4'(B,C) .
+
+'attach_path/6'([],A) .
+
+'attach_path/6'([A|B],C) :-
+        (  get_attr(A,timeConstraints,v(D,E,F,G)) ->
+             (  D /\ 2 =:= 2 ->
+                  put_attr(A,timeConstraints,v(D,E,[C|F],G))
+             ;
+                  H is D \/ 2,
+                  put_attr(A,timeConstraints,v(H,E,[C],G))
+             )
+        ;
+             put_attr(A,timeConstraints,v(2,[],[C],[]))
+        ),
+        'attach_path/6'(B,C) .
+
+'attach_labeling/0'([],A) .
+
+'attach_labeling/0'([A|B],C) :-
+        (  get_attr(A,timeConstraints,v(D,E,F,G)) ->
+             (  D /\ 4 =:= 4 ->
+                  put_attr(A,timeConstraints,v(D,E,F,[C|G]))
+             ;
+                  H is D \/ 4,
+                  put_attr(A,timeConstraints,v(H,E,F,[C]))
+             )
+        ;
+             put_attr(A,timeConstraints,v(4,[],[],[C]))
+        ),
+        'attach_labeling/0'(B,C) .
+
+'detach_arc/4'([],A) .
+
+'detach_arc/4'([A|B],C) :-
+        (  get_attr(A,timeConstraints,v(D,E,F,G)) ->
+             (  D /\ 1 =:= 1 ->
+                  sbag_del_element(E,C,H),
+                  (  H == [] ->
+                       I is D /\ -2,
+                       (  I == 0 ->
+                            del_attr(A,timeConstraints)
+                       ;
+                            put_attr(A,timeConstraints,v(I,[],F,G))
+                       )
+                  ;
+                       put_attr(A,timeConstraints,v(D,H,F,G))
+                  )
+             ;
+                  true
+             )
+        ;
+             true
+        ),
+        'detach_arc/4'(B,C) .
+
+'detach_path/6'([],A) .
+
+'detach_path/6'([A|B],C) :-
+        (  get_attr(A,timeConstraints,v(D,E,F,G)) ->
+             (  D /\ 2 =:= 2 ->
+                  sbag_del_element(F,C,H),
+                  (  H == [] ->
+                       I is D /\ -3,
+                       (  I == 0 ->
+                            del_attr(A,timeConstraints)
+                       ;
+                            put_attr(A,timeConstraints,v(I,E,[],G))
+                       )
+                  ;
+                       put_attr(A,timeConstraints,v(D,E,H,G))
+                  )
+             ;
+                  true
+             )
+        ;
+             true
+        ),
+        'detach_path/6'(B,C) .
+
+'detach_labeling/0'([],A) .
+
+'detach_labeling/0'([A|B],C) :-
+        (  get_attr(A,timeConstraints,v(D,E,F,G)) ->
+             (  D /\ 4 =:= 4 ->
+                  sbag_del_element(G,C,H),
+                  (  H == [] ->
+                       I is D /\ -5,
+                       (  I == 0 ->
+                            del_attr(A,timeConstraints)
+                       ;
+                            put_attr(A,timeConstraints,v(I,E,F,[]))
+                       )
+                  ;
+                       put_attr(A,timeConstraints,v(D,E,F,H))
+                  )
+             ;
+                  true
+             )
+        ;
+             true
+        ),
+        'detach_labeling/0'(B,C) .
+
+attach_increment([],A) .
+
+attach_increment([A|B],v(C,D,E,F)) :-
+        not_locked(A),
+        (  get_attr(A,timeConstraints,v(G,H,I,J)) ->
+             sort(H,K),
+             merge_attributes(D,K,L),
+             sort(I,M),
+             merge_attributes(E,M,N),
+             sort(J,O),
+             merge_attributes(F,O,P),
+             Q is C \/ G,
+             put_attr(A,timeConstraints,v(Q,L,N,P))
+        ;
+             put_attr(A,timeConstraints,v(C,D,E,F))
+        ),
+        attach_increment(B,v(C,D,E,F)) .
+
+attr_unify_hook(v(A,B,C,D),E) :-
+        sort(B,F),
+        sort(C,G),
+        sort(D,H),
+        (  var(E) ->
+             (  get_attr(E,timeConstraints,v(I,J,K,L)) ->
+                  sort(J,M),
+                  merge_attributes(F,M,N),
+                  sort(K,O),
+                  merge_attributes(G,O,P),
+                  sort(L,Q),
+                  merge_attributes(H,Q,R),
+                  S is A \/ I,
+                  put_attr(E,timeConstraints,v(S,N,P,R)),
+                  run_suspensions_loop([N,P,R])
+             ;
+                  put_attr(E,timeConstraints,v(A,F,G,H)),
+                  run_suspensions_loop([F,G,H])
+             )
+        ;
+             (  compound(E) ->
+                  term_variables(E,T),
+                  attach_increment(T,v(A,F,G,H))
+             ;
+                  true
+             ),
+             run_suspensions_loop([F,G,H])
+        ) .
+
+arc(A,B,C,D) :-
+        'arc/4__0'(A,B,C,D,E) .
+
+'arc/4__0'(A,B,C,D,E) :-
+        true,
+        true,
+        lock(C),
+        lock(D),
+        ground(C),
+        ground(D),
+        length(C,F),
+        unlock(C),
+        unlock(D),
+        !,
+        true,
+        (  var(E) ->
+             true
+        ;
+             remove_constraint_internal(E,G),
+             'detach_arc/4'(G,E)
+        ),
+        globalize(A),
+        globalize(B),
+        sort(C,H),
+        chr_TraceNewPath(path(F,A,B,H,D,1)),
+        path(F,A,B,H,D,1),
+        chr_GraphStep .
+
+'arc/4__0'(A,B,C,D,E) :-
+        (  var(E) ->
+             insert_constraint_internal(F,E,'arc/4__0'(A,B,C,D,E),arc,[A,B,C,D])
+        ;
+             activate_constraint(F,E,G)
+        ),
+        'attach_arc/4'(F,E) .
+
+path(A,B,C,D,E,F) :-
+        'path/6__0'(A,B,C,D,E,F,G) .
+
+'path/6__0'(A,B,C,D,E,F,G) :-
+        true,
+        true,
+        ground(B - C - D - E),
+        !,
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,H),
+             'detach_path/6'(H,G)
+        ),
+        chr_TraceConstraintRuleFired(ground,path(A,B,C,D,E,F)),
+        path1(A,B,C,D,E) .
+
+'path/6__0'(A,B,C,D,E,F,G) :-
+        true,
+        true,
+        lock(A),
+        lock(D),
+        empty(A,D),
+        unlock(A),
+        unlock(D),
+        !,
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,H),
+             'detach_path/6'(H,G)
+        ),
+        chr_TraceConstraintRuleFired(empty,path(A,B,C,D,E,F)),
+        fail .
+
+'path/6__0'(A,B,C,D,E,F,G) :-
+        true,
+        true,
+        lock(A),
+        lock(D),
+        lock(E),
+        universal(A,D,E),
+        unlock(A),
+        unlock(D),
+        unlock(E),
+        !,
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,H),
+             'detach_path/6'(H,G)
+        ),
+        chr_TraceConstraintRuleFired(universal,path(A,B,C,D,E,F)),
+        true .
+
+'path/6__0'(A,B,C,D,E,F,G) :-
+        C == B,
+        true,
+        true,
+        true,
+        true,
+        !,
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,H),
+             'detach_path/6'(H,G)
+        ),
+        equality(D,E),
+        chr_TraceConstraintRuleFired(universal,path(A,B,I,D,E,F)) .
+
+'path/6__0'(A,B,C,D,E,F,G) :-
+        A == 1,
+        true,
+        lock(D),
+        lock(E),
+        unique(D),
+        equality(D,E),
+        unlock(D),
+        unlock(E),
+        !,
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,H),
+             'detach_path/6'(H,G)
+        ),
+        chr_TraceConstraintRuleFired(unify,path(1,B,C,D,E,F)),
+        B = C .
+
+'path/6__0'(A,B,C,D,E,F,G) :-
+        true,
+        via([A,B,C,D,E],H),
+        get_attr(H,timeConstraints,v(I,J,K,L)),
+        I /\ 2 =:= 2,
+        sbag_member(M,K),
+        M = suspension(N,O,P,Q,R,S,T,U,V,W,X,Y),
+        get_mutable(active,O),
+        true,
+        T == A,
+        U == B,
+        V == C,
+        W == D,
+        X == E,
+        true,
+        Y =< F,
+        !,
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,Z),
+             'detach_path/6'(Z,G)
+        ),
+        chr_TraceConstraintRuleFired(path_already_in_store1,path(A,B,C,D,E,Y),path(A,B,C,D,E,F)),
+        true .
+
+'path/6__0'(A,B,C,D,E,F,G) :-
+        true,
+        via([A,B,C,D,E],H),
+        get_attr(H,timeConstraints,v(I,J,K,L)),
+        I /\ 2 =:= 2,
+        !,
+        (  var(G) ->
+             allocate_constraint('path/6__0'(A,B,C,D,E,F,G),G,path,[A,B,C,D,E,F])
+        ;
+             true
+        ),
+        'path/6__0__0'(K,A,B,C,D,E,F,G) .
+
+'path/6__0__0'([],A,B,C,D,E,F,G) :-
+        'path/6__1'(A,B,C,D,E,F,G) .
+
+'path/6__0__0'([A|B],C,D,E,F,G,H,I) :-
+        (
+          A = suspension(J,K,L,M,N,O,P,Q,R,S,T,U),
+          get_mutable(active,K),
+          P == C,
+          Q == D,
+          R == E,
+          S == F,
+          T == G,
+          true,
+          H =< U ->
+             remove_constraint_internal(A,V),
+             'detach_path/6'(V,A),
+             true,
+             activate_constraint(W,I,X),
+             'attach_path/6'(W,I),
+             chr_TraceConstraintRuleFired(path_already_in_store1,path(C,D,E,F,G,H),path(C,D,E,F,G,U)),
+             true,
+             (
+               I = suspension(Y,Z,A1,B1,C1,D1,E1,F1,G1,H1,I1,J1),
+               get_mutable(active,Z),
+               get_mutable(X,B1) ->
+                  update_mutable(inactive,Z),
+                  'path/6__0__0'(B,C,D,E,F,G,H,I)
+             ;
+                  true
+             )
+        ;
+             'path/6__0__0'(B,C,D,E,F,G,H,I)
+        ) .
+
+'path/6__0'(A,B,C,D,E,F,G) :-
+        (  var(G) ->
+             allocate_constraint('path/6__0'(A,B,C,D,E,F,G),G,path,[A,B,C,D,E,F])
+        ;
+             true
+        ),
+        'path/6__1'(A,B,C,D,E,F,G) .
+
+'path/6__1'(A,B,C,D,E,F,G) :-
+        true,
+        via([B,C,E],H),
+        get_attr(H,timeConstraints,v(I,J,K,L)),
+        I /\ 2 =:= 2,
+        sbag_member(M,K),
+        M = suspension(N,O,P,Q,R,S,T,U,V,W,X,Y),
+        get_mutable(active,O),
+        true,
+        U == B,
+        V == C,
+        X == E,
+        true,
+        lock(W),
+        lock(D),
+        lock(T),
+        lock(A),
+        intersection(W,D,Z),
+        Z == W,
+        T < A,
+        unlock(W),
+        unlock(D),
+        unlock(T),
+        unlock(A),
+        !,
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,A1),
+             'detach_path/6'(A1,G)
+        ),
+        chr_TraceConstraintRuleFired(path_already_in_store2,path(T,B,C,W,E,Y),path(A,B,C,D,E,F)),
+        true .
+
+'path/6__1'(A,B,C,D,E,F,G) :-
+        true,
+        via([B,C,E],H),
+        get_attr(H,timeConstraints,v(I,J,K,L)),
+        I /\ 2 =:= 2,
+        !,
+        true,
+        'path/6__1__0'(K,A,B,C,D,E,F,G) .
+
+'path/6__1__0'([],A,B,C,D,E,F,G) :-
+        'path/6__2'(A,B,C,D,E,F,G) .
+
+'path/6__1__0'([A|B],C,D,E,F,G,H,I) :-
+        (
+          A = suspension(J,K,L,M,N,O,P,Q,R,S,T,U),
+          get_mutable(active,K),
+          Q == D,
+          R == E,
+          T == G,
+          true,
+          lock(F),
+          lock(S),
+          lock(C),
+          lock(P),
+          intersection(F,S,V),
+          V == F,
+          C < P,
+          unlock(F),
+          unlock(S),
+          unlock(C),
+          unlock(P) ->
+             remove_constraint_internal(A,W),
+             'detach_path/6'(W,A),
+             true,
+             activate_constraint(X,I,Y),
+             'attach_path/6'(X,I),
+             chr_TraceConstraintRuleFired(path_already_in_store2,path(C,D,E,F,G,H),path(P,D,E,S,G,U)),
+             true,
+             (
+               I = suspension(Z,A1,B1,C1,D1,E1,F1,G1,H1,I1,J1,K1),
+               get_mutable(active,A1),
+               get_mutable(Y,C1) ->
+                  update_mutable(inactive,A1),
+                  'path/6__1__0'(B,C,D,E,F,G,H,I)
+             ;
+                  true
+             )
+        ;
+             'path/6__1__0'(B,C,D,E,F,G,H,I)
+        ) .
+
+'path/6__1'(A,B,C,D,E,F,G) :-
+        true,
+        'path/6__2'(A,B,C,D,E,F,G) .
+
+'path/6__2'(A,B,C,D,E,F,G) :-
+        nonvar(E),
+        E = H - I,
+        via([B,C,H,I],J),
+        get_attr(J,timeConstraints,v(K,L,M,N)),
+        K /\ 2 =:= 2,
+        sbag_member(O,M),
+        O = suspension(P,Q,R,S,T,U,V,W,X,Y,Z,A1),
+        get_mutable(active,Q),
+        true,
+        W == B,
+        X == C,
+        nonvar(Z),
+        Z = B1 - C1,
+        B1 == H,
+        C1 == I,
+        true,
+        lock(D),
+        lock(Y),
+        intersection(D,Y,D1),
+        D1 \== D,
+        D1 \== Y,
+        unlock(D),
+        unlock(Y),
+        !,
+        remove_constraint_internal(O,E1),
+        'detach_path/6'(E1,O),
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,F1),
+             'detach_path/6'(F1,G)
+        ),
+        chr_TraceConstraintRuleFired(intersect_xy_xy,path(A,B,C,D,H - I,F),path(V,B,C,Y,H - I,A1)),
+        length(D1,G1),
+        H1 is min(F,A1),
+        chr_TraceNewPath(path(G1,B,C,D1,H - I,H1)),
+        path(G1,B,C,D1,H - I,H1),
+        chr_GraphStep .
+
+'path/6__2'(A,B,C,D,E,F,G) :-
+        nonvar(E),
+        E = H - I,
+        via([B,C,H,I],J),
+        get_attr(J,timeConstraints,v(K,L,M,N)),
+        K /\ 2 =:= 2,
+        sbag_member(O,M),
+        O = suspension(P,Q,R,S,T,U,V,W,X,Y,Z,A1),
+        get_mutable(active,Q),
+        true,
+        W == B,
+        X == C,
+        nonvar(Z),
+        Z = B1 - C1,
+        B1 == H,
+        C1 == I,
+        true,
+        lock(Y),
+        lock(D),
+        intersection(Y,D,D1),
+        D1 \== Y,
+        D1 \== D,
+        unlock(Y),
+        unlock(D),
+        !,
+        remove_constraint_internal(O,E1),
+        'detach_path/6'(E1,O),
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,F1),
+             'detach_path/6'(F1,G)
+        ),
+        chr_TraceConstraintRuleFired(intersect_xy_xy,path(V,B,C,Y,H - I,A1),path(A,B,C,D,H - I,F)),
+        length(D1,G1),
+        H1 is min(A1,F),
+        chr_TraceNewPath(path(G1,B,C,D1,H - I,H1)),
+        path(G1,B,C,D1,H - I,H1),
+        chr_GraphStep .
+
+'path/6__2'(A,B,C,D,E,F,G) :-
+        nonvar(E),
+        E = H - I,
+        via([C,B,I,H],J),
+        get_attr(J,timeConstraints,v(K,L,M,N)),
+        K /\ 2 =:= 2,
+        sbag_member(O,M),
+        O = suspension(P,Q,R,S,T,U,V,W,X,Y,Z,A1),
+        get_mutable(active,Q),
+        true,
+        W == C,
+        X == B,
+        nonvar(Z),
+        Z = B1 - C1,
+        B1 == I,
+        C1 == H,
+        true,
+        true,
+        true,
+        true,
+        !,
+        remove_constraint_internal(O,D1),
+        'detach_path/6'(D1,O),
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,E1),
+             'detach_path/6'(E1,G)
+        ),
+        chr_TraceConstraintRuleFired(intersect_yx_xy,path(A,B,C,D,H - I,F),path(V,C,B,Y,I - H,A1)),
+        equality([F1],I - I),
+        transl(Y,G1,[F1],I - H - I),
+        intersection(D,G1,H1),
+        length(H1,I1),
+        J1 is min(F,A1),
+        chr_TraceNewPath(path(I1,B,C,H1,H - I,J1)),
+        path(I1,B,C,H1,H - I,J1),
+        chr_GraphStep .
+
+'path/6__2'(A,B,C,D,E,F,G) :-
+        nonvar(E),
+        E = H - I,
+        via([C,B,I,H],J),
+        get_attr(J,timeConstraints,v(K,L,M,N)),
+        K /\ 2 =:= 2,
+        sbag_member(O,M),
+        O = suspension(P,Q,R,S,T,U,V,W,X,Y,Z,A1),
+        get_mutable(active,Q),
+        true,
+        W == C,
+        X == B,
+        nonvar(Z),
+        Z = B1 - C1,
+        B1 == I,
+        C1 == H,
+        true,
+        true,
+        true,
+        true,
+        !,
+        remove_constraint_internal(O,D1),
+        'detach_path/6'(D1,O),
+        true,
+        (  var(G) ->
+             true
+        ;
+             remove_constraint_internal(G,E1),
+             'detach_path/6'(E1,G)
+        ),
+        chr_TraceConstraintRuleFired(intersect_yx_xy,path(V,C,B,Y,I - H,A1),path(A,B,C,D,H - I,F)),
+        equality([F1],H - H),
+        transl(D,G1,[F1],H - I - H),
+        intersection(Y,G1,H1),
+        length(H1,I1),
+        J1 is min(A1,F),
+        chr_TraceNewPath(path(I1,C,B,H1,I - H,J1)),
+        path(I1,C,B,H1,I - H,J1),
+        chr_GraphStep .
+
+'path/6__2'(A,B,C,D,E,F,G) :-
+        nonvar(E),
+        E = H - I,
+        via_2(C,I,J),
+        get_attr(J,timeConstraints,v(K,L,M,N)),
+        K /\ 2 =:= 2,
+        !,
+        true,
+        'path/6__2__0'(M,A,B,C,D,E,F,G,H,I) .
+
+'path/6__2__0'([],A,B,C,D,E,F,G,H,I) :-
+        'path/6__3'(A,B,C,D,E,F,G) .
+
+'path/6__2__0'([A|B],C,D,E,F,G,H,I,J,K) :-
+        (
+          A = suspension(L,M,N,O,P,Q,R,S,T,U,V,W),
+          get_mutable(active,M),
+          true,
+          S == E,
+          nonvar(V),
+          V = X - Y,
+          X == K,
+          Z = t(11,I,A),
+          novel_production(I,Z),
+          novel_production(A,Z),
+          lock(E),
+          lock(W),
+          lock(H),
+          lock(D),
+          lock(T),
+          nonground(E),
+          W = 1,
+          (  H = 1 ->
+               var_compare((<),D,T)
+          ;
+               true
+          ),
+          unlock(E),
+          unlock(W),
+          unlock(H),
+          unlock(D),
+          unlock(T) ->
+             extend_history(I,Z),
+             activate_constraint(A1,I,B1),
+             'attach_path/6'(A1,I),
+             chr_TraceConstraintRuleFired(propagate_xy_yz,path(C,D,E,F,J - K,H),path(R,E,T,U,K - Y,W)),
+             transl(F,U,C1,J - K - Y),
+             length(C1,D1),
+             E1 is H + W,
+             chr_TraceNewPath(path(D1,D,T,C1,J - Y,E1)),
+             path(D1,D,T,C1,J - Y,E1),
+             chr_GraphStep,
+             (
+               I = suspension(F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1),
+               get_mutable(active,G1),
+               get_mutable(B1,I1) ->
+                  update_mutable(inactive,G1),
+                  'path/6__2__0'(B,C,D,E,F,G,H,I,J,K)
+             ;
+                  true
+             )
+        ;
+             'path/6__2__0'(B,C,D,E,F,G,H,I,J,K)
+        ) .
+
+'path/6__2'(A,B,C,D,E,F,G) :-
+        true,
+        'path/6__3'(A,B,C,D,E,F,G) .
+
+'path/6__3'(A,B,C,D,E,F,G) :-
+        nonvar(E),
+        E = H - I,
+        via_2(B,H,J),
+        get_attr(J,timeConstraints,v(K,L,M,N)),
+        K /\ 2 =:= 2,
+        !,
+        true,
+        'path/6__3__0'(M,A,B,C,D,E,F,G,H,I) .
+
+'path/6__3__0'([],A,B,C,D,E,F,G,H,I) :-
+        'path/6__4'(A,B,C,D,E,F,G) .
+
+'path/6__3__0'([A|B],C,D,E,F,G,H,I,J,K) :-
+        (
+          A = suspension(L,M,N,O,P,Q,R,S,T,U,V,W),
+          get_mutable(active,M),
+          true,
+          T == D,
+          nonvar(V),
+          V = X - Y,
+          Y == J,
+          Z = t(11,A,I),
+          novel_production(A,Z),
+          novel_production(I,Z),
+          lock(D),
+          lock(H),
+          lock(W),
+          lock(S),
+          lock(E),
+          nonground(D),
+          H = 1,
+          (  W = 1 ->
+               var_compare((<),S,E)
+          ;
+               true
+          ),
+          unlock(D),
+          unlock(H),
+          unlock(W),
+          unlock(S),
+          unlock(E) ->
+             extend_history(I,Z),
+             activate_constraint(A1,I,B1),
+             'attach_path/6'(A1,I),
+             chr_TraceConstraintRuleFired(propagate_xy_yz,path(R,S,D,U,X - J,W),path(C,D,E,F,J - K,H)),
+             transl(U,F,C1,X - J - K),
+             length(C1,D1),
+             E1 is W + H,
+             chr_TraceNewPath(path(D1,S,E,C1,X - K,E1)),
+             path(D1,S,E,C1,X - K,E1),
+             chr_GraphStep,
+             (
+               I = suspension(F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1),
+               get_mutable(active,G1),
+               get_mutable(B1,I1) ->
+                  update_mutable(inactive,G1),
+                  'path/6__3__0'(B,C,D,E,F,G,H,I,J,K)
+             ;
+                  true
+             )
+        ;
+             'path/6__3__0'(B,C,D,E,F,G,H,I,J,K)
+        ) .
+
+'path/6__3'(A,B,C,D,E,F,G) :-
+        true,
+        'path/6__4'(A,B,C,D,E,F,G) .
+
+'path/6__4'(A,B,C,D,E,F,G) :-
+        nonvar(E),
+        E = H - I,
+        via_2(B,H,J),
+        get_attr(J,timeConstraints,v(K,L,M,N)),
+        K /\ 2 =:= 2,
+        !,
+        true,
+        'path/6__4__0'(M,A,B,C,D,E,F,G,H,I) .
+
+'path/6__4__0'([],A,B,C,D,E,F,G,H,I) :-
+        'path/6__5'(A,B,C,D,E,F,G) .
+
+'path/6__4__0'([A|B],C,D,E,F,G,H,I,J,K) :-
+        (
+          A = suspension(L,M,N,O,P,Q,R,S,T,U,V,W),
+          get_mutable(active,M),
+          true,
+          S == D,
+          nonvar(V),
+          V = X - Y,
+          X == J,
+          Z = t(12,I,A),
+          novel_production(I,Z),
+          novel_production(A,Z),
+          lock(D),
+          lock(H),
+          lock(W),
+          lock(E),
+          lock(T),
+          nonground(D),
+          min(H,W) =:= 1,
+          var_compare((<),E,T),
+          unlock(D),
+          unlock(H),
+          unlock(W),
+          unlock(E),
+          unlock(T) ->
+             extend_history(I,Z),
+             activate_constraint(A1,I,B1),
+             'attach_path/6'(A1,I),
+             chr_TraceConstraintRuleFired(propagate_xy_xz,path(C,D,E,F,J - K,H),path(R,D,T,U,J - Y,W)),
+             transl(F,C1,U,J - K - Y),
+             length(C1,D1),
+             E1 is H + W,
+             chr_TraceNewPath(path(D1,E,T,C1,K - Y,E1)),
+             path(D1,E,T,C1,K - Y,E1),
+             chr_GraphStep,
+             (
+               I = suspension(F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1),
+               get_mutable(active,G1),
+               get_mutable(B1,I1) ->
+                  update_mutable(inactive,G1),
+                  'path/6__4__0'(B,C,D,E,F,G,H,I,J,K)
+             ;
+                  true
+             )
+        ;
+             'path/6__4__0'(B,C,D,E,F,G,H,I,J,K)
+        ) .
+
+'path/6__4'(A,B,C,D,E,F,G) :-
+        true,
+        'path/6__5'(A,B,C,D,E,F,G) .
+
+'path/6__5'(A,B,C,D,E,F,G) :-
+        nonvar(E),
+        E = H - I,
+        via_2(B,H,J),
+        get_attr(J,timeConstraints,v(K,L,M,N)),
+        K /\ 2 =:= 2,
+        !,
+        true,
+        'path/6__5__0'(M,A,B,C,D,E,F,G,H,I) .
+
+'path/6__5__0'([],A,B,C,D,E,F,G,H,I) :-
+        'path/6__6'(A,B,C,D,E,F,G) .
+
+'path/6__5__0'([A|B],C,D,E,F,G,H,I,J,K) :-
+        (
+          A = suspension(L,M,N,O,P,Q,R,S,T,U,V,W),
+          get_mutable(active,M),
+          true,
+          S == D,
+          nonvar(V),
+          V = X - Y,
+          X == J,
+          Z = t(12,A,I),
+          novel_production(A,Z),
+          novel_production(I,Z),
+          lock(D),
+          lock(W),
+          lock(H),
+          lock(T),
+          lock(E),
+          nonground(D),
+          min(W,H) =:= 1,
+          var_compare((<),T,E),
+          unlock(D),
+          unlock(W),
+          unlock(H),
+          unlock(T),
+          unlock(E) ->
+             extend_history(I,Z),
+             activate_constraint(A1,I,B1),
+             'attach_path/6'(A1,I),
+             chr_TraceConstraintRuleFired(propagate_xy_xz,path(R,D,T,U,J - Y,W),path(C,D,E,F,J - K,H)),
+             transl(U,C1,F,J - Y - K),
+             length(C1,D1),
+             E1 is W + H,
+             chr_TraceNewPath(path(D1,T,E,C1,Y - K,E1)),
+             path(D1,T,E,C1,Y - K,E1),
+             chr_GraphStep,
+             (
+               I = suspension(F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1),
+               get_mutable(active,G1),
+               get_mutable(B1,I1) ->
+                  update_mutable(inactive,G1),
+                  'path/6__5__0'(B,C,D,E,F,G,H,I,J,K)
+             ;
+                  true
+             )
+        ;
+             'path/6__5__0'(B,C,D,E,F,G,H,I,J,K)
+        ) .
+
+'path/6__5'(A,B,C,D,E,F,G) :-
+        true,
+        'path/6__6'(A,B,C,D,E,F,G) .
+
+'path/6__6'(A,B,C,D,E,F,G) :-
+        nonvar(E),
+        E = H - I,
+        via_2(C,I,J),
+        get_attr(J,timeConstraints,v(K,L,M,N)),
+        K /\ 2 =:= 2,
+        !,
+        true,
+        'path/6__6__0'(M,A,B,C,D,E,F,G,H,I) .
+
+'path/6__6__0'([],A,B,C,D,E,F,G,H,I) :-
+        'path/6__7'(A,B,C,D,E,F,G) .
+
+'path/6__6__0'([A|B],C,D,E,F,G,H,I,J,K) :-
+        (
+          A = suspension(L,M,N,O,P,Q,R,S,T,U,V,W),
+          get_mutable(active,M),
+          true,
+          T == E,
+          nonvar(V),
+          V = X - Y,
+          Y == K,
+          Z = t(13,I,A),
+          novel_production(I,Z),
+          novel_production(A,Z),
+          lock(E),
+          lock(H),
+          lock(W),
+          lock(D),
+          lock(S),
+          nonground(E),
+          min(H,W) =:= 1,
+          var_compare((<),D,S),
+          unlock(E),
+          unlock(H),
+          unlock(W),
+          unlock(D),
+          unlock(S) ->
+             extend_history(I,Z),
+             activate_constraint(A1,I,B1),
+             'attach_path/6'(A1,I),
+             chr_TraceConstraintRuleFired(propagate_xy_zy,path(C,D,E,F,J - K,H),path(R,S,E,U,X - K,W)),
+             transl(C1,U,F,J - X - K),
+             length(C1,D1),
+             E1 is H + W,
+             chr_TraceNewPath(path(D1,D,S,C1,J - X,E1)),
+             path(D1,D,S,C1,J - X,E1),
+             chr_GraphStep,
+             (
+               I = suspension(F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1),
+               get_mutable(active,G1),
+               get_mutable(B1,I1) ->
+                  update_mutable(inactive,G1),
+                  'path/6__6__0'(B,C,D,E,F,G,H,I,J,K)
+             ;
+                  true
+             )
+        ;
+             'path/6__6__0'(B,C,D,E,F,G,H,I,J,K)
+        ) .
+
+'path/6__6'(A,B,C,D,E,F,G) :-
+        true,
+        'path/6__7'(A,B,C,D,E,F,G) .
+
+'path/6__7'(A,B,C,D,E,F,G) :-
+        nonvar(E),
+        E = H - I,
+        via_2(C,I,J),
+        get_attr(J,timeConstraints,v(K,L,M,N)),
+        K /\ 2 =:= 2,
+        !,
+        true,
+        'path/6__7__0'(M,A,B,C,D,E,F,G,H,I) .
+
+'path/6__7__0'([],A,B,C,D,E,F,G,H,I) :-
+        'path/6__8'(A,B,C,D,E,F,G) .
+
+'path/6__7__0'([A|B],C,D,E,F,G,H,I,J,K) :-
+        (
+          A = suspension(L,M,N,O,P,Q,R,S,T,U,V,W),
+          get_mutable(active,M),
+          true,
+          T == E,
+          nonvar(V),
+          V = X - Y,
+          Y == K,
+          Z = t(13,A,I),
+          novel_production(A,Z),
+          novel_production(I,Z),
+          lock(E),
+          lock(W),
+          lock(H),
+          lock(S),
+          lock(D),
+          nonground(E),
+          min(W,H) =:= 1,
+          var_compare((<),S,D),
+          unlock(E),
+          unlock(W),
+          unlock(H),
+          unlock(S),
+          unlock(D) ->
+             extend_history(I,Z),
+             activate_constraint(A1,I,B1),
+             'attach_path/6'(A1,I),
+             chr_TraceConstraintRuleFired(propagate_xy_zy,path(R,S,E,U,X - K,W),path(C,D,E,F,J - K,H)),
+             transl(C1,F,U,X - J - K),
+             length(C1,D1),
+             E1 is W + H,
+             chr_TraceNewPath(path(D1,S,D,C1,X - J,E1)),
+             path(D1,S,D,C1,X - J,E1),
+             chr_GraphStep,
+             (
+               I = suspension(F1,G1,H1,I1,J1,K1,L1,M1,N1,O1,P1,Q1),
+               get_mutable(active,G1),
+               get_mutable(B1,I1) ->
+                  update_mutable(inactive,G1),
+                  'path/6__7__0'(B,C,D,E,F,G,H,I,J,K)
+             ;
+                  true
+             )
+        ;
+             'path/6__7__0'(B,C,D,E,F,G,H,I,J,K)
+        ) .
+
+'path/6__7'(A,B,C,D,E,F,G) :-
+        true,
+        'path/6__8'(A,B,C,D,E,F,G) .
+
+'path/6__8'(A,B,C,D,E,F,G) :-
+        activate_constraint(H,G,I),
+        'attach_path/6'(H,G) .
+
+labeling :-
+        'labeling/0__0'(A) .
+
+'labeling/0__0'(A) :-
+        true,
+        global_term_ref_1(B),
+        get_attr(B,timeConstraints,v(C,D,E,F)),
+        C /\ 2 =:= 2,
+        sbag_member(G,E),
+        G = suspension(H,I,J,K,L,M,N,O,P,Q,R,S),
+        get_mutable(active,I),
+        true,
+        true,
+        true,
+        N > 1,
+        !,
+        remove_constraint_internal(G,T),
+        'detach_path/6'(T,G),
+        true,
+        (  var(A) ->
+             true
+        ;
+             remove_constraint_internal(A,U),
+             'detach_labeling/0'(U,A)
+        ),
+        chr_TraceConstraintRuleFired(labeling,path(N,O,P,Q,R,S)),
+        member(V,Q),
+        chr_TraceNewPath(path(1,O,P,[V],R,S)),
+        path(1,O,P,[V],R,S),
+        chr_GraphStep,
+        labeling .
+
+'labeling/0__0'(A) :-
+        (  var(A) ->
+             insert_constraint_internal(B,A,'labeling/0__0'(A),labeling,[])
+        ;
+             activate_constraint(B,A,C)
+        ),
+        'attach_labeling/0'(B,A) .
+

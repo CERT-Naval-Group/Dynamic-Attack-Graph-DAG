@@ -1,0 +1,229 @@
+% MulVAL interaction rules
+% Author : Xinming Ou, Su Zhang
+% Copyright (C) 2011, Argus Cybersecurity Lab, Kansas State University
+
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+/******************************************************/
+/****         Predicates Declaration              *****/
+/******************************************************/
+
+primitive(networkServiceInfo(Host, Vlan, Program, Protocol, Port, User)).
+primitive(vulExists(Host, VulID, Program, Range, Consequence)).
+primitive(firewallRule(HostS, Vlan1, HostD, Vlan2, Protocol, Port)).
+primitive(vlanInterface(Host, Vlan)).
+primitive(attackerLocated(Host)).
+primitive(softwareInfo(Host, Software, Perm)).
+
+primitive(isProxy(Proxy, PortS, Srv, PortD)).
+primitive(receivePhishingMail(Host)).
+primitive(isDC(DC, Domain)).
+primitive(networkStream(HostS, HostD, Port, Protocol, Vlan, Data)).
+primitive(openMaliciousFile(Host, User, Perm, Software)).
+primitive(mitm(HostS, HostD, Vlan)).
+primitive(noCheckAuth(Host, Port, Prot)).
+primitive(isDomainMember(Host, DC, Domain)).
+
+
+meta(cvss(VulID, AC)).
+
+
+derived(execCode(Host, User)).
+derived(availability(Host, Software)).
+derived(confidentiality(Data)).
+derived(ddos(Host, Software)).
+derived(netAccess(Machine, Protocol, Port)).
+derived(lanAccess(Vlan)).
+
+
+meta(attackGoal(_)).
+
+/******************************************************/
+/****         Tabling Predicates                  *****/
+/*   All derived predicates should be tabled          */
+/******************************************************/
+
+:- table execCode/2.
+:- table netAccess/3.
+:- table availability/2.
+:- table confidentiality/1.
+:- table ddos/2.
+:- table lanAccess/1.
+
+
+
+/******************************************************/
+/****         Interaction Rules                   *****/
+/******************************************************/
+
+/****** Section execCode *******/
+
+interaction_rule(
+  (execCode(HostD, Perm) :-
+	vulExists(HostD, _, Software, remoteExploit, privEscalation),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm),
+	netAccess(HostD, Protocol, Port)),
+  rule_desc('remote exploit of a server program',
+  1.0)).
+  
+
+interaction_rule(
+  (execCode(HostD, Perm2) :-
+	vulExists(HostD, _, Software, localExploit, privEscalation),
+	softwareInfo(HostD, Software, Perm2),
+	execCode(HostD, Perm1)),
+  rule_desc('local exploit of a server program',
+  1.0)).
+
+
+
+interaction_rule(
+  (execCode(HostD, Perm) :-
+	softwareInfo(HostD, Software, _),
+	receivePhishingMail(HostD),
+	openMaliciousFile(HostD, _, Perm, Software)),
+  rule_desc('T1566.001 - Phishing - Spearphishing Attachment',
+  1.0)).
+
+
+interaction_rule(
+  (execCode(Host, root) :-
+	execCode(DC, root),
+	isDC(DC, Domain),
+	isDomainMember(Host, DC, Domain)),
+  rule_desc('Domain Group policy attack',
+  1.0)).
+
+  
+/****** Section dos *******/
+
+interaction_rule(
+  (availability(HostD, Software) :-
+	vulExists(HostD, _, Software, remoteExploit, dos),
+	networkServiceInfo(HostD, _, Software, Protocol, Port, Perm),
+	netAccess(HostD, Protocol, Port)),
+  rule_desc('remote exploit of a server program',
+  1.0)).
+  
+  
+interaction_rule(
+  (ddos(HostD, Software) :-
+	vlanInterface(HostD, 'internet'),
+	networkServiceInfo(HostD, 'internet', Software, _, _, _)),
+  rule_desc('remote exploit of a server program - DDOS attack',
+  1.0)).
+
+
+/******** Section Conf **********/
+
+
+interaction_rule(
+  (confidentiality(Data) :-
+  	networkStream(HostS, HostD, Port, Protocol, Vlan, Data),
+	noCheckAuth(HostD, Port, Protocol),
+	mitm(HostS, HostD, Vlan)),
+  rule_desc('mitm attack',
+  1.0)).
+
+
+/******** Section netAccess ********/
+/* accessing a host through network according to a hacl policy.
+   For now we assume that every user on a local
+   machine has access to network. this may change
+   later. */
+
+
+interaction_rule(
+  (netAccess(HostD, Protocol, Port) :-
+	execCode(HostS, Perm),
+	firewallRule(HostS, internet, HostD, Vlan2, Protocol, Port),
+	vlanInterface(HostS, homeNetwork),
+	vlanInterface(HostD, Vlan2)),
+  rule_desc('multi-hop access from home network',
+  1.0)).
+
+
+/*
+interaction_rule(
+  (netAccess(HostD, Protocol, Port) :-
+	execCode(HostS, Perm),
+	vlanInterface(HostS, Vlan),
+	vlanInterface(HostD, Vlan)),
+  rule_desc('multi-hop access same LAN',
+  1.0)).
+*/
+
+
+interaction_rule(
+  (lanAccess(Vlan) :-
+	execCode(Host, Perm),
+	vlanInterface(Host, Vlan)),
+  rule_desc('LAN access',
+  1.0)).
+
+
+interaction_rule(
+  (netAccess(HostD, Protocol, Port) :-
+	lanAccess(Vlan),
+	vlanInterface(HostD, Vlan)),
+  rule_desc('multi-hop access same LAN',
+  1.0)).
+
+
+interaction_rule(
+  (netAccess(HostD, Protocol, Port) :-
+	execCode(HostS, Perm),
+	firewallRule(HostS, Vlan1, HostD, Vlan2, Protocol, Port),
+	vlanInterface(HostS, Vlan1),
+	vlanInterface(HostD, Vlan2)),
+  rule_desc('multi-hop access',
+  1.0)).
+
+
+interaction_rule(
+  (netAccess(HostD, Protocol, Port) :-
+	attackerLocated(Vlan1),
+	firewallRule(_, Vlan1, HostD, _, Protocol, Port),
+	vlanInterface(HostD, _)),
+  rule_desc('first access',
+  1.0)).
+
+
+interaction_rule(
+  (netAccess(Host, Protocol, Port) :-
+	attackerLocated(Vlan),
+	vlanInterface(Host, Vlan)),
+  rule_desc('first access on the same LAN',
+  1.0)).
+
+
+interaction_rule(
+  (netAccess(HostD, Protocol, PortD) :-
+  	execCode(HostS, Perm),
+  	vlanInterface(HostS, Vlan1),
+	isProxy(Proxy, PortP, HostD, PortD),
+	firewallRule(HostS, Vlan1, Proxy, _, _, PortP),
+	firewallRule(Proxy, _, HostD, _, Protocol, PortD)),
+  rule_desc('access throught proxy',
+  1.0)).
+
+
+interaction_rule(
+  (netAccess(HostD, Protocol, PortD) :-
+  	attackerLocated(Vlan1),
+	isProxy(Proxy, PortP, HostD, PortD),
+	firewallRule(HostS, Vlan1, Proxy, _, _, PortP),
+	firewallRule(Proxy, _, HostD, _, Protocol, PortD)),
+  rule_desc('access throught proxy',
+  1.0)).

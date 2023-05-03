@@ -1,0 +1,18 @@
+Generation of Dynamic Attack Graph - DAG
+Parsing timed input files...
+Attack graph generation with MulVAL...
+------------ MulVAL output ------------
+MULVALROOT is:  /home/abo/dynamic-attack-graph-dag/mulval/tools/mulval rule file is: /home/abo/dynamic-attack-graph-dag/mulval/tools/mulval/kb/optimized_rules.P constraint file is:
+additional rule file is:
+attack graph options are: -l  input file is: input.P goal is:
+dynamic changes file is:
+Attack Graph opts is -l  Goal:  execCode(_h322,_h323)  availability(_h322,_h323)  confidentiality(_h322)  ddos(_h322,_h323) 
+Execution time of MulVAL : 10.395741939544678 seconds
+---------------------------------------
+Loading attack graph!
+Attack graph has been loaded!
+Size of graph : 81925
+Simulation is running...
+Execution time : 424.062 seconds
+Uploading graphs...
+

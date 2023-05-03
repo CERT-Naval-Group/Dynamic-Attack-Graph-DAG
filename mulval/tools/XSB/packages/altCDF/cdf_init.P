@@ -1,0 +1,49 @@
+%- import addCheckToContext/2 from cdf_checks.
+%:- import check_types/2, classify_if_necessary/2 from cdf_checks.
+
+:- import addCheckToContext/2 from usermod(cdf_checks).
+
+%:- addCheckToContext(check_types/2,query).
+%:- addCheckToContext(classify_if_necessary/2,componentUpdate).
+
+:- addCheckToContext(check_identity/2,newExtTermSingle).
+:- addCheckToContext(check_identity/2,newExtTermBatch).
+
+
+/* used in cdfpt/cdf_intensional.P; here for indexing efficiency, quite important */
+isa_int_prim(oid(Val,cdfpt),cid(Type,cdf)) :-
+	nonvar(Val),
+	prim_type_val(Type,Val).
+isa_int_prim(cid(Val,cdfpt),cid(Type,cdf)) :-
+	nonvar(Val),
+	prim_type_val(Type,Val).
+
+prim_type_val(Type,Atom) :- atom(Atom), !,
+	(is_number_atom(Atom),
+	 atom_codes(Atom, AIntegerCodes),
+	 number_codes(Integer, AIntegerCodes),
+	 integer(Integer)
+	 ->	Type = atomicIntegers
+	 ;	Type = allAtoms
+	).
+prim_type_val(allIntegers,Integer) :- integer(Integer), !.
+prim_type_val(allStructures,Term) :- structure(Term), !.
+prim_type_val(allFloats,Float) :- float(Float), !.
+
+/******
+isa_int(oid(Integer,cdfpt),cid(allIntegers,cdf)):- integer(Integer).
+isa_int(oid(Float,cdfpt),cid(allFloats,cdf)):- float(Float).
+isa_int(oid(Atom,cdfpt),cid(allAtoms,cdf)):- atom(Atom).
+isa_int(oid(Term,cdfpt),cid(allStructures,cdf)):- structure(Term).
+isa_int(oid(AInteger,cdfpt),cid(atomicIntegers,cdf)):-
+	is_number_atom(AInteger),
+	atom_codes(AInteger, AIntegerCodes), number_codes(Integer, AIntegerCodes), integer(Integer).
+
+isa_int(cid(Integer,cdfpt),cid(allIntegers,cdf)):- integer(Integer).
+isa_int(cid(Float,cdfpt),cid(allFloats,cdf)):- float(Float).
+isa_int(cid(Atom,cdfpt),cid(allAtoms,cdf)):- atom(Atom).
+isa_int(cid(Term,cdfpt),cid(allStructures,cdf)):- structure(Term).
+isa_int(cid(AInteger,cdfpt),cid(atomicIntegers,cdf)):-
+	is_number_atom(AInteger),
+	atom_codes(AInteger, AIntegerCodes), number_codes(Integer, AIntegerCodes), integer(Integer).
+***********/

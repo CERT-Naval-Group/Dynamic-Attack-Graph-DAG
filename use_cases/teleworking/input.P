@@ -1,0 +1,16 @@
+
+attackerLocated(homeNetwork).
+attackGoal(execCode(_,_)).
+attackGoal(confidentiality(_)).
+attackGoal(ddos(_,_)).
+attackGoal(availability(_,_)).
+firewallRule(workstation, userLAN, proxy, proxyLAN, tcp, 443).
+firewallRule(proxy, proxyLAN, webServer, serviceLAN, tcp, 80).
+vulExists(webServer, 'CVE-2017-12617', httpd, remoteExploit, privEscalation).
+networkServiceInfo(webServer, serviceLAN, httpd, tcp, 80, apache).
+vlanInterface(webServer, serviceLAN).
+vulExists(workstation, 'CVE-2020-0796', smb, remoteExploit, privEscalation).
+networkServiceInfo(workstation, _, smb, tcp, 445, root).
+vlanInterface(workstation, homeNetwork).
+vlanInterface(workstation, userLAN).
+isProxy(proxy, 443, webServer, 80).
